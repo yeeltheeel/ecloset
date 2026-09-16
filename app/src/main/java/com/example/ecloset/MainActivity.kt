@@ -145,17 +145,17 @@ fun MainPage(
     val previewClothes = listOf(
         PreviewCard(
             id = 1,
-            title = "Outfit 1",
+            title = "Item 1",
             color = Color(0xFFE8DFF5)
         ),
         PreviewCard(
             id = 2,
-            title = "Outfit 2",
+            title = "Item 2",
             color = Color(0xFFDDEBF7)
         ),
         PreviewCard(
             id = 3,
-            title = "Outfit 3",
+            title = "Item 3",
             color = Color(0xFFFCE1E4)
         )
     )
