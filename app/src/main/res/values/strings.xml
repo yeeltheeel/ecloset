@@ -1,0 +1,7 @@
+<resources>
+	<string name="app_name" translatable="false">eCloset</string>
+	<string name="outfit_list_title">My outfits</string>
+	<string name="clothes_list_title">My closet</string>
+	<string name="analytics_title">My statistics</string>
+	<string name="unused_items_title">Forgotten gems</string>
+</resources>

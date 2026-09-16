@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="outfit_list_title">Мои образы</string>
+    <string name="clothes_list_title">Мой гардероб</string>
+    <string name="analytics_title">Статистика</string>
+    <string name="unused_items_title">Утерянные сокровища</string>
+</resources>
