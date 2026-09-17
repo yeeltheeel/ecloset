@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="outfit_list_title">Мои образы</string>
+    <string name="outfit_list_title">Мои аутфиты</string>
     <string name="clothes_list_title">Мой гардероб</string>
     <string name="analytics_title">Статистика</string>
     <string name="unused_items_title">Утерянные сокровища</string>
+    <string name="unused_items_text">Эти вещи давно не использовались. Не хочешь дать им втрой шанс?</string>
+    <string name="new_outfit_title">Новый аутфит</string>
+    <string name="occasion_promt">"Какое событие сегодня? "</string>
+    <string name="location_prompt">Где ты будешь находиться?</string>
 </resources>

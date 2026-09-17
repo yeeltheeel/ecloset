@@ -4,4 +4,8 @@
 	<string name="clothes_list_title">My closet</string>
 	<string name="analytics_title">My statistics</string>
 	<string name="unused_items_title">Forgotten gems</string>
+	<string name="unused_items_text">You haven\'t worn these in a while. Maybe give them another chance</string>
+	<string name="new_outfit_title">New outfit</string>
+	<string name="occasion_promt">What is the occasion?</string>
+	<string name="location_prompt">Where will you stay?</string>
 </resources>
