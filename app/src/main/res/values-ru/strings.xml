@@ -8,4 +8,9 @@
     <string name="new_outfit_title">Новый аутфит</string>
     <string name="occasion_promt">"Какое событие сегодня? "</string>
     <string name="location_prompt">Где ты будешь находиться?</string>
+    <string name="add_prompt">Добавить</string>
+    <string name="edit_prompt">Изменить</string>
+    <string name="remove_prompt">Удалить</string>
+    <string name="item_text">вещь</string>
+    <string name="outfit_text">аутфит</string>
 </resources>

@@ -8,4 +8,9 @@
 	<string name="new_outfit_title">New outfit</string>
 	<string name="occasion_promt">What is the occasion?</string>
 	<string name="location_prompt">Where will you stay?</string>
+	<string name="add_prompt">Add</string>
+	<string name="edit_prompt">Edit</string>
+	<string name="remove_prompt">Remove</string>
+	<string name="item_text">item</string>
+	<string name="outfit_text">outfit</string>
 </resources>
