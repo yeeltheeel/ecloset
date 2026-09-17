@@ -2,7 +2,9 @@
 
 package com.example.ecloset
 
+import android.location.Location
 import android.os.Bundle
+import android.text.Layout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +35,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -47,6 +51,7 @@ import com.example.ecloset.ui.theme.EclosetTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.text.style.TextAlign
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,43 +134,46 @@ fun MainPage(
         PreviewCard(
             id = 1,
             title = "Outfit 1",
-            color = Color(0xFFE8DFF5)
+            color = MaterialTheme.colorScheme.tertiary
         ),
         PreviewCard(
             id = 2,
             title = "Outfit 2",
-            color = Color(0xFFDDEBF7)
+            color = MaterialTheme.colorScheme.tertiary
         ),
         PreviewCard(
             id = 3,
             title = "Outfit 3",
-            color = Color(0xFFFCE1E4)
+            color = MaterialTheme.colorScheme.tertiary
         )
     )
     val previewClothes = listOf(
         PreviewCard(
             id = 1,
             title = "Item 1",
-            color = Color(0xFFE8DFF5)
+            color = MaterialTheme.colorScheme.tertiary
         ),
         PreviewCard(
             id = 2,
             title = "Item 2",
-            color = Color(0xFFDDEBF7)
+            color = MaterialTheme.colorScheme.tertiary
         ),
         PreviewCard(
             id = 3,
             title = "Item 3",
-            color = Color(0xFFFCE1E4)
+            color = MaterialTheme.colorScheme.tertiary
         )
     )
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
         item{
+            WeatherWidget(modifier = modifier, location = "Moscow")
+        }
+        item{
             PreviewCarousel(
                 modifier = modifier,
-                previewTitle = stringResource(R.string.outfit_list_title),
+                previewTitle = stringResource(R.string.outfit_list_title) + " >",
                 cards = previewOutfits,
                 onOpenGrid = {
                     // Navigate to the complete grid page
@@ -180,12 +188,34 @@ fun MainPage(
         item{
             PreviewCarousel(
                 modifier = modifier,
-                previewTitle = stringResource(R.string.clothes_list_title),
+                previewTitle = stringResource(R.string.clothes_list_title) + " >",
                 cards = previewClothes,
                 onOpenGrid = {},
                 onCardClick = { card -> }
             )
         }
+    }
+}
+
+@Composable
+fun WeatherWidget(
+    modifier: Modifier,
+    location: String // active if enabled else set (?String)
+){
+    Box(
+	    modifier = Modifier
+		    .fillMaxWidth()
+		    .padding(
+                horizontal = 16.dp,
+                vertical = 12.dp
+            ),
+	    propagateMinConstraints = true,
+	    contentAlignment = Alignment.Center
+    ){
+        Text(
+	        text = location,
+	        textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -273,19 +303,3 @@ fun PreviewOutfitCard(
         }
     }
 }
-
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    EclosetTheme {
-//        Greeting(name = "Android")
-//    }
-//}
