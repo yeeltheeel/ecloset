@@ -13,4 +13,10 @@
 	<string name="remove_prompt">Remove</string>
 	<string name="item_text">item</string>
 	<string name="outfit_text">outfit</string>
+    <string name="mainpage_title">Home</string>
+	<string name="login_title">Login</string>
+	<string name="register_title">Registration</string>
+	<string name="username_prompt">Username</string>
+	<string name="password_prompt">Password</string>
+	<string name="email_prompt">Email</string>
 </resources>

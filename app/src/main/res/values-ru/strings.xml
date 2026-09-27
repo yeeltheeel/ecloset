@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="outfit_list_title">Мои аутфиты</string>
     <string name="clothes_list_title">Мой гардероб</string>
     <string name="analytics_title">Статистика</string>
@@ -13,4 +14,10 @@
     <string name="remove_prompt">Удалить</string>
     <string name="item_text">вещь</string>
     <string name="outfit_text">аутфит</string>
+    <string name="mainpage_title">Главная</string>
+    <string name="password_prompt">Пароль</string>
+    <string name="email_prompt">Почта</string>
+    <string name="login_title">Вход</string>
+    <string name="register_title">Регистрация</string>
+    <string name="username_prompt">Имя</string>
 </resources>
