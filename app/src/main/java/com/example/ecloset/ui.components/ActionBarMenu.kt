@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,6 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
+import com.example.ecloset.ui.navigation.Routes
 
 @Composable
 fun ActionBarButton(
@@ -57,8 +60,11 @@ fun ActionBarButton(
 }
 
 @Composable
-fun ActionBarMenu(){
-	var selectedPage by remember { mutableStateOf(0) }
+fun ActionBarMenu(
+	navController: NavHostController,
+	currentRoute: String?
+){
+	var selectedPage by remember { mutableIntStateOf(0) }
 	var addMenuOpen by remember { mutableStateOf(false) }
 
 	// bottom aligned fab row
@@ -71,12 +77,19 @@ fun ActionBarMenu(){
 			modifier = Modifier.padding(bottom = 16.dp)
 		) {
 			ActionBarButton(
-				isSelected = selectedPage == 0,
+				isSelected = currentRoute == Routes.MAIN, //isSelected = selectedPage == 0,
 				iconImage = Icons.Default.Home,
 				description = stringResource(R.string.mainpage_title),
 				primaryColor = MaterialTheme.colorScheme.primary,
 				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
-				onClick = { selectedPage = 0 }
+				onClick = {
+					//selectedPage = 0
+					addMenuOpen = false
+					navController.navigate(Routes.MAIN) {
+						popUpTo(Routes.MAIN) { inclusive = true }
+						launchSingleTop = true
+					}
+				}
 			)
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 			ActionBarButton(
@@ -87,90 +100,27 @@ fun ActionBarMenu(){
 							stringResource(R.string.outfit_text),
 				primaryColor = MaterialTheme.colorScheme.onTertiary,
 				secondaryColor = MaterialTheme.colorScheme.tertiary,
-				onClick = { addMenuOpen = !addMenuOpen }
+				onClick = {
+					addMenuOpen = !addMenuOpen
+				}
 			)
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 			ActionBarButton(
-				isSelected = selectedPage == 1,
+				isSelected = currentRoute == Routes.ANALYTICS, //isSelected = selectedPage == 1,
 				iconImage = Icons.Default.Book,
 				description = stringResource(R.string.analytics_title),
 				primaryColor = MaterialTheme.colorScheme.primary,
 				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
-				onClick = { selectedPage = 1 }
+				onClick = {
+					//selectedPage = 1
+					addMenuOpen = false
+					navController.navigate(Routes.ANALYTICS) {
+						popUpTo(Routes.MAIN)
+						launchSingleTop = true
+					}
+				}
 			)
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-		}
-	}
-}
-
-@Composable
-fun ActionBarMenuPrototype(){
-	var selectedPage by remember { mutableStateOf(0) }
-	Box(
-		modifier = Modifier.fillMaxSize(),
-		contentAlignment = Alignment.BottomCenter
-	) {
-		Row(
-			horizontalArrangement = Arrangement.Center,
-			modifier = Modifier.padding(bottom = 16.dp)
-		) {
-			// Page 1
-			FloatingActionButton(
-				onClick = { selectedPage = 0 },
-				containerColor = if (selectedPage == 0)
-					MaterialTheme.colorScheme.primary
-				else
-					MaterialTheme.colorScheme.secondaryContainer,
-				modifier = Modifier.size(56.dp)
-			) {
-				Icon(
-					imageVector = Icons.Default.Home,
-					contentDescription = stringResource(R.string.mainpage_title),
-					tint = if (selectedPage == 0)
-						MaterialTheme.colorScheme.onPrimary
-					else
-						MaterialTheme.colorScheme.onSecondaryContainer
-				)
-			}
-			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-
-			// Add
-			FloatingActionButton(
-				onClick = {
-					// add outfit/item
-				},
-				containerColor = MaterialTheme.colorScheme.tertiary,
-				modifier = Modifier.size(56.dp)
-			) {
-				Icon(
-					imageVector = Icons.Default.Add,
-					contentDescription = stringResource(R.string.add_prompt) + " " +
-							stringResource(R.string.item_text) + " or " +
-							stringResource(R.string.outfit_text),
-					tint = MaterialTheme.colorScheme.onTertiary,
-					modifier = Modifier.size(32.dp)
-				)
-			}
-			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-
-			// Page 2
-			FloatingActionButton(
-				onClick = { selectedPage = 1 },
-				containerColor = if (selectedPage == 1)
-					MaterialTheme.colorScheme.primary
-				else
-					MaterialTheme.colorScheme.secondaryContainer,
-				modifier = Modifier.size(56.dp)
-			) {
-				Icon(
-					imageVector = Icons.Default.Book,
-					contentDescription = stringResource(R.string.analytics_title),
-					tint = if (selectedPage == 1)
-						MaterialTheme.colorScheme.onPrimary
-					else
-						MaterialTheme.colorScheme.onSecondaryContainer
-				)
-			}
 		}
 	}
 }

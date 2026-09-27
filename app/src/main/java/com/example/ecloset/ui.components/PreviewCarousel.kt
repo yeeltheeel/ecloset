@@ -40,7 +40,8 @@ fun PreviewCarousel(
 	Text(
 		text = previewTitle,
 		modifier = Modifier
-			.fillMaxWidth().clickable {
+			.fillMaxWidth()
+			.clickable {
 				onOpenGrid()
 			}
 			.padding(
@@ -52,7 +53,8 @@ fun PreviewCarousel(
 	)
 	// Horizontal card carousel
 	LazyRow(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier
+			.fillMaxWidth(),
 		contentPadding = PaddingValues(
 			horizontal = 16.dp,
 			vertical = 16.dp
@@ -80,7 +82,9 @@ fun PreviewOutfitCard(
 ) {
 	Card(
 		onClick = onClick,
-		modifier = Modifier.width(160.dp).height(210.dp),
+		modifier = Modifier
+			.width(150.dp)
+			.height(200.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = card.color
 		),
@@ -98,7 +102,6 @@ fun PreviewOutfitCard(
 			Spacer(
 				modifier = Modifier
 					.size(130.dp)
-					//.weight(1f)
 					.padding(bottom = 8.dp)
 			)
 

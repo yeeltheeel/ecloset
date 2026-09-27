@@ -19,4 +19,9 @@
 	<string name="username_prompt">Username</string>
 	<string name="password_prompt">Password</string>
 	<string name="email_prompt">Email</string>
+	<string name="repeat_password_prompt">Repeat password</string>
+	<string name="forgot_password_prompt">Forgot password?</string>
+	<string name="already_registered_prompt">"Already have an account? "</string>
+	<string name="no_account_prompt">"No account yet? "</string>
+	<string name="back_prompt">Back</string>
 </resources>

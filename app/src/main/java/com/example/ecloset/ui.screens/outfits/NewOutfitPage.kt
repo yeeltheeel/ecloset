@@ -1,3 +1,11 @@
-package com.example.ecloset.ui.screens
+package com.example.ecloset.ui.screens.outfits
 
-import com.example.ecloset.user.data.OutfitItem
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+@Composable
+fun NewOutfitPage(
+	modifier: Modifier = Modifier
+){
+
+}

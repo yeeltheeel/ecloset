@@ -12,12 +12,13 @@ import com.example.ecloset.ui.components.PreviewCard
 import com.example.ecloset.ui.components.WeatherWidget
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
+import com.example.ecloset.ui.screens.auth.LoginPage
 
 @Composable
 fun MainPage(
 	modifier: Modifier = Modifier
 ) {
-
+	/* begin test data */
 	val previewOutfits = listOf(
 		PreviewCard(
 			id = 1,
@@ -35,6 +36,7 @@ fun MainPage(
 			color = MaterialTheme.colorScheme.onTertiary
 		)
 	)
+
 	val previewClothes = listOf(
 		PreviewCard(
 			id = 1,
@@ -52,6 +54,7 @@ fun MainPage(
 			color = MaterialTheme.colorScheme.onTertiary
 		)
 	)
+	/* end test data */
 
 	LazyColumn(
 		modifier = modifier
@@ -78,6 +81,10 @@ fun MainPage(
 				onOpenGrid = {},
 				onCardClick = {}
 			)
+		}
+		// testing
+		item {
+			LoginPage()
 		}
 	}
 }

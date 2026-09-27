@@ -25,6 +25,9 @@ fun WeatherWidget(
             .padding(horizontal = 16.dp, vertical = 0.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 2.dp
         )
     ) {
         Text(

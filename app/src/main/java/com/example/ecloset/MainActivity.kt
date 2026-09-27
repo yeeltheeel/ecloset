@@ -16,10 +16,13 @@ import androidx.compose.ui.Modifier
 import com.example.ecloset.ui.theme.EclosetTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.ecloset.ui.components.ActionBarMenu
 import com.example.ecloset.ui.components.Header
-import com.example.ecloset.ui.screens.main.MainPage
+import com.example.ecloset.ui.navigation.NavActionHost
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,19 +38,27 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EclosetScreen(){
+	val navController = rememberNavController()
+	val backStackEntry by navController.currentBackStackEntryAsState()
+	val currentRoute = backStackEntry?.destination?.route
+
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
 		topBar = { Header() },
-		floatingActionButton = { ActionBarMenu() },
+		floatingActionButton = {
+			ActionBarMenu(
+				navController = navController,
+				currentRoute = currentRoute
+			) },
 		floatingActionButtonPosition = FabPosition.Center
 	) {
 		innerPadding ->
-		MainPage(
+		NavActionHost(
+			navController = navController,
+			innerPadding = innerPadding,
 			modifier = Modifier
 				.fillMaxSize()
-				.padding(
-					top = 70.dp
-				)
+				.padding(top = 45.dp)
 		)
 	}
 }

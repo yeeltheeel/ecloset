@@ -20,4 +20,9 @@
     <string name="login_title">Вход</string>
     <string name="register_title">Регистрация</string>
     <string name="username_prompt">Имя</string>
+    <string name="repeat_password_prompt">Введите пароль еще раз</string>
+    <string name="forgot_password_prompt">Забыли пароль?</string>
+    <string name="already_registered_prompt">Уже зарегистрированы?</string>
+    <string name="no_account_prompt">Еще не зарегистрированы?</string>
+    <string name="back_prompt">Назад</string>
 </resources>

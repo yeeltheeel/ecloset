@@ -1,6 +1,5 @@
 package com.example.ecloset.user.data
 
-//import android.graphics.Color
 import androidx.compose.ui.graphics.Color
 import java.sql.Date
 
@@ -9,6 +8,31 @@ data class UserInfo(
 	val username: String,
 	val avatarUrl: String?
 )
+
+data class LoginFormState(
+	val email: String = "",
+	val password: String = "",
+	val emailError: String? = null,
+	val passwordError: String? = null,
+	val isSubmitting: Boolean = false
+)
+
+data class RegFormState(
+	val username: String = "",
+	val email: String = "",
+	val password: String = "",
+	val confirmPassword: String = "",
+	val usernameError: String? = null,
+	val emailError: String? = null,
+	val passwordError: String? = null,
+	val confirmPasswordError: String? = null,
+	val isSubmitting: Boolean = false
+)
+
+sealed interface AuthResult {
+	data class Success(val token: String, val userId: String) : AuthResult
+	data class Failure(val message: String) : AuthResult
+}
 
 interface GridCardData {
 	val id: Int
