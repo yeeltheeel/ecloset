@@ -36,7 +36,6 @@ fun AnalyticsPage(
 				style = MaterialTheme.typography.titleLarge,
 				color = MaterialTheme.colorScheme.primary
 			)
-			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
 			Text(

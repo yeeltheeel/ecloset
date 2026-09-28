@@ -7,7 +7,7 @@
     <string name="unused_items_title">Утерянные сокровища</string>
     <string name="unused_items_text">Эти вещи давно не использовались. Не хочешь дать им втрой шанс?</string>
     <string name="new_outfit_title">Новый аутфит</string>
-    <string name="occasion_promt">"Какое событие сегодня? "</string>
+    <string name="occasion_prompt">"Какое событие сегодня? "</string>
     <string name="location_prompt">Где ты будешь находиться?</string>
     <string name="add_prompt">Добавить</string>
     <string name="edit_prompt">Изменить</string>
@@ -25,4 +25,9 @@
     <string name="already_registered_prompt">Уже зарегистрированы?</string>
     <string name="no_account_prompt">Еще не зарегистрированы?</string>
     <string name="back_prompt">Назад</string>
+    <string name="user_profile_title">Настройки профиля</string>
+    <string name="avatar_prompt">Сменить изображение</string>
+    <string name="login_prompt">Войти</string>
+    <string name="reg_prompt">Зарегистрироваться</string>
+    <string name="new_item_title">Новая вещь</string>
 </resources>

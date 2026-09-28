@@ -12,11 +12,13 @@ import com.example.ecloset.ui.components.PreviewCard
 import com.example.ecloset.ui.components.WeatherWidget
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
-import com.example.ecloset.ui.screens.auth.LoginPage
+import androidx.navigation.NavHostController
+import com.example.ecloset.ui.navigation.Routes
 
 @Composable
 fun MainPage(
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	navController: NavHostController
 ) {
 	/* begin test data */
 	val previewOutfits = listOf(
@@ -69,8 +71,9 @@ fun MainPage(
 				modifier = modifier,
 				previewTitle = stringResource(R.string.outfit_list_title) + " >",
 				cards = previewOutfits,
-				onOpenGrid = {},
-				onCardClick = {}
+				onCardClick = { },
+				navController = navController,
+				currentRoute = Routes.OUTFITS
 			)
 		}
 		item {
@@ -78,13 +81,10 @@ fun MainPage(
 				modifier = modifier,
 				previewTitle = stringResource(R.string.clothes_list_title) + " >",
 				cards = previewClothes,
-				onOpenGrid = {},
-				onCardClick = {}
+				onCardClick = {},
+				navController = navController,
+				currentRoute = Routes.CLOSET
 			)
-		}
-		// testing
-		item {
-			LoginPage()
 		}
 	}
 }

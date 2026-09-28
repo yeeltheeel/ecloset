@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.ecloset.ui.navigation.Routes
 
 data class PreviewCard(
 	val id: Int,
@@ -33,8 +35,9 @@ fun PreviewCarousel(
 	modifier: Modifier,
 	previewTitle: String,
 	cards: List<PreviewCard>,
-	onOpenGrid: () -> Unit,
-	onCardClick: (PreviewCard) -> Unit
+	onCardClick: (PreviewCard) -> Unit,
+	navController: NavHostController,
+	currentRoute: String
 ){
 	// Clickable title above the carousel
 	Text(
@@ -42,7 +45,7 @@ fun PreviewCarousel(
 		modifier = Modifier
 			.fillMaxWidth()
 			.clickable {
-				onOpenGrid()
+				navController.navigate(currentRoute)
 			}
 			.padding(
 				horizontal = 16.dp,

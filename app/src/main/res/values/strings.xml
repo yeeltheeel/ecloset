@@ -6,7 +6,7 @@
 	<string name="unused_items_title">Forgotten gems</string>
 	<string name="unused_items_text">You haven\'t worn these in a while. Maybe give them another chance</string>
 	<string name="new_outfit_title">New outfit</string>
-	<string name="occasion_promt">What is the occasion?</string>
+	<string name="occasion_prompt">What is the occasion?</string>
 	<string name="location_prompt">Where will you stay?</string>
 	<string name="add_prompt">Add</string>
 	<string name="edit_prompt">Edit</string>
@@ -24,4 +24,9 @@
 	<string name="already_registered_prompt">"Already have an account? "</string>
 	<string name="no_account_prompt">"No account yet? "</string>
 	<string name="back_prompt">Back</string>
+	<string name="user_profile_title">Profile settings</string>
+	<string name="avatar_prompt">Change image</string>
+	<string name="login_prompt">Login</string>
+	<string name="reg_prompt">Register</string>
+    <string name="new_item_title">New item</string>
 </resources>

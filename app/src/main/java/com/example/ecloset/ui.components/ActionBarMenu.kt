@@ -17,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,6 +29,7 @@ import com.example.ecloset.R
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
+import com.example.ecloset.ui.components.PopupMenu
 
 @Composable
 fun ActionBarButton(
@@ -64,7 +64,6 @@ fun ActionBarMenu(
 	navController: NavHostController,
 	currentRoute: String?
 ){
-	var selectedPage by remember { mutableIntStateOf(0) }
 	var addMenuOpen by remember { mutableStateOf(false) }
 
 	// bottom aligned fab row
@@ -77,13 +76,12 @@ fun ActionBarMenu(
 			modifier = Modifier.padding(bottom = 16.dp)
 		) {
 			ActionBarButton(
-				isSelected = currentRoute == Routes.MAIN, //isSelected = selectedPage == 0,
+				isSelected = currentRoute == Routes.MAIN,
 				iconImage = Icons.Default.Home,
 				description = stringResource(R.string.mainpage_title),
 				primaryColor = MaterialTheme.colorScheme.primary,
 				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
 				onClick = {
-					//selectedPage = 0
 					addMenuOpen = false
 					navController.navigate(Routes.MAIN) {
 						popUpTo(Routes.MAIN) { inclusive = true }
@@ -106,13 +104,12 @@ fun ActionBarMenu(
 			)
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 			ActionBarButton(
-				isSelected = currentRoute == Routes.ANALYTICS, //isSelected = selectedPage == 1,
+				isSelected = currentRoute == Routes.ANALYTICS,
 				iconImage = Icons.Default.Book,
 				description = stringResource(R.string.analytics_title),
 				primaryColor = MaterialTheme.colorScheme.primary,
 				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
 				onClick = {
-					//selectedPage = 1
 					addMenuOpen = false
 					navController.navigate(Routes.ANALYTICS) {
 						popUpTo(Routes.MAIN)

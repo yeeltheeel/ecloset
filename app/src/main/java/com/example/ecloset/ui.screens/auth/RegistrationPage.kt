@@ -4,11 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.user.data.RegFormState
 import com.example.ecloset.user.data.AuthResult
@@ -72,6 +74,28 @@ fun RegistrationPage(){
 				vertical = 8.dp
 			)
 	)
+	Button(
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 50.dp,
+				vertical = 8.dp
+			),
+		onClick = {}
+	) {
+		Text(
+			text = stringResource(com.example.ecloset.R.string.reg_prompt),
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(
+					horizontal = 16.dp,
+					vertical = 12.dp
+				),
+			style = MaterialTheme.typography.titleLarge,
+			color = MaterialTheme.colorScheme.onPrimary,
+			textAlign = TextAlign.Center
+		)
+	}
 	Text(
 		text = stringResource(com.example.ecloset.R.string.already_registered_prompt),
 		modifier = Modifier

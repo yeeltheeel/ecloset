@@ -18,11 +18,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.ecloset.ui.components.ActionBarMenu
 import com.example.ecloset.ui.components.Header
+import androidx.navigation.compose.rememberNavController
 import com.example.ecloset.ui.navigation.NavActionHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {

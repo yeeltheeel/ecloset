@@ -1,7 +1,6 @@
 package com.example.ecloset.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -12,6 +11,8 @@ import com.example.ecloset.ui.screens.main.MainPage
 import com.example.ecloset.ui.screens.main.AnalyticsPage
 import com.example.ecloset.ui.screens.closet.NewItemPage
 import com.example.ecloset.ui.screens.outfits.NewOutfitPage
+import com.example.ecloset.ui.screens.closet.ClosetPage
+import com.example.ecloset.ui.screens.outfits.OutfitPage
 
 object Routes {
 	const val MAIN = "main"
@@ -36,16 +37,39 @@ fun NavActionHost(
 		modifier = modifier
 	) {
 		composable(Routes.MAIN) {
-			MainPage(modifier = modifier)
+			MainPage(
+				modifier = modifier,
+				navController = navController
+			)
 		}
 		composable(Routes.ANALYTICS) {
-			AnalyticsPage(modifier = modifier)
+			AnalyticsPage(
+				modifier = modifier
+			)
 		}
 		composable(Routes.ADD_ITEM) {
-			NewItemPage(modifier = modifier)
+			NewItemPage(
+				modifier = modifier,
+				navController = navController
+			)
 		}
 		composable(Routes.ADD_OUTFIT) {
-			NewOutfitPage(modifier = modifier)
+			NewOutfitPage(
+				modifier = modifier,
+				navController = navController
+			)
+		}
+		composable(Routes.CLOSET) {
+			ClosetPage(
+				modifier = modifier,
+				navController = navController
+			)
+		}
+		composable(Routes.OUTFITS) {
+			OutfitPage(
+				modifier = modifier,
+				navController = navController
+			)
 		}
 	}
 }
