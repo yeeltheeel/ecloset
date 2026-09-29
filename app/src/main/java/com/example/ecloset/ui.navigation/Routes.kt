@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.ecloset.ui.screens.user.UserProfile
 
 import com.example.ecloset.ui.screens.main.MainPage
 import com.example.ecloset.ui.screens.main.AnalyticsPage
@@ -13,6 +14,7 @@ import com.example.ecloset.ui.screens.closet.NewItemPage
 import com.example.ecloset.ui.screens.outfits.NewOutfitPage
 import com.example.ecloset.ui.screens.closet.ClosetPage
 import com.example.ecloset.ui.screens.outfits.OutfitPage
+import com.example.ecloset.ui.screens.user.AboutPage
 
 object Routes {
 	const val MAIN = "main"
@@ -23,6 +25,9 @@ object Routes {
 
 	const val CLOSET = "closet"
 	const val OUTFITS = "outfits"
+
+	const val USER_SETTINGS = "user_profile"
+	const val ABOUT = "about"
 }
 
 @Composable
@@ -67,6 +72,18 @@ fun NavActionHost(
 		}
 		composable(Routes.OUTFITS) {
 			OutfitPage(
+				modifier = modifier,
+				navController = navController
+			)
+		}
+		composable(Routes.USER_SETTINGS) {
+			UserProfile(
+				modifier = modifier,
+				navController = navController
+			)
+		}
+		composable(Routes.ABOUT) {
+			AboutPage(
 				modifier = modifier,
 				navController = navController
 			)

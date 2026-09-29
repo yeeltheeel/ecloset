@@ -1,4 +1,4 @@
-package com.example.ecloset.ui.screens
+package com.example.ecloset.ui.screens.user
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
@@ -10,12 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.ecloset.R
 
 @Composable
-fun UserProfile(){
+fun UserProfile(
+	modifier: Modifier = Modifier,
+	navController: NavHostController
+){
 	Text(
-		text = stringResource(com.example.ecloset.R.string.back_prompt),
+		text = stringResource(R.string.back_prompt),
 		modifier = Modifier
 			.fillMaxWidth()
 			.padding(
@@ -40,3 +44,4 @@ fun UserProfile(){
 	)
 	Spacer(modifier = Modifier.padding(vertical = 8.dp))
 }
+

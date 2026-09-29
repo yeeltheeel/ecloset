@@ -30,4 +30,5 @@
     <string name="login_prompt">Войти</string>
     <string name="reg_prompt">Зарегистрироваться</string>
     <string name="new_item_title">Новая вещь</string>
+    <string name="about_title">О нас</string>
 </resources>

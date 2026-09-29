@@ -44,7 +44,9 @@ fun EclosetScreen(){
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
-		topBar = { Header() },
+		topBar = { Header(
+			navController = navController
+		) },
 		floatingActionButton = {
 			ActionBarMenu(
 				navController = navController,

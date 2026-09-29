@@ -29,4 +29,5 @@
 	<string name="login_prompt">Login</string>
 	<string name="reg_prompt">Register</string>
     <string name="new_item_title">New item</string>
+	<string name="about_title">About</string>
 </resources>

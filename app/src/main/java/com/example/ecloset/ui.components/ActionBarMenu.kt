@@ -29,7 +29,7 @@ import com.example.ecloset.R
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.ui.components.PopupMenu
+import com.example.ecloset.ui.components.PopupActionMenu
 
 @Composable
 fun ActionBarButton(
@@ -65,6 +65,18 @@ fun ActionBarMenu(
 	currentRoute: String?
 ){
 	var addMenuOpen by remember { mutableStateOf(false) }
+	val addMenuActions = listOf(
+			PopupAction(
+				content = stringResource(R.string.add_prompt) + " " +
+						stringResource(R.string.item_text),
+				navRoute = Routes.ADD_ITEM,
+			),
+			PopupAction(
+				content = stringResource(R.string.add_prompt) + " " +
+						stringResource(R.string.outfit_text),
+				navRoute = Routes.ADD_OUTFIT,
+			)
+		)
 
 	// bottom aligned fab row
 	Box(
@@ -90,18 +102,30 @@ fun ActionBarMenu(
 				}
 			)
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-			ActionBarButton(
-				isSelected = addMenuOpen,
-				iconImage = Icons.Default.AddCircle,
-				description = stringResource(R.string.add_prompt) + " " +
+			Box{
+				ActionBarButton(
+					isSelected = addMenuOpen,
+					iconImage = Icons.Default.AddCircle,
+					description = stringResource(R.string.add_prompt) + " " +
 							stringResource(R.string.item_text) + " or " +
 							stringResource(R.string.outfit_text),
-				primaryColor = MaterialTheme.colorScheme.onTertiary,
-				secondaryColor = MaterialTheme.colorScheme.tertiary,
-				onClick = {
-					addMenuOpen = !addMenuOpen
-				}
-			)
+					primaryColor = MaterialTheme.colorScheme.onTertiary,
+					secondaryColor = MaterialTheme.colorScheme.tertiary,
+					onClick = {
+						addMenuOpen = !addMenuOpen
+					}
+				)
+				PopupActionMenu(
+					modifier = Modifier,
+					expanded = addMenuOpen,
+					direction = PopupDirection.UP,
+					actions = addMenuActions,
+					navController = navController,
+					onDismiss = {
+						addMenuOpen = false
+					}
+				)
+			}
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 			ActionBarButton(
 				isSelected = currentRoute == Routes.ANALYTICS,
