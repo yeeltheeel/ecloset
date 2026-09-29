@@ -12,11 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.LoginFormState
 import com.example.ecloset.user.data.AuthResult
 
 @Composable
-fun LoginPage(){
+fun LoginPage(
+	modifier: Modifier = Modifier,
+	navController: NavHostController
+){
 	Text(
 		text = stringResource(com.example.ecloset.R.string.login_title),
 		modifier = Modifier
@@ -81,4 +86,18 @@ fun LoginPage(){
 			textAlign = TextAlign.Center
 		)
 	}
+	Text(
+		text = stringResource(com.example.ecloset.R.string.no_account_prompt),
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 8.dp
+			)
+			.clickable{
+				navController.navigate(Routes.LOGIN)
+			},
+		style = MaterialTheme.typography.bodySmall,
+		color = MaterialTheme.colorScheme.secondary
+	)
 }

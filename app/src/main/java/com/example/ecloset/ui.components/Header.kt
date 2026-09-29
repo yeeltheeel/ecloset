@@ -47,7 +47,7 @@ fun Header(
 			Box{
 				IconButton(
 					onClick = {
-						// Open and close the menu
+						userMenuOpen = !userMenuOpen
 					},
 				) {
 					if (userAvatarUrl == null) {

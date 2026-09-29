@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.ecloset.ui.screens.user.UserProfile
 
 import com.example.ecloset.ui.screens.main.MainPage
 import com.example.ecloset.ui.screens.main.AnalyticsPage
@@ -14,7 +13,10 @@ import com.example.ecloset.ui.screens.closet.NewItemPage
 import com.example.ecloset.ui.screens.outfits.NewOutfitPage
 import com.example.ecloset.ui.screens.closet.ClosetPage
 import com.example.ecloset.ui.screens.outfits.OutfitPage
+import com.example.ecloset.ui.screens.user.UserProfile
 import com.example.ecloset.ui.screens.user.AboutPage
+import com.example.ecloset.ui.screens.auth.LoginPage
+import com.example.ecloset.ui.screens.auth.RegistrationPage
 
 object Routes {
 	const val MAIN = "main"
@@ -28,6 +30,9 @@ object Routes {
 
 	const val USER_SETTINGS = "user_profile"
 	const val ABOUT = "about"
+
+	const val LOGIN = "login"
+	const val REGISTER = "registration"
 }
 
 @Composable
@@ -84,6 +89,18 @@ fun NavActionHost(
 		}
 		composable(Routes.ABOUT) {
 			AboutPage(
+				modifier = modifier,
+				navController = navController
+			)
+		}
+		composable(Routes.LOGIN) {
+			LoginPage(
+				modifier = modifier,
+				navController = navController
+			)
+		}
+		composable(Routes.REGISTER) {
+			RegistrationPage(
 				modifier = modifier,
 				navController = navController
 			)
