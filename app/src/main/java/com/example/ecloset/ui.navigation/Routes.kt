@@ -2,6 +2,8 @@ package com.example.ecloset.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,6 +19,7 @@ import com.example.ecloset.ui.screens.user.UserProfile
 import com.example.ecloset.ui.screens.user.AboutPage
 import com.example.ecloset.ui.screens.auth.LoginPage
 import com.example.ecloset.ui.screens.auth.RegistrationPage
+import com.example.ecloset.user.data.UserViewModel
 
 object Routes {
 	const val MAIN = "main"
@@ -37,13 +40,17 @@ object Routes {
 
 @Composable
 fun NavActionHost(
+	modifier: Modifier,
 	navController: NavHostController,
 	innerPadding: PaddingValues,
-	modifier: Modifier
+	userViewModel: UserViewModel
 ) {
+	val userState by userViewModel.userState.collectAsState()
+	val startDest = if (userState.loggedIn) Routes.MAIN else Routes.LOGIN
+
 	NavHost(
 		navController = navController,
-		startDestination = Routes.MAIN,
+		startDestination = startDest,
 		modifier = modifier
 	) {
 		composable(Routes.MAIN) {
@@ -102,7 +109,7 @@ fun NavActionHost(
 		composable(Routes.REGISTER) {
 			RegistrationPage(
 				modifier = modifier,
-				navController = navController
+				navController = navController,
 			)
 		}
 	}

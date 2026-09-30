@@ -18,11 +18,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ecloset.ui.components.ActionBarMenu
 import com.example.ecloset.ui.components.Header
 import androidx.navigation.compose.rememberNavController
 import com.example.ecloset.ui.navigation.NavActionHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.ecloset.ui.navigation.Routes
+import com.example.ecloset.user.data.UserViewModel
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,9 +41,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EclosetScreen(){
+	val userViewModel: UserViewModel = viewModel()
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route
+	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER)
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
@@ -48,19 +53,22 @@ fun EclosetScreen(){
 			navController = navController
 		) },
 		floatingActionButton = {
-			ActionBarMenu(
-				navController = navController,
-				currentRoute = currentRoute
-			) },
+			if (showNavBar) {
+				ActionBarMenu(
+					navController = navController,
+					currentRoute = currentRoute
+				)
+			}},
 		floatingActionButtonPosition = FabPosition.Center
 	) {
 		innerPadding ->
 		NavActionHost(
-			navController = navController,
-			innerPadding = innerPadding,
 			modifier = Modifier
 				.fillMaxSize()
-				.padding(top = 45.dp)
+				.padding(top = 45.dp),
+			navController = navController,
+			innerPadding = innerPadding,
+			userViewModel = userViewModel // ???
 		)
 	}
 }
