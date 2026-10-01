@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ecloset"
 include(":app")
+include(":backend")
