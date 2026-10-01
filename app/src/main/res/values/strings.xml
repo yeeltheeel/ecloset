@@ -34,4 +34,6 @@
 	<string name="password_error">Password too short</string>
 	<string name="confirm_password_error">Passwords do not match</string>
 	<string name="email_error">Valid email is required</string>
+	<string name="logout_promt">Log out</string>
+	<string name="delete_account_prompt">Delete account</string>
 </resources>

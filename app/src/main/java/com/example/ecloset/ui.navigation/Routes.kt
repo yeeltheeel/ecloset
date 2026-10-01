@@ -91,7 +91,8 @@ fun NavActionHost(
 		composable(Routes.USER_SETTINGS) {
 			UserProfile(
 				modifier = modifier,
-				navController = navController
+				navController = navController,
+				userViewModel = userViewModel
 			)
 		}
 		composable(Routes.ABOUT) {

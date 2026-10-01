@@ -12,6 +12,7 @@ import java.sql.Date
 data class UserInfo(
 	val id: Int,
 	val username: String,
+	val email: String,
 	val avatarUrl: String? = null
 )
 
@@ -66,6 +67,7 @@ class UserViewModel(): ViewModel() {
 val testUser = UserInfo(
 	id = 1,
 	username = "User",
+	email = "user@example.com",
 	avatarUrl = null
 )
 

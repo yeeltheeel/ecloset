@@ -35,4 +35,6 @@
     <string name="password_error">Слишком короткий пароль</string>
     <string name="confirm_password_error">Пароли не совпадают</string>
     <string name="email_error">Неправильная почта</string>
+    <string name="logout_promt">Выйти из аккаунта</string>
+    <string name="delete_account_prompt">Удалить аккаунт</string>
 </resources>
