@@ -26,6 +26,7 @@ import com.example.ecloset.ui.navigation.NavActionHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.UserViewModel
+import androidx.compose.runtime.collectAsState
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +47,14 @@ fun EclosetScreen(){
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route
 	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER)
+	// mb remove add_button from new_item and new_outfit
+	val userLogged = userViewModel.userState.collectAsState().value.loggedIn
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
 		topBar = { Header(
-			navController = navController
+			navController = navController,
+			userLogged = userLogged
 		) },
 		floatingActionButton = {
 			if (showNavBar) {

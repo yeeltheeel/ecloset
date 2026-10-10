@@ -25,21 +25,39 @@ import com.example.ecloset.ui.navigation.Routes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Header(
-	navController: NavHostController
+	navController: NavHostController,
+	userLogged: Boolean
 ){
 	val userAvatarUrl: String? = null
 
 	var userMenuOpen by remember { mutableStateOf(false) }
-	val userMenuActions = listOf(
-		PopupAction(
-			content = stringResource(R.string.user_profile_title),
-			navRoute = Routes.USER_SETTINGS,
-		),
-		PopupAction(
-			content = stringResource(R.string.about_title),
-			navRoute = Routes.ABOUT,
+//	val userMenuActions = listOf(
+//		PopupAction(
+//			content = stringResource(R.string.user_profile_title),
+//			navRoute = Routes.USER_SETTINGS,
+//		),
+//		PopupAction(
+//			content = stringResource(R.string.about_title),
+//			navRoute = Routes.ABOUT,
+//		)
+//	)
+
+	val userMenuActions = buildList {
+		if (userLogged) {
+			add(
+				PopupAction(
+					content = stringResource(R.string.user_profile_title),
+					navRoute = Routes.USER_SETTINGS,
+				)
+			)
+		}
+		add(
+			PopupAction(
+				content = stringResource(R.string.about_title),
+				navRoute = Routes.ABOUT,
+			)
 		)
-	)
+	}
 
 	TopAppBar(
 		title = {Text(text = stringResource(R.string.app_name))},

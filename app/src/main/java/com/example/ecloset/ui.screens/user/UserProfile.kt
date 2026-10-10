@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +36,7 @@ fun UserProfile(
 		item{
 			Spacer(modifier = Modifier.padding(vertical = 20.dp))
 			Text(
-				text = "< " + stringResource(com.example.ecloset.R.string.back_prompt),
+				text = "< " + stringResource(R.string.back_prompt),
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(
@@ -70,7 +72,8 @@ fun UserProfile(
 					.padding(
 						horizontal = 16.dp,
 						vertical = 8.dp
-					),
+					)
+					.clickable{},
 				style = MaterialTheme.typography.bodyLarge
 			)
 			Text(
@@ -94,7 +97,8 @@ fun UserProfile(
 					.padding(
 						horizontal = 16.dp,
 						vertical = 8.dp
-					),
+					)
+					.clickable{},
 				style = MaterialTheme.typography.bodyLarge
 			)
 			Text(
@@ -146,7 +150,10 @@ fun UserProfile(
 					),
 				onClick = {
 					userViewModel.deleteAccount()
-				}
+				},
+				colors = ButtonDefaults.buttonColors(
+					containerColor = MaterialTheme.colorScheme.error
+				)
 			) {
 				Text(
 					text = stringResource(com.example.ecloset.R.string.delete_account_prompt),
@@ -157,7 +164,7 @@ fun UserProfile(
 							vertical = 12.dp
 						),
 					style = MaterialTheme.typography.titleLarge,
-					color = MaterialTheme.colorScheme.error,
+					color = MaterialTheme.colorScheme.onPrimary,
 					textAlign = TextAlign.Center
 				)
 			}
