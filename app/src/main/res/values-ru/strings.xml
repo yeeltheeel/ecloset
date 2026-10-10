@@ -37,4 +37,7 @@
     <string name="email_error">Неправильная почта</string>
     <string name="logout_promt">Выйти из аккаунта</string>
     <string name="delete_account_prompt">Удалить аккаунт</string>
+    <string name="otp_title">Одноразовый код</string>
+    <string name="code_prompt">Введите код, отправленный на почту</string>
+    <string name="confirm_prompt">Подтвердить</string>
 </resources>

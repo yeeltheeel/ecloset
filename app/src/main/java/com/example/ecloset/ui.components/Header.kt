@@ -31,17 +31,6 @@ fun Header(
 	val userAvatarUrl: String? = null
 
 	var userMenuOpen by remember { mutableStateOf(false) }
-//	val userMenuActions = listOf(
-//		PopupAction(
-//			content = stringResource(R.string.user_profile_title),
-//			navRoute = Routes.USER_SETTINGS,
-//		),
-//		PopupAction(
-//			content = stringResource(R.string.about_title),
-//			navRoute = Routes.ABOUT,
-//		)
-//	)
-
 	val userMenuActions = buildList {
 		if (userLogged) {
 			add(
@@ -69,14 +58,14 @@ fun Header(
 					},
 				) {
 					if (userAvatarUrl == null) {
-						// default avatar when no image is available.
+						// default avatar when no image is available
 						Icon(
 							imageVector = Icons.Default.AccountCircle,
 							contentDescription = "User profile",
 							tint = MaterialTheme.colorScheme.onPrimary
 						)
 					} else {
-						// display the user's image here later.
+						// display the user's image here later
 						Icon(
 							imageVector = Icons.Default.AccountCircle,
 							contentDescription = "User profile",
