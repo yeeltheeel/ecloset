@@ -22,8 +22,8 @@
     <string name="username_prompt">Имя</string>
     <string name="repeat_password_prompt">Введите пароль еще раз</string>
     <string name="forgot_password_prompt">Забыли пароль?</string>
-    <string name="already_registered_prompt">Уже зарегистрированы?</string>
-    <string name="no_account_prompt">Еще не зарегистрированы?</string>
+    <string name="already_registered_prompt">Уже зарегистрированы? Войти</string>
+    <string name="no_account_prompt">Еще не зарегистрированы? Зарегистрироваться</string>
     <string name="back_prompt">Назад</string>
     <string name="user_profile_title">Настройки профиля</string>
     <string name="avatar_prompt">Сменить изображение</string>
@@ -37,4 +37,7 @@
     <string name="email_error">Неправильная почта</string>
     <string name="logout_promt">Выйти из аккаунта</string>
     <string name="delete_account_prompt">Удалить аккаунт</string>
+    <string name="otp_title">Одноразовый код</string>
+    <string name="code_prompt">Введите код, отправленный на почту</string>
+    <string name="confirm_prompt">Подтвердить</string>
 </resources>

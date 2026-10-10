@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 data class LoginFormState(
 	val email: String = "",
 	val password: String = "",
-	val confirmCode: Int? = null, // otp to email
+	val confirmCode: String? = null, // otp to email
 	val emailError: Int? = null,
 	val passwordError: Int? = null,
 	val codeError: Int? = null,
@@ -24,6 +24,7 @@ data class RegFormState(
 	val username: String = "",
 	val email: String = "",
 	val password: String = "",
+	val code: String = "",
 	val confirmPassword: String = "",
 	val usernameError: Int? = null,
 	val emailError: Int? = null,
@@ -86,7 +87,7 @@ class AuthViewModel(): ViewModel() {
 				passwordError = null
 			)
 			"confirmCode" -> {
-				val code = value.toIntOrNull()
+				val code = value // value.toIntOrNull()
 				current.copy(
 					confirmCode = code,
 					codeError = null

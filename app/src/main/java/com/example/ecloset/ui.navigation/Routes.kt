@@ -19,6 +19,7 @@ import com.example.ecloset.ui.screens.user.UserProfile
 import com.example.ecloset.ui.screens.user.AboutPage
 import com.example.ecloset.ui.screens.auth.LoginPage
 import com.example.ecloset.ui.screens.auth.RegistrationPage
+import com.example.ecloset.ui.screens.auth.OtpPage
 import com.example.ecloset.user.data.UserViewModel
 
 object Routes {
@@ -36,6 +37,8 @@ object Routes {
 
 	const val LOGIN = "login"
 	const val REGISTER = "registration"
+
+	const val OTP = "otp"
 }
 
 @Composable
@@ -110,7 +113,13 @@ fun NavActionHost(
 		composable(Routes.REGISTER) {
 			RegistrationPage(
 				modifier = modifier,
-				navController = navController,
+				navController = navController
+			)
+		}
+		composable(Routes.OTP) {
+			OtpPage(
+				modifier = modifier,
+				navController = navController
 			)
 		}
 	}

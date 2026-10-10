@@ -91,8 +91,8 @@ fun LoginPage(
 						horizontal = 16.dp,
 						vertical = 8.dp
 					)
-					.clickable{
-						// otp to email action
+					.clickable {
+						navController.navigate(Routes.OTP) // otp to email action
 					},
 				style = MaterialTheme.typography.bodySmall,
 				color = MaterialTheme.colorScheme.secondary
@@ -132,7 +132,7 @@ fun LoginPage(
 						horizontal = 16.dp,
 						vertical = 8.dp
 					)
-					.clickable{
+					.clickable {
 						navController.navigate(Routes.REGISTER)
 					},
 				style = MaterialTheme.typography.bodySmall,
