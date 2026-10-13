@@ -1,14 +1,20 @@
 package com.example.ecloset.ui.screens.user
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,12 +63,26 @@ fun UserProfile(
 					.fillMaxWidth()
 					.padding(
 						horizontal = 16.dp,
-						vertical = 12.dp
+						vertical = 8.dp
 					),
 				style = MaterialTheme.typography.titleLarge,
 				color = MaterialTheme.colorScheme.primary
 			)
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
+		}
+		item{
+			val avatarUrl = userViewModel.userState.collectAsState().value.user?.avatarUrl
+			if (avatarUrl == null){
+				Icon(
+					imageVector = Icons.Default.AccountCircle,
+					contentDescription = "profile picture",
+					modifier = Modifier
+						.width(150.dp)
+						.padding(horizontal = 16.dp)
+						.aspectRatio(1f),
+					tint = MaterialTheme.colorScheme.tertiary,
+				)
+			}
 		}
 		item{
 			Text(
@@ -71,7 +91,7 @@ fun UserProfile(
 					.fillMaxWidth()
 					.padding(
 						horizontal = 16.dp,
-						vertical = 8.dp
+						vertical = 16.dp
 					)
 					.clickable{},
 				style = MaterialTheme.typography.bodyLarge
@@ -152,7 +172,7 @@ fun UserProfile(
 					userViewModel.deleteAccount()
 				},
 				colors = ButtonDefaults.buttonColors(
-					containerColor = MaterialTheme.colorScheme.error
+					containerColor = MaterialTheme.colorScheme.errorContainer
 				)
 			) {
 				Text(
@@ -164,7 +184,7 @@ fun UserProfile(
 							vertical = 12.dp
 						),
 					style = MaterialTheme.typography.titleLarge,
-					color = MaterialTheme.colorScheme.onPrimary,
+					color = MaterialTheme.colorScheme.onErrorContainer,
 					textAlign = TextAlign.Center
 				)
 			}

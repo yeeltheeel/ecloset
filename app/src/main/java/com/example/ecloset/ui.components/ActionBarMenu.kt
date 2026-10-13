@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.ui.components.PopupActionMenu
 
@@ -77,6 +78,9 @@ fun ActionBarMenu(
 				navRoute = Routes.ADD_OUTFIT,
 			)
 		)
+	val backStackEntry by navController.currentBackStackEntryAsState()
+	val currentRoute = backStackEntry?.destination?.route
+	val showAddButton = (currentRoute != Routes.ADD_ITEM && currentRoute != Routes.ADD_OUTFIT)
 
 	// bottom aligned fab row
 	Box(
@@ -91,8 +95,8 @@ fun ActionBarMenu(
 				isSelected = currentRoute == Routes.MAIN,
 				iconImage = Icons.Default.Home,
 				description = stringResource(R.string.mainpage_title),
-				primaryColor = MaterialTheme.colorScheme.primary,
-				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
+				primaryColor = MaterialTheme.colorScheme.secondaryContainer,
+				secondaryColor = MaterialTheme.colorScheme.onSecondaryContainer,
 				onClick = {
 					addMenuOpen = false
 					navController.navigate(Routes.MAIN) {
@@ -102,37 +106,39 @@ fun ActionBarMenu(
 				}
 			)
 			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-			Box{
-				ActionBarButton(
-					isSelected = addMenuOpen,
-					iconImage = Icons.Default.AddCircle,
-					description = stringResource(R.string.add_prompt) + " " +
-							stringResource(R.string.item_text) + " or " +
-							stringResource(R.string.outfit_text),
-					primaryColor = MaterialTheme.colorScheme.onTertiary,
-					secondaryColor = MaterialTheme.colorScheme.tertiary,
-					onClick = {
-						addMenuOpen = !addMenuOpen
-					}
-				)
-				PopupActionMenu(
-					modifier = Modifier,
-					expanded = addMenuOpen,
-					direction = PopupDirection.UP,
-					actions = addMenuActions,
-					navController = navController,
-					onDismiss = {
-						addMenuOpen = false
-					}
-				)
+			if (showAddButton){
+				Box{
+					ActionBarButton(
+						isSelected = addMenuOpen,
+						iconImage = Icons.Default.AddCircle,
+						description = stringResource(R.string.add_prompt) + " " +
+								stringResource(R.string.item_text) + " or " +
+								stringResource(R.string.outfit_text),
+						primaryColor = MaterialTheme.colorScheme.onTertiary,
+						secondaryColor = MaterialTheme.colorScheme.tertiary,
+						onClick = {
+							addMenuOpen = !addMenuOpen
+						}
+					)
+					PopupActionMenu(
+						modifier = Modifier,
+						expanded = addMenuOpen,
+						direction = PopupDirection.UP,
+						actions = addMenuActions,
+						navController = navController,
+						onDismiss = {
+							addMenuOpen = false
+						}
+					)
+				}
+				Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 			}
-			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 			ActionBarButton(
 				isSelected = currentRoute == Routes.ANALYTICS,
 				iconImage = Icons.Default.Book,
 				description = stringResource(R.string.analytics_title),
-				primaryColor = MaterialTheme.colorScheme.primary,
-				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
+				primaryColor = MaterialTheme.colorScheme.secondaryContainer,
+				secondaryColor = MaterialTheme.colorScheme.onSecondaryContainer,
 				onClick = {
 					addMenuOpen = false
 					navController.navigate(Routes.ANALYTICS) {
@@ -141,7 +147,6 @@ fun ActionBarMenu(
 					}
 				}
 			)
-			Spacer(modifier = Modifier.padding(horizontal = 8.dp))
 		}
 	}
 }

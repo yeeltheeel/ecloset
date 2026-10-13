@@ -25,7 +25,7 @@ fun WeatherWidget(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 0.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
@@ -38,7 +38,8 @@ fun WeatherWidget(
             modifier = Modifier.padding(
                 vertical = 8.dp,
                 horizontal = 8.dp
-            )
+            ),
+            color = MaterialTheme.colorScheme.primary
         )
     }
     Spacer(modifier = Modifier.padding(vertical = 8.dp))

@@ -14,7 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
 import androidx.navigation.NavHostController
+import com.example.ecloset.ui.components.GridHeader
+import com.example.ecloset.ui.components.GridLayout
 import com.example.ecloset.ui.navigation.Routes
+import com.example.ecloset.user.data.MockData.outfitsList
+import com.example.ecloset.user.data.MockData.outfitsCategories
 
 @Composable
 fun OutfitPage(
@@ -56,6 +60,14 @@ fun OutfitPage(
 				color = MaterialTheme.colorScheme.primary
 			)
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
+		}
+		item{
+			GridHeader(
+				categoryList = outfitsCategories
+			)
+			GridLayout(
+				itemList = outfitsList
+			)
 		}
 	}
 }

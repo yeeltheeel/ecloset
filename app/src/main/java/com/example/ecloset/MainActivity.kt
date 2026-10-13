@@ -1,6 +1,15 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 @file:SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
+/* to-do:
+	user theme preference + dynamic tinting for theme
+	user tint selecting block to user settings
+	user actions (change username, etc)
+	add statistics for clothes categories
+	add unused clothes
+	remove type attribute from data classes, replace with type check
+*/
+
 package com.example.ecloset
 
 import android.annotation.SuppressLint
@@ -13,7 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.ecloset.ui.theme.EclosetTheme
+import com.example.ecloset.ui.theme.EClosetTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.getValue
@@ -32,8 +41,9 @@ class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
+		window.isNavigationBarContrastEnforced = false
 		setContent {
-			EclosetTheme {
+			EClosetTheme {
 				EclosetScreen()
 			}
 		}
@@ -46,8 +56,8 @@ fun EclosetScreen(){
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route
-	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER)
-	// mb remove add_button from new_item and new_outfit
+	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER &&
+			currentRoute != Routes.USER_SETTINGS && currentRoute != Routes.ABOUT)
 	val userLogged = userViewModel.userState.collectAsState().value.loggedIn
 
 	Scaffold(
@@ -72,7 +82,7 @@ fun EclosetScreen(){
 				.padding(top = 45.dp),
 			navController = navController,
 			innerPadding = innerPadding,
-			userViewModel = userViewModel // ???
+			userViewModel = userViewModel
 		)
 	}
 }

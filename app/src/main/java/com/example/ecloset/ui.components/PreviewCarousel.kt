@@ -19,26 +19,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-
-data class PreviewCard(
-	val id: Int,
-	val title: String,
-	val color: Color
-)
+import com.example.ecloset.user.data.PreviewCard
+import com.example.ecloset.ui.components.PreviewGridCard
 
 @Composable
 fun PreviewCarousel(
-	modifier: Modifier,
 	previewTitle: String,
 	cards: List<PreviewCard>,
-	onCardClick: (PreviewCard) -> Unit,
 	navController: NavHostController,
 	currentRoute: String
 ){
-	// Clickable title above the carousel
+	// clickable title as link to dedicated page
 	Text(
 		text = previewTitle,
 		modifier = Modifier
@@ -53,7 +46,7 @@ fun PreviewCarousel(
 		style = MaterialTheme.typography.titleLarge,
 		color = MaterialTheme.colorScheme.primary
 	)
-	// Horizontal card carousel
+	// horizontal card preview carousel
 	LazyRow(
 		modifier = Modifier
 			.fillMaxWidth(),
@@ -67,50 +60,8 @@ fun PreviewCarousel(
 			items = cards,
 			key = { card -> card.id }
 		) { card ->
-			PreviewOutfitCard(
-				card = card,
-				onClick = {
-					onCardClick(card)
-				}
-			)
-		}
-	}
-}
-
-@Composable
-fun PreviewOutfitCard(
-	card: PreviewCard,
-	onClick: () -> Unit
-) {
-	Card(
-		onClick = onClick,
-		modifier = Modifier
-			.width(150.dp)
-			.height(200.dp),
-		colors = CardDefaults.cardColors(
-			containerColor = card.color
-		),
-		elevation = CardDefaults.cardElevation(
-			defaultElevation = 2.dp
-		)
-	) {
-		Column(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(12.dp),
-			horizontalAlignment = Alignment.CenterHorizontally
-		) {
-			// Temporary image placeholder
-			Spacer(
-				modifier = Modifier
-					.size(130.dp)
-					.padding(bottom = 8.dp)
-			)
-
-			Text(
-				text = card.title,
-				style = MaterialTheme.typography.titleMedium,
-				maxLines = 1
+			PreviewGridCard(
+				data = card
 			)
 		}
 	}

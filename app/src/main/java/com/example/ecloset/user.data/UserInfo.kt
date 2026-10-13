@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.sql.Date
+import com.example.ecloset.user.data.MockData.testUser
 
 data class UserInfo(
 	val id: Int,
@@ -39,7 +40,7 @@ class UserViewModel(): ViewModel() {
 			)
 		}
 
-		// placeholder
+		// placeholder for now
 		val loggedIn = true
 		userStateFlow.value = userStateFlow.value.copy(
 			isLoading = false,
@@ -61,43 +62,53 @@ class UserViewModel(): ViewModel() {
 	}
 
 	fun deleteAccount(){
+		// remove account
 	}
 }
 
-val testUser = UserInfo(
-	id = 1,
-	username = "User",
-	email = "user@example.com",
-	avatarUrl = null
-)
-
-// user related objects
-interface GridCardData {
-	val id: Int
-	val imageUrl: String?
-	val dateAdded: Date
-}
-
+// clothes and outfits
 data class CategoryItem(
 	val id: Int,
 	val title: String
 )
 
-data class ClosetItem(
+data class ClosetItemData(
 	override val id: Int,
+	override val title: String,
+	override val type: String,
 	override val imageUrl: String?,
-	val category: String,
+	val category: String, // same as CategoryItem
 	val season: String,
 	val material: String,
 	val color: Color,
 	val occasion: String,
 	override val dateAdded: Date
-) : GridCardData
+) : PreviewCardData
 
-data class OutfitItem(
+data class OutfitItemData(
 	override val id: Int,
+	override val title: String,
+	override val type: String,
 	override val imageUrl: String?,
 	val season: String, // or Int if we go with season_id
 	val occasion: String,
 	override val dateAdded: Date
-) : GridCardData
+) : PreviewCardData
+
+interface PreviewCardData {
+	val id: Int
+	val title: String
+	val type: String
+	val imageUrl: String?
+	val dateAdded: Date
+}
+
+data class PreviewCard(
+	// wrapper for PreviewCardData
+	val id: Int,
+	val title: String,
+	val type: String,
+	val imageUrl: String? = null,
+	val dateAdded: Date = Date(System.currentTimeMillis())
+)
+
