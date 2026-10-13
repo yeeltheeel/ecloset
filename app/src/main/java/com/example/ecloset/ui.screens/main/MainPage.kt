@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
+import com.example.ecloset.user.data.CategoryItem
 
 @Composable
 fun MainPage(

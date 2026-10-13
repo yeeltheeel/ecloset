@@ -14,13 +14,55 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
 import androidx.navigation.NavHostController
+import com.example.ecloset.ui.components.GridLayout
+import com.example.ecloset.ui.components.PreviewCard
 import com.example.ecloset.ui.navigation.Routes
+import com.example.ecloset.user.data.CategoryItem
 
 @Composable
 fun ClosetPage(
 	modifier: Modifier = Modifier,
 	navController: NavHostController
 ){
+	/* begin test data */
+	val clothesCats = listOf(
+		CategoryItem(
+			id = 1,
+			title = "top"
+		),
+		CategoryItem(
+			id = 2,
+			title = "bottom"
+		),
+		CategoryItem(
+			id = 3,
+			title = "shoes"
+		),
+		CategoryItem(
+			id = 4,
+			title = "accessories"
+		)
+	)
+
+	val clothes = listOf(
+		PreviewCard(
+			id = 1,
+			title = "Item 1",
+			color = MaterialTheme.colorScheme.onTertiary
+		),
+		PreviewCard(
+			id = 2,
+			title = "Item 2",
+			color = MaterialTheme.colorScheme.onTertiary
+		),
+		PreviewCard(
+			id = 3,
+			title = "Item 3",
+			color = MaterialTheme.colorScheme.onTertiary
+		)
+	)
+	/* end test data */
+
 	LazyColumn(
 		modifier
 			.fillMaxWidth(),
@@ -56,6 +98,12 @@ fun ClosetPage(
 				color = MaterialTheme.colorScheme.primary
 			)
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
+		}
+		item{
+			GridLayout(
+				categoryList = clothesCats,
+				itemList = clothes
+			)
 		}
 	}
 }

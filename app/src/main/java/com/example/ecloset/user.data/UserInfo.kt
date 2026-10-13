@@ -78,6 +78,11 @@ interface GridCardData {
 	val dateAdded: Date
 }
 
+data class CategoryItem(
+	val id: Int,
+	val title: String
+)
+
 data class ClosetItem(
 	override val id: Int,
 	override val imageUrl: String?,
