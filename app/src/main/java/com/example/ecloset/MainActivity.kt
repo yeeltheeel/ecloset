@@ -4,7 +4,9 @@
 /* to-do:
 	user theme preference + dynamic tinting for theme
 	user tint selecting block to user settings
+	add localizations to clothes categories
 	user actions (change username, etc)
+	weather widget (add cute animation/gif)
 	add statistics for clothes categories
 	add unused clothes
 	remove type attribute from data classes, replace with type check

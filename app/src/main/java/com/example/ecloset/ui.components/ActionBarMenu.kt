@@ -95,8 +95,8 @@ fun ActionBarMenu(
 				isSelected = currentRoute == Routes.MAIN,
 				iconImage = Icons.Default.Home,
 				description = stringResource(R.string.mainpage_title),
-				primaryColor = MaterialTheme.colorScheme.secondaryContainer,
-				secondaryColor = MaterialTheme.colorScheme.onSecondaryContainer,
+				primaryColor = MaterialTheme.colorScheme.onSecondaryContainer,
+				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
 				onClick = {
 					addMenuOpen = false
 					navController.navigate(Routes.MAIN) {
@@ -137,8 +137,8 @@ fun ActionBarMenu(
 				isSelected = currentRoute == Routes.ANALYTICS,
 				iconImage = Icons.Default.Book,
 				description = stringResource(R.string.analytics_title),
-				primaryColor = MaterialTheme.colorScheme.secondaryContainer,
-				secondaryColor = MaterialTheme.colorScheme.onSecondaryContainer,
+				primaryColor = MaterialTheme.colorScheme.onSecondaryContainer,
+				secondaryColor = MaterialTheme.colorScheme.secondaryContainer,
 				onClick = {
 					addMenuOpen = false
 					navController.navigate(Routes.ANALYTICS) {
