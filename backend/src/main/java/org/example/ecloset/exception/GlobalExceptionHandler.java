@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,5 +70,30 @@ public class GlobalExceptionHandler {
         Map<String, String> errorBody = new HashMap<>();
         errorBody.put("error", message);
         return new ResponseEntity<>(errorBody, status);
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleItemNotFound(ItemNotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND); // 404
+    }
+
+    @ExceptionHandler(SeasonNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleSeasonNotFound(SeasonNotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND); // 404
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN); // 403
+    }
+
+    // Обработка ошибок десериализации (например, неверное значение enum)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleEnumParsingError(HttpMessageNotReadableException ex) {
+        String message = "Некорректный формат данных в запросе";
+        if (ex.getMessage() != null && ex.getMessage().contains("Cannot deserialize value of type")) {
+            message = "Некорректное значение перечисления (enum). Проверьте правильность написания.";
+        }
+        return buildErrorResponse(message, HttpStatus.BAD_REQUEST); // 400
     }
 }
