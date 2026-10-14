@@ -58,5 +58,31 @@ fun NewOutfitPage(
 			)
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
+		item {
+			Text(
+				text = stringResource(R.string.occasion_prompt),
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(
+						horizontal = 16.dp,
+						vertical = 8.dp
+					)
+					.clickable{},
+				style = MaterialTheme.typography.bodyLarge
+			)
+		}
+		item {
+			Text(
+				text = stringResource(R.string.location_prompt),
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(
+						horizontal = 16.dp,
+						vertical = 8.dp
+					)
+					.clickable{},
+				style = MaterialTheme.typography.bodyLarge
+			)
+		}
 	}
 }

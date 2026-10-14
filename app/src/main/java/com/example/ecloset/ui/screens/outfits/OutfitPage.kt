@@ -18,7 +18,7 @@ import com.example.ecloset.ui.components.GridHeader
 import com.example.ecloset.ui.components.GridLayout
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.MockData.outfitsList
-import com.example.ecloset.user.data.MockData.outfitsCategories
+//import com.example.ecloset.user.data.MockData.outfitsCategories
 
 @Composable
 fun OutfitPage(
@@ -62,9 +62,9 @@ fun OutfitPage(
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
-			GridHeader(
-				categoryList = outfitsCategories
-			)
+//			GridHeader(
+//				categoryList = outfitsCategories
+//			)
 			GridLayout(
 				itemList = outfitsList
 			)

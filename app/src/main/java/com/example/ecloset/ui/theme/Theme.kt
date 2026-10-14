@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun EClosetTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    tint: Tint = Tint.Plum,
+    tint: Tint = Tint.Violet,
     dynamicColor: Boolean = false, // Dynamic color is available on Android 12+
     content: @Composable () -> Unit,
 ) {

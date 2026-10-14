@@ -2,14 +2,21 @@
 @file:SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
 /* to-do:
-	user theme preference + dynamic tinting for theme
-	user tint selecting block to user settings
-	add localizations to clothes categories
-	user actions (change username, etc)
-	weather widget (add cute animation/gif)
-	add statistics for clothes categories
-	add unused clothes
-	remove type attribute from data classes, replace with type check
+	main:
+		user actions (change username, etc)
+		closet viewmodels
+		user tint selecting block to user settings
+		filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
+		weather widget (add cute animation/gif)
+	medium:
+		user theme preference + dynamic tinting for theme
+		add localizations to clothes categories
+		add statistics for clothes categories
+		add unused clothes
+		preview cards (last added items, relevant outfits)
+	misc:
+		fix up log/reg pages (cutify)
+		remove type attribute from data classes, replace with type check
 */
 
 package com.example.ecloset
@@ -37,7 +44,6 @@ import com.example.ecloset.ui.navigation.NavActionHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.UserViewModel
-import androidx.compose.runtime.collectAsState
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {

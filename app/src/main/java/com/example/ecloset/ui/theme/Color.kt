@@ -50,13 +50,13 @@ data class Tint(
 ) {
 	companion object {
 		val None   = Tint(GrayRamp.N50, chroma = 0f)
-		val Plum   = Tint(Color(0xFF6B4E7A))
-		val Sage   = Tint(Color(0xFF5A7A6B))
-		val Amber  = Tint(Color(0xFFC58B3A))
-		val Indigo = Tint(Color(0xFF4E5A9A))
-		val Rose   = Tint(Color(0xFFB55070))
+		val Violet   = Tint(Color(0xFF654381))
+		val Sage   = Tint(Color(0xFF4C7C55))
+		val Amber  = Tint(Color(0xFFD28E38))
+		val Indigo = Tint(Color(0xFF2F65B4))
+		val Rose   = Tint(Color(0xFFAF3E78))
 
-		val presets = listOf(Plum, Sage, Amber, Indigo, Rose)
+		val presets = listOf(Violet, Sage, Amber, Indigo, Rose)
 	}
 }
 
@@ -91,6 +91,7 @@ private fun hslToColor(h: Float, s: Float, l: Float): Color {
 		h < 300f -> Triple(x, 0f, c)
 		else     -> Triple(c, 0f, x)
 	}
+
 	return Color(r1 + m, g1 + m, b1 + m, 1f)
 }
 

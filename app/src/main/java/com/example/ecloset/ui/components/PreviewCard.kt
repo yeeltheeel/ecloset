@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.user.data.CategoryItem
 import com.example.ecloset.user.data.PreviewCard
@@ -134,7 +135,7 @@ fun CategoryCard(
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			Text(
-				text = category.title,
+				text = stringResource(category.titleId),
 				style = MaterialTheme.typography.titleMedium,
 				color = MaterialTheme.colorScheme.onSecondaryContainer,
 				maxLines = 1

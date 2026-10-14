@@ -1,6 +1,9 @@
 package com.example.ecloset.user.data
 
+import android.R
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.example.ecloset.user.data.PreviewCard
 
 object MockData {
@@ -52,19 +55,27 @@ object MockData {
 	val clothesCategories = listOf(
 		CategoryItem(
 			id = 1,
-			title = "Tops"
+			titleId = com.example.ecloset.R.string.items_tops
 		),
 		CategoryItem(
 			id = 2,
-			title = "Bottoms"
+			titleId = com.example.ecloset.R.string.items_bottoms
 		),
 		CategoryItem(
 			id = 3,
-			title = "Shoes"
+			titleId = com.example.ecloset.R.string.items_shoes
 		),
 		CategoryItem(
 			id = 4,
-			title = "Accessories"
+			titleId = com.example.ecloset.R.string.items_cardigans
+		),
+		CategoryItem(
+			id = 5,
+			titleId = com.example.ecloset.R.string.items_coats
+		),
+		CategoryItem(
+			id = 6,
+			titleId = com.example.ecloset.R.string.items_accessories
 		)
 	)
 
@@ -102,20 +113,7 @@ object MockData {
 	)
 
 	/* outfits  */
-	val outfitsCategories = listOf(
-		CategoryItem(
-			id = 1,
-			title = "Seasonal"
-		),
-		CategoryItem(
-			id = 2,
-			title = "Casual"
-		),
-		CategoryItem(
-			id = 3,
-			title = "Party"
-		)
-	)
+	//val outfitsCategories = listOf()
 	val outfitsList = listOf(
 		PreviewCard(
 			id = 1,

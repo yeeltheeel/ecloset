@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -80,9 +81,10 @@ fun UserProfile(
 						.width(150.dp)
 						.padding(horizontal = 16.dp)
 						.aspectRatio(1f),
-					tint = MaterialTheme.colorScheme.tertiary,
+					tint = MaterialTheme.colorScheme.tertiary
 				)
 			}
+			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
 			Text(
@@ -91,7 +93,7 @@ fun UserProfile(
 					.fillMaxWidth()
 					.padding(
 						horizontal = 16.dp,
-						vertical = 16.dp
+						vertical = 8.dp
 					)
 					.clickable{},
 				style = MaterialTheme.typography.bodyLarge
@@ -102,7 +104,7 @@ fun UserProfile(
 					.fillMaxWidth()
 					.padding(
 						horizontal = 16.dp,
-						vertical = 4.dp
+						vertical = 0.dp
 					),
 				style = MaterialTheme.typography.bodyMedium,
 				color = MaterialTheme.colorScheme.tertiary
@@ -127,20 +129,20 @@ fun UserProfile(
 					.fillMaxWidth()
 					.padding(
 						horizontal = 16.dp,
-						vertical = 4.dp
+						vertical = 0.dp
 					),
 				style = MaterialTheme.typography.bodyMedium,
 				color = MaterialTheme.colorScheme.tertiary
 			)
-			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
+			Spacer(modifier = Modifier.padding(vertical = 16.dp))
 			Button(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(
 						horizontal = 50.dp,
-						vertical = 4.dp
+						vertical = 8.dp
 					),
 				onClick = {
 					userViewModel.logOut()
