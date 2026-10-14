@@ -15,3 +15,5 @@
 local.propertiess
 .env
 *.env.local
+uploads/
+!uploads/.gitkeep

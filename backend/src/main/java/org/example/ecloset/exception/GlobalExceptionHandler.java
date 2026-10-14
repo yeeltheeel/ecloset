@@ -1,6 +1,7 @@
 package org.example.ecloset.exception;
 import io.swagger.v3.oas.annotations.Hidden;
 
+import org.example.ecloset.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -92,8 +93,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleEnumParsingError(HttpMessageNotReadableException ex) {
         String message = "Некорректный формат данных в запросе";
         if (ex.getMessage() != null && ex.getMessage().contains("Cannot deserialize value of type")) {
-            message = "Некорректное значение перечисления (enum). Проверьте правильность написания.";
+            message = "Некорректное значение пер ечисления (enum). Проверьте правильность написания.";
         }
         return buildErrorResponse(message, HttpStatus.BAD_REQUEST); // 400
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<ErrorResponse> handleFileStorage(FileStorageException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage()));
     }
 }

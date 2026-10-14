@@ -17,10 +17,12 @@ import org.example.ecloset.entity.User;
 import org.example.ecloset.exception.UserNotFoundException;
 import org.example.ecloset.repository.UserRepository;
 import org.example.ecloset.service.ItemService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,6 +43,26 @@ public class ItemController {
         return user.getUserId();
     }
 
+    @Operation(summary = "Получить вещь по ID",
+            description = "Возвращает одну вещь текущего пользователя по её ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Вещь найдена",
+                    content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}"))),
+            @ApiResponse(responseCode = "403", description = "Вещь принадлежит другому пользователю",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"У вас нет прав на это действие\"}"))),
+            @ApiResponse(responseCode = "404", description = "Вещь не найдена",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Вещь не найдена\"}")))
+    })
+    @GetMapping("/{itemId}")
+    public ResponseEntity<ItemResponseDto> getItemById(@PathVariable Integer itemId) {
+        return ResponseEntity.ok(itemService.getItemById(getCurrentUserId(), itemId));
+    }
+
     @Operation(summary = "Получить все вещи текущего пользователя",
             description = "Возвращает список всех вещей, принадлежащих авторизованному пользователю")
     @ApiResponses(value = {
@@ -59,11 +81,12 @@ public class ItemController {
     }
 
     @Operation(summary = "Создать новую вещь",
-            description = "Добавляет новую вещь в гардероб текущего пользователя")
+            description = "Добавляет новую вещь в гардероб текущего пользователя. "
+                    + "Запрос multipart/form-data: часть `data` — JSON, часть `image` — файл изображения.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Вещь успешно создана",
                     content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Ошибка валидации входных данных",
+            @ApiResponse(responseCode = "400", description = "Ошибка валидации входных данных или файла",
                     content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
@@ -72,17 +95,21 @@ public class ItemController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Сезон с ID 5 не найден\"}")))
     })
-    @PostMapping
-    public ResponseEntity<ItemResponseDto> createItem(@Valid @RequestBody ItemCreateRequest request) {
-        return ResponseEntity.status(201).body(itemService.createItem(getCurrentUserId(), request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ItemResponseDto> createItem(
+            @Valid @RequestPart("data") ItemCreateRequest request,
+            @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.status(201)
+                .body(itemService.createItem(getCurrentUserId(), request, image));
     }
 
     @Operation(summary = "Обновить вещь",
-            description = "Полностью обновляет данные вещи по её ID (PUT-логика)")
+            description = "Полностью обновляет данные вещи по её ID (PUT-логика). "
+                    + "Запрос multipart/form-data: часть `data` — JSON, часть `image` — необязательный новый файл.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Вещь успешно обновлена",
                     content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Ошибка валидации",
+            @ApiResponse(responseCode = "400", description = "Ошибка валидации или файла",
                     content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
@@ -94,11 +121,12 @@ public class ItemController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Вещь не найдена\"}")))
     })
-    @PutMapping("/{itemId}")
+    @PutMapping(value = "/{itemId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ItemResponseDto> updateItem(
             @PathVariable Integer itemId,
-            @Valid @RequestBody ItemUpdateRequest request) {
-        return ResponseEntity.ok(itemService.updateItem(getCurrentUserId(), itemId, request));
+            @Valid @RequestPart("data") ItemUpdateRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return ResponseEntity.ok(itemService.updateItem(getCurrentUserId(), itemId, request, image));
     }
 
     @Operation(summary = "Удалить вещь",

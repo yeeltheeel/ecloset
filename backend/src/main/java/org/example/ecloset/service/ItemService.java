@@ -17,6 +17,7 @@ import org.example.ecloset.repository.SeasonRepository;
 import org.example.ecloset.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class ItemService {
     private final UserRepository userRepository;
     private final SeasonRepository seasonRepository;
     private final ItemMapper itemMapper;
+    private final FileStorageService fileStorageService;
 
     @Transactional(readOnly = true)
     public List<ItemResponseDto> getAllItemsByUser(Integer userId) {
@@ -38,7 +40,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemResponseDto createItem(Integer userId, ItemCreateRequest request) {
+    public ItemResponseDto createItem(Integer userId, ItemCreateRequest request, MultipartFile image) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
@@ -48,14 +50,23 @@ public class ItemService {
                     .orElseThrow(() -> new SeasonNotFoundException("Сезон с ID " + request.getSeasonId() + " не найден"));
         }
 
-        Item item = itemMapper.toEntity(request, user, season);
-        Item savedItem = itemRepository.save(item);
+        // Сначала сохраняем файл — если что-то упадёт, в БД ничего не попадёт
+        String imageUrl = fileStorageService.store(image);
 
-        return itemMapper.toResponseDto(savedItem);
+        try {
+            Item item = itemMapper.toEntity(request, user, season);
+            item.setImageUrl(imageUrl);
+            Item savedItem = itemRepository.save(item);
+            return itemMapper.toResponseDto(savedItem);
+        } catch (RuntimeException e) {
+            // откатываем файл, если БД упала
+            fileStorageService.delete(imageUrl);
+            throw e;
+        }
     }
 
     @Transactional
-    public ItemResponseDto updateItem(Integer userId, Integer itemId, ItemUpdateRequest request) {
+    public ItemResponseDto updateItem(Integer userId, Integer itemId, ItemUpdateRequest request, MultipartFile image) {
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена"));
 
@@ -67,10 +78,34 @@ public class ItemService {
                     .orElseThrow(() -> new SeasonNotFoundException("Сезон с ID " + request.getSeasonId() + " не найден"));
         }
 
-        Item updatedItem = itemMapper.updateEntity(request, existingItem, season);
-        Item savedItem = itemRepository.save(updatedItem);
+        String oldImageUrl = existingItem.getImageUrl();
+        String newImageUrl = null;
 
-        return itemMapper.toResponseDto(savedItem);
+        // Если пришла новая картинка — сохраняем её
+        if (image != null && !image.isEmpty()) {
+            newImageUrl = fileStorageService.store(image);
+        }
+
+        try {
+            Item updatedItem = itemMapper.updateEntity(request, existingItem, season);
+            if (newImageUrl != null) {
+                updatedItem.setImageUrl(newImageUrl);
+            }
+            Item savedItem = itemRepository.save(updatedItem);
+
+            // Только после успешного сохранения в БД удаляем старый файл
+            if (newImageUrl != null) {
+                fileStorageService.delete(oldImageUrl);
+            }
+
+            return itemMapper.toResponseDto(savedItem);
+        } catch (RuntimeException e) {
+            // если БД упала — удаляем только что сохранённый новый файл
+            if (newImageUrl != null) {
+                fileStorageService.delete(newImageUrl);
+            }
+            throw e;
+        }
     }
 
     @Transactional
@@ -79,18 +114,22 @@ public class ItemService {
                 .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена"));
 
         checkOwnership(item, userId);
+
+        String imageUrl = item.getImageUrl();
         itemRepository.delete(item);
+
+        // Удаляем файл после успешного удаления из БД.
+        // Если файл не удалится — БД уже консистентна, просто останется мусор.
+        fileStorageService.delete(imageUrl);
     }
 
     @Transactional
     public ItemResponseDto wearItem(Integer userId, Integer itemId) {
-        // Атомарный инкремент. Если вернёт 0, значит вещь не найдена или не принадлежит пользователю
         int updatedRows = itemRepository.incrementTimesWorn(itemId, userId);
         if (updatedRows == 0) {
             throw new ItemNotFoundException("Вещь не найдена или у вас нет прав на это действие");
         }
 
-        // Перечитываем обновлённую сущность, чтобы вернуть актуальный timesWorn в DTO
         Item updatedItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена после обновления"));
 
@@ -101,14 +140,23 @@ public class ItemService {
     public List<ItemResponseDto> getItemsByTemperature(Integer userId, Integer temperature) {
         List<Season> suitableSeasons = seasonRepository.findSeasonsByTemperature(temperature);
         if (suitableSeasons.isEmpty()) {
-            return List.of(); // Нет сезонов для такой температуры
+            return List.of();
         }
         return itemRepository.findByUser_UserIdAndSeasonIn(userId, suitableSeasons).stream()
                 .map(itemMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    // Приватный хелпер для проверки прав
+    @Transactional(readOnly = true)
+    public ItemResponseDto getItemById(Integer userId, Integer itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена"));
+
+        checkOwnership(item, userId);
+
+        return itemMapper.toResponseDto(item);
+    }
+
     private void checkOwnership(Item item, Integer userId) {
         if (!item.getUser().getUserId().equals(userId)) {
             throw new AccessDeniedException("У вас нет прав на это действие");
