@@ -24,7 +24,6 @@ public class ItemMapper {
                 .color(request.getColor())
                 .material(request.getMaterial())
                 .occasion(request.getOccasion())
-                .imageUrl(request.getImageUrl())
                 .brand(request.getBrand())
                 .price(request.getPrice())
                 .timesWorn(request.getInitialTimesWorn() != null ? request.getInitialTimesWorn() : 0)
@@ -38,7 +37,6 @@ public class ItemMapper {
         existingItem.setColor(request.getColor());
         existingItem.setMaterial(request.getMaterial());
         existingItem.setOccasion(request.getOccasion());
-        existingItem.setImageUrl(request.getImageUrl());
         existingItem.setBrand(request.getBrand());
         existingItem.setPrice(request.getPrice());
 

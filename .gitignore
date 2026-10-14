@@ -15,6 +15,5 @@
 local.propertiess
 .env
 *.env.local
-docker-compose.yaml
 uploads/
 !uploads/.gitkeep

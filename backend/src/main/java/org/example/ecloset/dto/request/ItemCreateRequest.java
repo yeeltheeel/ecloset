@@ -33,10 +33,6 @@ public class ItemCreateRequest {
 
     private Occasion occasion;
 
-    @NotBlank(message = "URL изображения обязателен")
-    @Size(max = 500, message = "URL изображения не может быть длиннее 500 символов")
-    private String imageUrl;
-
     @Size(max = 100, message = "Название бренда не может быть длиннее 100 символов")
     private String brand;
 
