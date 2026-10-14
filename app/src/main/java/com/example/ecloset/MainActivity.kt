@@ -60,13 +60,12 @@ fun EclosetScreen(){
 	val currentRoute = backStackEntry?.destination?.route
 	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER &&
 			currentRoute != Routes.USER_SETTINGS && currentRoute != Routes.ABOUT)
-	val userLogged = userViewModel.userState.collectAsState().value.loggedIn
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
 		topBar = { Header(
 			navController = navController,
-			userLogged = userLogged
+			userViewModel = userViewModel
 		) },
 		floatingActionButton = {
 			if (showNavBar) {

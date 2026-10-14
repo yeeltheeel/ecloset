@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 	implementation(libs.androidx.lifecycle.viewmodel.ktx)
-	implementation(libs.androidx.ui.graphics)
+	//implementation(libs.androidx.ui.graphics)
 	//implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -63,4 +63,15 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    // OkHttp (logging + auth interceptor)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    // Kotlinx Serialization
+    implementation(libs.kotlinx.serialization.json)
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
 }
