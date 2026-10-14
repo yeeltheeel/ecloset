@@ -40,4 +40,11 @@
     <string name="otp_title">Одноразовый код</string>
     <string name="code_prompt">Введите код, отправленный на почту</string>
     <string name="confirm_prompt">Подтвердить</string>
+    <string name="items_tops">Верх</string>
+    <string name="items_bottoms">Низ</string>
+    <string name="items_coats">Верхняя одежда</string>
+    <string name="items_shoes">Обувь</string>
+    <string name="items_onepieces">Платья и комбинезоны</string>
+    <string name="items_accessories">Аксессуары</string>
+    <string name="items_cardigans">Кофты</string>
 </resources>
