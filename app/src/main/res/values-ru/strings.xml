@@ -47,4 +47,5 @@
     <string name="items_onepieces">Платья и комбинезоны</string>
     <string name="items_accessories">Аксессуары</string>
     <string name="items_cardigans">Кофты</string>
+    <string name="change_avatar_prompt">Изменить изображение</string>
 </resources>

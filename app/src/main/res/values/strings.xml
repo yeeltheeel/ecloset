@@ -46,4 +46,5 @@
 	<string name="items_onepieces">Single pieces</string>
 	<string name="items_accessories">Accessories</string>
 	<string name="items_cardigans">Cardigans</string>
+    <string name="change_avatar_prompt">Change image</string>
 </resources>

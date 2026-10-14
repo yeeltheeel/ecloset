@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
+import com.example.ecloset.ui.components.PreviewSingleRow
+
+import com.example.ecloset.user.data.MockData.previewClothes
 
 @Composable
 fun AnalyticsPage(
@@ -57,6 +60,9 @@ fun AnalyticsPage(
 						horizontal = 16.dp,
 						vertical = 8.dp
 					)
+			)
+			PreviewSingleRow(
+				cards = previewClothes // placeholder
 			)
 		}
 	}

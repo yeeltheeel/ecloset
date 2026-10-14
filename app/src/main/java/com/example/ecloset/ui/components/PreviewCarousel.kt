@@ -66,3 +66,27 @@ fun PreviewCarousel(
 		}
 	}
 }
+
+@Composable
+fun PreviewSingleRow(
+	cards: List<PreviewCard>
+){
+	LazyRow(
+		modifier = Modifier
+			.fillMaxWidth(),
+		contentPadding = PaddingValues(
+			horizontal = 16.dp,
+			vertical = 16.dp
+		),
+		horizontalArrangement = Arrangement.spacedBy(12.dp)
+	) {
+		items(
+			items = cards,
+			key = { card -> card.id }
+		) { card ->
+			PreviewGridCard(
+				data = card
+			)
+		}
+	}
+}

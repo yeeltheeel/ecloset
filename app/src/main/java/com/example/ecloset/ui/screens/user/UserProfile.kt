@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -84,6 +85,30 @@ fun UserProfile(
 					tint = MaterialTheme.colorScheme.tertiary
 				)
 			}
+
+			Button(
+				modifier = Modifier
+					.width(250.dp)
+					.padding(
+						horizontal = 16.dp,
+						vertical = 8.dp
+					),
+				onClick = {}
+			) {
+				Text(
+					text = stringResource(com.example.ecloset.R.string.change_avatar_prompt),
+					modifier = Modifier
+						.fillMaxWidth()
+						.padding(
+							horizontal = 12.dp,
+							vertical = 8.dp
+						),
+					style = MaterialTheme.typography.bodyMedium,
+					color = MaterialTheme.colorScheme.onPrimary,
+					textAlign = TextAlign.Center
+				)
+			}
+
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
@@ -133,6 +158,30 @@ fun UserProfile(
 					),
 				style = MaterialTheme.typography.bodyMedium,
 				color = MaterialTheme.colorScheme.tertiary
+			)
+		}
+		item {
+			Spacer(modifier = Modifier.padding(vertical = 16.dp))
+			Text(
+				text = "Location",
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(
+						horizontal = 16.dp,
+						vertical = 8.dp
+					)
+					.clickable{},
+				style = MaterialTheme.typography.titleMedium
+			)
+			OutlinedTextField(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(
+						horizontal = 16.dp,
+						vertical = 8.dp
+					),
+				value = "",
+				onValueChange = {}
 			)
 		}
 		item{

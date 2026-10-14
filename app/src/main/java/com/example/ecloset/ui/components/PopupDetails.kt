@@ -21,8 +21,7 @@ fun DetailsPopup(
 ){
 	ModalBottomSheet(
 		modifier = Modifier
-			.fillMaxWidth()
-			.padding(16.dp),
+			.fillMaxWidth(),
 		onDismissRequest = onDismiss,
 		dragHandle = {
 			BottomSheetDefaults.DragHandle()

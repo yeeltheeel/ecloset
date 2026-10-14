@@ -65,7 +65,7 @@ fun PreviewGridCard(
 			)
 			Text(
 				text = data.title,
-				style = MaterialTheme.typography.titleMedium,
+				style = MaterialTheme.typography.titleSmall,
 				color = MaterialTheme.colorScheme.tertiary,
 				maxLines = 1
 			)
@@ -100,12 +100,12 @@ fun CardDetails(
 		item{
 			Text(
 				text = data.title,
-				style = MaterialTheme.typography.titleMedium
+				style = MaterialTheme.typography.titleLarge
 			)
 		}
 		item{
 			Text(
-				text = type + " added: " + data.dateAdded.toString(),
+				text = type + ", " + data.dateAdded.toString(),
 				style = MaterialTheme.typography.bodyMedium
 			)
 		}
