@@ -1,6 +1,25 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 @file:SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
+/* to-do:
+	main:
+		user actions (change username, etc)
+		closet viewmodels
+		connect backend
+		user tint selecting block to user settings
+		filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
+		weather widget (add cute animation/gif)
+	medium:
+		user theme preference + dynamic tinting for theme
+		add localizations to clothes categories
+		add statistics for clothes categories
+		add unused clothes
+		preview cards (last added items, relevant outfits)
+	misc:
+		fix up log/reg pages (cutify)
+		remove type attribute from data classes, replace with type check
+*/
+
 package com.example.ecloset
 
 import android.annotation.SuppressLint
@@ -13,7 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.ecloset.ui.theme.EclosetTheme
+import com.example.ecloset.ui.theme.EClosetTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.getValue
@@ -26,14 +45,14 @@ import com.example.ecloset.ui.navigation.NavActionHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.UserViewModel
-import androidx.compose.runtime.collectAsState
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
+		window.isNavigationBarContrastEnforced = false
 		setContent {
-			EclosetTheme {
+			EClosetTheme {
 				EclosetScreen()
 			}
 		}
@@ -46,15 +65,14 @@ fun EclosetScreen(){
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route
-	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER)
-	// mb remove add_button from new_item and new_outfit
-	val userLogged = userViewModel.userState.collectAsState().value.loggedIn
+	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER &&
+			currentRoute != Routes.USER_SETTINGS && currentRoute != Routes.ABOUT)
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
 		topBar = { Header(
 			navController = navController,
-			userLogged = userLogged
+			userViewModel = userViewModel
 		) },
 		floatingActionButton = {
 			if (showNavBar) {
@@ -72,7 +90,7 @@ fun EclosetScreen(){
 				.padding(top = 45.dp),
 			navController = navController,
 			innerPadding = innerPadding,
-			userViewModel = userViewModel // ???
+			userViewModel = userViewModel
 		)
 	}
 }

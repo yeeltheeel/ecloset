@@ -39,4 +39,12 @@
     <string name="otp_title">Single-use code</string>
 	<string name="code_prompt">Enter code sent to your email</string>
 	<string name="confirm_prompt">Confirm</string>
+	<string name="items_tops">Tops</string>
+	<string name="items_bottoms">Bottoms</string>
+	<string name="items_coats">Coats</string>
+	<string name="items_shoes">Shoes</string>
+	<string name="items_onepieces">Single pieces</string>
+	<string name="items_accessories">Accessories</string>
+	<string name="items_cardigans">Cardigans</string>
+    <string name="change_avatar_prompt">Change image</string>
 </resources>

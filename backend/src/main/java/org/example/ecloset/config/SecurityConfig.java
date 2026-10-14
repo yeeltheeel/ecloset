@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // без авторизации
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         // Swagger / OpenAPI — разрешаем без авторизации
                         .requestMatchers(
                                 "/swagger-ui/**",
