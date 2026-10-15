@@ -9,6 +9,7 @@
 		user tint selecting block to user settings
 		filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 		weather widget (add cute animation/gif)
+		fix up preview card classes
 	medium:
 		user theme preference + dynamic tinting for theme
 		add localizations to clothes categories

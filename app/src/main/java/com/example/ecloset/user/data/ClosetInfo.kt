@@ -3,6 +3,8 @@ package com.example.ecloset.user.data
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.sql.Date
 
 // data types
@@ -19,7 +21,7 @@ data class ClosetItemData(
 	val category: String, // same as CategoryItem
 	val season: String,
 	val material: String,
-	val color: Color,
+	val color: Int,
 	val occasion: String,
 	override val dateAdded: Date
 ) : PreviewCardData
@@ -44,64 +46,35 @@ interface PreviewCardData {
 
 // clothes
 data class ClosetItemState(
-	val items: Array<ClosetItemData>,
+	val items: List<ClosetItemData> = emptyList(),
 	val isLoading: Boolean = false,
 	val error: Int? = null
-) {
-	override fun equals(other: Any?): Boolean {
-		if (this === other) return true
-		if (javaClass != other?.javaClass) return false
-
-		other as ClosetItemState
-
-		if (isLoading != other.isLoading) return false
-		if (error != other.error) return false
-		if (!items.contentEquals(other.items)) return false
-
-		return true
-	}
-
-	override fun hashCode(): Int {
-		var result = isLoading.hashCode()
-		result = 31 * result + error.hashCode()
-		result = 31 * result + items.contentHashCode()
-		return result
-	}
-}
+)
 
 class ItemViewModel : ViewModel() {
-	// tbd
+	private val itemStateFlow = MutableStateFlow(ClosetItemState())
+	val itemState: StateFlow<ClosetItemState> = itemStateFlow.asStateFlow()
 }
 
 // outfits
 data class OutfitItemState(
-	val items: Array<OutfitItemData>,
+	val outfits: List<OutfitItemData> = emptyList(),
 	val isLoading: Boolean = false,
 	val error: Int? = null
-) {
-	override fun equals(other: Any?): Boolean {
-		if (this === other) return true
-		if (javaClass != other?.javaClass) return false
-
-		other as OutfitItemState
-
-		if (isLoading != other.isLoading) return false
-		if (error != other.error) return false
-		if (!items.contentEquals(other.items)) return false
-
-		return true
-	}
-
-	override fun hashCode(): Int {
-		var result = isLoading.hashCode()
-		result = 31 * result + error.hashCode()
-		result = 31 * result + items.contentHashCode()
-		return result
-	}
-}
+)
 
 class OutfitViewModel : ViewModel() {
-	// tbd
+	private val outfitStateFlow = MutableStateFlow(OutfitItemState())
+	val outfitState: StateFlow<OutfitItemState> = outfitStateFlow.asStateFlow()
+}
+
+sealed interface ClosetError {
+	data class Resource(
+		val stringRes: Int
+	) : ClosetError
+	data class Message(
+		val text: String
+	) : ClosetError
 }
 
 // for preview
