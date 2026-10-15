@@ -47,4 +47,10 @@
 	<string name="items_accessories">Accessories</string>
 	<string name="items_cardigans">Cardigans</string>
     <string name="change_avatar_prompt">Change image</string>
+	<string name="no_connection">Please check your internet connection</string>
+	<string name="no_content">Nothing here yet</string>
+	<string name="location_title">Location</string>
+	<string name="email_title">Email</string>
+	<string name="username_title">Username</string>
+	<string name="theme_title">Theme</string>
 </resources>

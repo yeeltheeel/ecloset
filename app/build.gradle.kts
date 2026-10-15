@@ -72,6 +72,9 @@ dependencies {
     implementation(libs.logging.interceptor)
     // Kotlinx Serialization
     implementation(libs.kotlinx.serialization.json)
+    // Json
+    implementation(libs.moshi.kotlin)
+    implementation(libs.converter.moshi)
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 }

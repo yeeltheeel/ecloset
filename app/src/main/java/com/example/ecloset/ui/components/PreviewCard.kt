@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.ecloset.R
 import com.example.ecloset.user.data.CategoryItem
 import com.example.ecloset.user.data.PreviewCard
 import com.example.ecloset.ui.components.DetailsPopup
@@ -138,6 +139,34 @@ fun CategoryCard(
 				text = stringResource(category.titleId),
 				style = MaterialTheme.typography.titleMedium,
 				color = MaterialTheme.colorScheme.onSecondaryContainer,
+				maxLines = 1
+			)
+		}
+	}
+}
+
+@Composable
+fun EmptyPreviewCard(){
+	Card(
+		onClick = {},
+		modifier = Modifier
+			.width(150.dp)
+			.height(200.dp),
+//		colors = CardDefaults.cardColors(
+//			containerColor = MaterialTheme.colorScheme.surfaceVariant,
+//			contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+//		)
+	){
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(8.dp),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			Text(
+				text = stringResource(R.string.no_content),
+				style = MaterialTheme.typography.titleSmall,
+				color = MaterialTheme.colorScheme.tertiary,
 				maxLines = 1
 			)
 		}

@@ -4,15 +4,17 @@
 /* to-do:
 	main:
 		user actions (change username, etc)
-		closet viewmodels
+		closet view models
 		connect backend
+		connect weather api
 		user tint selecting block to user settings
 		filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 		weather widget (add cute animation/gif)
 		fix up preview card classes
+		empty card placeholder + no connection page
 	medium:
 		user theme preference + dynamic tinting for theme
-		add localizations to clothes categories
+		add localizations for all hardcoded strings
 		add statistics for clothes categories
 		add unused clothes
 		preview cards (last added items, relevant outfits)

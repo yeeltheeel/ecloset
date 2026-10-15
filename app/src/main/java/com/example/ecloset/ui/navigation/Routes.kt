@@ -20,25 +20,28 @@ import com.example.ecloset.ui.screens.user.AboutPage
 import com.example.ecloset.ui.screens.auth.LoginPage
 import com.example.ecloset.ui.screens.auth.RegistrationPage
 import com.example.ecloset.ui.screens.auth.OtpPage
+import com.example.ecloset.ui.screens.main.NoConnectionPage
 import com.example.ecloset.user.data.UserViewModel
 
 object Routes {
 	const val MAIN = "main"
 	const val ANALYTICS = "analytics"
 
-	const val ADD_ITEM = "add_clothing"
-	const val ADD_OUTFIT = "add_outfit"
+	const val ADD_ITEM = "add clothing"
+	const val ADD_OUTFIT = "add outfit"
 
 	const val CLOSET = "closet"
 	const val OUTFITS = "outfits"
 
-	const val USER_SETTINGS = "user_profile"
+	const val USER_SETTINGS = "user profile"
 	const val ABOUT = "about"
 
 	const val LOGIN = "login"
 	const val REGISTER = "registration"
 
 	const val OTP = "otp"
+
+	const val NO_CONNECTION = "no connection"
 }
 
 @Composable
@@ -120,6 +123,11 @@ fun NavActionHost(
 			OtpPage(
 				modifier = modifier,
 				navController = navController
+			)
+		}
+		composable(Routes.NO_CONNECTION) {
+			NoConnectionPage(
+				modifier = modifier
 			)
 		}
 	}

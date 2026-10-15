@@ -2,6 +2,8 @@ package com.example.ecloset.ui.screens.user
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,9 +17,11 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +32,7 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.UserViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
@@ -74,46 +79,53 @@ fun UserProfile(
 		}
 		item{
 			val avatarUrl = userViewModel.userState.collectAsState().value.user?.avatarUrl
-			if (avatarUrl == null){
-				Icon(
-					imageVector = Icons.Default.AccountCircle,
-					contentDescription = "profile picture",
-					modifier = Modifier
-						.width(150.dp)
-						.padding(horizontal = 16.dp)
-						.aspectRatio(1f),
-					tint = MaterialTheme.colorScheme.tertiary
-				)
-			}
 
-			Button(
+			Column(
 				modifier = Modifier
-					.width(250.dp)
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				onClick = {}
-			) {
-				Text(
-					text = stringResource(com.example.ecloset.R.string.change_avatar_prompt),
+					.fillMaxWidth(),
+				horizontalAlignment = Alignment.CenterHorizontally
+			){
+				if (avatarUrl == null){
+					Icon(
+						imageVector = Icons.Default.AccountCircle,
+						contentDescription = "profile picture",
+						modifier = Modifier
+							.width(150.dp)
+							.aspectRatio(1f),
+						tint = MaterialTheme.colorScheme.tertiary
+					)
+				}
+
+				Button(
 					modifier = Modifier
-						.fillMaxWidth()
+						.width(300.dp)
 						.padding(
-							horizontal = 12.dp,
+							horizontal = 16.dp,
 							vertical = 8.dp
 						),
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onPrimary,
-					textAlign = TextAlign.Center
-				)
+					onClick = {}
+				) {
+					Text(
+						text = stringResource(com.example.ecloset.R.string.change_avatar_prompt),
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(
+								horizontal = 12.dp,
+								vertical = 8.dp
+							),
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.onPrimary,
+						textAlign = TextAlign.Center,
+						maxLines = 1
+					)
+				}
 			}
 
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
 			Text(
-				text = stringResource(R.string.username_prompt),
+				text = stringResource(R.string.username_title),
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(
@@ -138,7 +150,7 @@ fun UserProfile(
 		}
 		item{
 			Text(
-				text = stringResource(R.string.email_prompt),
+				text = stringResource(R.string.email_title),
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(
@@ -163,15 +175,22 @@ fun UserProfile(
 		item {
 			Spacer(modifier = Modifier.padding(vertical = 16.dp))
 			Text(
-				text = "Location",
+				text = stringResource(R.string.location_title),
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(
 						horizontal = 16.dp,
 						vertical = 8.dp
-					)
-					.clickable{},
+					),
 				style = MaterialTheme.typography.titleMedium
+			)
+			RadioButton(
+				selected = true,
+				onClick = {}
+			)
+			RadioButton(
+				selected = false,
+				onClick = {}
 			)
 			OutlinedTextField(
 				modifier = Modifier
@@ -182,6 +201,27 @@ fun UserProfile(
 					),
 				value = "",
 				onValueChange = {}
+			)
+		}
+		item {
+			Spacer(modifier = Modifier.padding(vertical = 16.dp))
+			Text(
+				text = stringResource(R.string.theme_title),
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(
+						horizontal = 16.dp,
+						vertical = 8.dp
+					),
+				style = MaterialTheme.typography.titleMedium
+			)
+			RadioButton(
+				selected = true,
+				onClick = {}
+			)
+			RadioButton(
+				selected = false,
+				onClick = {}
 			)
 		}
 		item{

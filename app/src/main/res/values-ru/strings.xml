@@ -48,4 +48,10 @@
     <string name="items_accessories">Аксессуары</string>
     <string name="items_cardigans">Кофты</string>
     <string name="change_avatar_prompt">Изменить изображение</string>
+    <string name="no_connection">Пожалуйста, проверьте соединение с интернетом</string>
+    <string name="no_content">Тут пока ничего нет</string>
+    <string name="location_title">Локация</string>
+    <string name="email_title">Почта</string>
+    <string name="username_title">Имя пользователя</string>
+    <string name="theme_title">Тема приложения</string>
 </resources>
