@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
@@ -96,6 +97,8 @@ fun PopupActionMenu(
 	modifier: Modifier,
 	expanded: Boolean,
 	direction: PopupDirection,
+	color: Color = MaterialTheme.colorScheme.onSurface,
+	containerColor: Color = MaterialTheme.colorScheme.surface,
 	onDismiss: () -> Unit,
 	actions: List<PopupAction>,
 	navController: NavHostController
@@ -104,6 +107,7 @@ fun PopupActionMenu(
 	val menuPos = remember(direction){
 		PopupMenuPositionProvider(direction)
 	}
+
 	Popup(
 		popupPositionProvider = menuPos,
 		onDismissRequest = onDismiss,
@@ -116,14 +120,16 @@ fun PopupActionMenu(
 		Surface(
 			modifier = modifier,
 			shape = RoundedCornerShape(12.dp),
-			color = MaterialTheme.colorScheme.surface,
+			color = containerColor,
 			tonalElevation = 6.dp,
 			shadowElevation = 6.dp,
 		) {
 			Column(
 				modifier = Modifier
 					.width(200.dp)
-					.clip(RoundedCornerShape(8.dp))
+					.clip(
+						RoundedCornerShape(8.dp)
+					)
 					.padding(
 						vertical = 4.dp,
 						horizontal = 8.dp
@@ -135,7 +141,8 @@ fun PopupActionMenu(
 						text = {
 							Text(
 								text = action.content,
-								textAlign = TextAlign.Center
+								textAlign = TextAlign.Center,
+								color = color
 							)
 						},
 						onClick = {

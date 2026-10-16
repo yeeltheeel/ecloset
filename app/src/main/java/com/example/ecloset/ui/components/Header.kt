@@ -1,7 +1,11 @@
 package com.example.ecloset.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -67,7 +71,7 @@ fun Header(
 			)
 		},
 		actions = {
-			if (showIcon){
+			if (showIcon && loggedIn){
 				Box{
 					IconButton(
 						onClick = {
@@ -116,4 +120,39 @@ fun Header(
 		thickness = 1.dp,
 		color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
 	)
+}
+
+@Composable
+fun PageHeader(
+	title: String,
+	backAddress: String = Routes.MAIN,
+	navController: NavHostController
+){
+	Spacer(modifier = Modifier.padding(vertical = 20.dp))
+	Text(
+		text = "< " + stringResource(R.string.back_prompt),
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 8.dp
+			)
+			.clickable{
+				navController.navigate(backAddress)
+			},
+		style = MaterialTheme.typography.bodySmall,
+		color = MaterialTheme.colorScheme.secondary
+	)
+	Text(
+		text = title,
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 8.dp
+			),
+		style = MaterialTheme.typography.titleLarge,
+		color = MaterialTheme.colorScheme.primary
+	)
+	Spacer(modifier = Modifier.padding(vertical = 8.dp))
 }

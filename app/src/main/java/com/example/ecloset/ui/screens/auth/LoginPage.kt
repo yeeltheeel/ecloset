@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -56,11 +57,12 @@ fun LoginPage(
 		}
 		item{
 			OutlinedTextField(
-				value = loginFormState.email,
-				onValueChange = {
-					viewModel.updateLoginField("email", it)
-				},
 				label = { Text(stringResource(com.example.ecloset.R.string.email_prompt)) },
+				value = loginFormState.email,
+				shape = RoundedCornerShape(16.dp),
+				onValueChange = {
+					viewModel.updateLoginEmail(it)
+				},
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				isError = loginFormState.emailError != null,
@@ -70,11 +72,12 @@ fun LoginPage(
 			)
 
 			OutlinedTextField(
-				value = loginFormState.password,
-				onValueChange = {
-					viewModel.updateLoginField("password", it)
-				},
 				label = { Text(stringResource(com.example.ecloset.R.string.password_prompt)) },
+				value = loginFormState.password,
+				shape = RoundedCornerShape(16.dp),
+				onValueChange = {
+					viewModel.updateLoginPassword(it)
+				},
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				isError = loginFormState.passwordError != null,
@@ -97,6 +100,7 @@ fun LoginPage(
 				style = MaterialTheme.typography.bodySmall,
 				color = MaterialTheme.colorScheme.secondary
 			)
+			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
 			Button(
 				modifier = Modifier
@@ -136,7 +140,8 @@ fun LoginPage(
 						navController.navigate(Routes.REGISTER)
 					},
 				style = MaterialTheme.typography.bodySmall,
-				color = MaterialTheme.colorScheme.secondary
+				color = MaterialTheme.colorScheme.secondary,
+				textAlign = TextAlign.Center
 			)
 		}
 	}

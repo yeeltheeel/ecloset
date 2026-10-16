@@ -1,16 +1,13 @@
 package com.example.ecloset.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,17 +20,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
 import com.example.ecloset.user.data.CategoryItem
-import com.example.ecloset.user.data.PreviewCard
-import com.example.ecloset.ui.components.DetailsPopup
+import com.example.ecloset.user.data.PreviewCardData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewGridCard(
-	data: PreviewCard
+	data: PreviewCardData
 ){
 	var showDetails by remember { mutableStateOf(false) }
 
@@ -90,7 +87,7 @@ fun PreviewGridCard(
 
 @Composable
 fun CardDetails(
-	data: PreviewCard,
+	data: PreviewCardData,
 	type: String
 ){
 	LazyColumn(
@@ -115,14 +112,16 @@ fun CardDetails(
 
 @Composable
 fun CategoryCard(
-	category: CategoryItem
+	category: CategoryItem,
+	color: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+	backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer
 ){
 	Card(
 		modifier = Modifier
 			//.aspectRatio(1f)
 			.height(50.dp),
 		colors = CardDefaults.cardColors(
-			containerColor = MaterialTheme.colorScheme.secondaryContainer
+			containerColor = backgroundColor
 		),
 		elevation = CardDefaults.cardElevation(
 			defaultElevation = 2.dp
@@ -138,7 +137,7 @@ fun CategoryCard(
 			Text(
 				text = stringResource(category.titleId),
 				style = MaterialTheme.typography.titleMedium,
-				color = MaterialTheme.colorScheme.onSecondaryContainer,
+				color = color,
 				maxLines = 1
 			)
 		}

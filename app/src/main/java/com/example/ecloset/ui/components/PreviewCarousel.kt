@@ -31,7 +31,6 @@ fun PreviewCarousel(
 	navController: NavHostController,
 	currentRoute: String
 ){
-	// clickable title as link to dedicated page
 	Text(
 		text = previewTitle,
 		modifier = Modifier
@@ -46,7 +45,7 @@ fun PreviewCarousel(
 		style = MaterialTheme.typography.titleLarge,
 		color = MaterialTheme.colorScheme.primary
 	)
-	// horizontal card preview carousel
+
 	LazyRow(
 		modifier = Modifier
 			.fillMaxWidth(),

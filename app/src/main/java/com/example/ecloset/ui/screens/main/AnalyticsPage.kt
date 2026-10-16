@@ -13,9 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
+import com.example.ecloset.ui.components.DonutChart
 import com.example.ecloset.ui.components.PreviewSingleRow
 
 import com.example.ecloset.user.data.MockData.previewClothes
+import com.example.ecloset.user.data.MockData.clothesCategories
+import com.example.ecloset.user.data.MockData.clothesList
 
 @Composable
 fun AnalyticsPage(
@@ -39,6 +42,11 @@ fun AnalyticsPage(
 				style = MaterialTheme.typography.titleLarge,
 				color = MaterialTheme.colorScheme.primary
 			)
+			DonutChart(
+				categories = clothesCategories,
+				items = clothesList
+			)
+			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
 			Text(
@@ -64,6 +72,9 @@ fun AnalyticsPage(
 			PreviewSingleRow(
 				cards = previewClothes // placeholder
 			)
+		}
+		item{
+			Spacer(modifier = Modifier.padding(vertical = 70.dp))
 		}
 	}
 }

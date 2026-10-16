@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.ecloset.R
+import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.navigation.Routes
 
 @Composable
@@ -27,36 +28,10 @@ fun NewOutfitPage(
 		contentPadding = PaddingValues(top = 0.dp)
 	) {
 		item{
-			Spacer(modifier = Modifier.padding(vertical = 20.dp))
-			Text(
-				text = "< " + stringResource(com.example.ecloset.R.string.back_prompt),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					)
-					.clickable{
-						// validate exit
-						navController.navigate(Routes.MAIN)
-					},
-				style = MaterialTheme.typography.bodySmall,
-				color = MaterialTheme.colorScheme.secondary
+			PageHeader(
+				title = stringResource(R.string.new_outfit_title),
+				navController = navController
 			)
-		}
-		item {
-			Text(
-				text = stringResource(R.string.new_outfit_title),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 12.dp
-					),
-				style = MaterialTheme.typography.titleLarge,
-				color = MaterialTheme.colorScheme.primary
-			)
-			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item {
 			Text(

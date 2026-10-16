@@ -126,6 +126,8 @@ fun ActionBarMenu(
 						direction = PopupDirection.UP,
 						actions = addMenuActions,
 						navController = navController,
+						color = MaterialTheme.colorScheme.tertiary,
+						containerColor = MaterialTheme.colorScheme.onTertiary,
 						onDismiss = {
 							addMenuOpen = false
 						}

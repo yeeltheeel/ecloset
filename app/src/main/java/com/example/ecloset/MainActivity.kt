@@ -15,11 +15,9 @@
 	medium:
 		user theme preference + dynamic tinting for theme
 		add localizations for all hardcoded strings
-		add statistics for clothes categories
 		add unused clothes
 		preview cards (last added items, relevant outfits)
 	misc:
-		fix up log/reg pages (cutify)
 		remove type attribute from data classes, replace with type check
 */
 
@@ -38,6 +36,7 @@ import androidx.compose.ui.Modifier
 import com.example.ecloset.ui.theme.EClosetTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,6 +67,7 @@ fun EclosetScreen(){
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route
+	val loggedIn = userViewModel.userState.collectAsState().value.loggedIn
 	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER &&
 			currentRoute != Routes.USER_SETTINGS && currentRoute != Routes.ABOUT)
 
@@ -78,7 +78,7 @@ fun EclosetScreen(){
 			userViewModel = userViewModel
 		) },
 		floatingActionButton = {
-			if (showNavBar) {
+			if (showNavBar && loggedIn) {
 				ActionBarMenu(
 					navController = navController,
 					currentRoute = currentRoute

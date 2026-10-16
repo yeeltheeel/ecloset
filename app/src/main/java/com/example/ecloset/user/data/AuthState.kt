@@ -1,23 +1,27 @@
 package com.example.ecloset.user.data
 
 import android.util.Patterns
-import androidx.compose.ui.res.stringResource
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecloset.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+const val MIN_PASSWORD_LENGTH = 6
+const val CODE_LEN = 4
 
 data class LoginFormState(
 	val email: String = "",
 	val password: String = "",
-	val confirmCode: String? = null, // otp to email
-	val emailError: Int? = null,
-	val passwordError: Int? = null,
-	val codeError: Int? = null,
-	val isSubmitting: Boolean = false
+	val confirmCode: String? = null,
+	@StringRes val emailError: Int? = null,
+	@StringRes val passwordError: Int? = null,
+	@StringRes val codeError: Int? = null,
+	val isSubmitting: Boolean = false,
 )
 
 data class RegFormState(
@@ -26,11 +30,11 @@ data class RegFormState(
 	val password: String = "",
 	val code: String = "",
 	val confirmPassword: String = "",
-	val usernameError: Int? = null,
-	val emailError: Int? = null,
-	val passwordError: Int? = null,
-	val confirmPasswordError: Int? = null,
-	val isSubmitting: Boolean = false
+	@StringRes val usernameError: Int? = null,
+	@StringRes val emailError: Int? = null,
+	@StringRes val passwordError: Int? = null,
+	@StringRes val confirmPasswordError: Int? = null,
+	val isSubmitting: Boolean = false,
 )
 
 sealed interface AuthResult {
@@ -38,140 +42,177 @@ sealed interface AuthResult {
 		val token: String,
 		val userId: String
 	) : AuthResult
+
 	data class Failure(
-		val message: String
+		@StringRes val message: Int
 	) : AuthResult
 }
 
-const val MINPASS: Int = 6
+class AuthViewModel : ViewModel() {
 
-class AuthViewModel(): ViewModel() {
-	// registration
-	private val regFormStateFlow = MutableStateFlow(RegFormState())
-	val regFormState: StateFlow<RegFormState> = regFormStateFlow.asStateFlow()
-	// login
-	private val loginFormStateFlow = MutableStateFlow(LoginFormState())
-	val loginFormState: StateFlow<LoginFormState> = loginFormStateFlow.asStateFlow()
-	// general
-	private val authResultFlow = MutableStateFlow<AuthResult?>(null)
-	val authResult: StateFlow<AuthResult?> = authResultFlow.asStateFlow()
+	private val _regFormState = MutableStateFlow(RegFormState())
+	val regFormState: StateFlow<RegFormState> = _regFormState.asStateFlow()
 
-	// field handling
-	fun updateRegField(field: String, value: String) {
-		val current = regFormStateFlow.value
-		regFormStateFlow.value = when (field) {
-			"username" -> current.copy(
-				username = value,
-				usernameError = null
-			)
-			"email" -> current.copy(
-				email = value,
-				emailError = null
-			)
-			"password" -> current.copy(
-				password = value,
-				passwordError = null
-			)
-			"confirmPassword" -> current.copy(
-				confirmPassword = value,
-				confirmPasswordError = null
-			)
-			else -> current
-		}
+	private val _loginFormState = MutableStateFlow(LoginFormState())
+	val loginFormState: StateFlow<LoginFormState> = _loginFormState.asStateFlow()
+
+	private val _authResult = MutableStateFlow<AuthResult?>(null)
+	val authResult: StateFlow<AuthResult?> = _authResult.asStateFlow()
+
+	fun updateRegUsername(value: String) = _regFormState.update {
+		it.copy(
+			username = value,
+			usernameError = null
+		)
 	}
 
-	fun updateLoginField(field: String, value: String) {
-		val current = loginFormStateFlow.value
-		loginFormStateFlow.value = when (field) {
-			"email" -> current.copy(
-				email = value,
-				emailError = null
-			)
-			"password" -> current.copy(
-				password = value,
-				passwordError = null
-			)
-			"confirmCode" -> {
-				val code = value // value.toIntOrNull()
-				current.copy(
-					confirmCode = code,
-					codeError = null
+	fun updateRegEmail(value: String) = _regFormState.update {
+		it.copy(
+			email = value,
+			emailError = null
+		)
+	}
+
+	fun updateRegPassword(value: String) = _regFormState.update {
+		it.copy(
+			password = value,
+			passwordError = null
+		)
+	}
+
+	fun updateRegConfirmPassword(value: String) = _regFormState.update {
+		it.copy(
+			confirmPassword = value,
+			confirmPasswordError = null
+		)
+	}
+
+	fun updateRegCode(value: String) = _regFormState.update {
+		it.copy(
+			code = value
+		)
+	}
+
+	fun updateLoginEmail(value: String) = _loginFormState.update {
+		it.copy(
+			email = value,
+			emailError = null
+		)
+	}
+
+	fun updateLoginPassword(value: String) = _loginFormState.update {
+		it.copy(
+			password = value,
+			passwordError = null
+		)
+	}
+
+	fun updateLoginCode(value: String) = _loginFormState.update {
+		it.copy(
+			confirmCode = value,
+			codeError = null
+		)
+	}
+
+	fun register() {
+		val current = _regFormState.value
+
+		val usernameError = if (current.username.isBlank())
+			R.string.username_error else null
+		val emailError = if (!current.email.isValidEmail())
+			R.string.email_error else null
+		val passwordError = if (current.password.length < MIN_PASSWORD_LENGTH)
+			R.string.password_error else null
+		val confirmError = if (current.password != current.confirmPassword)
+			R.string.confirm_password_error else null
+
+		val hasErrors = listOfNotNull(
+			usernameError,
+			emailError,
+			passwordError,
+			confirmError
+		).isNotEmpty()
+
+		if (hasErrors) {
+			_regFormState.update {
+				it.copy(
+					usernameError = usernameError,
+					emailError = emailError,
+					passwordError = passwordError,
+					confirmPasswordError = confirmError
 				)
 			}
-			else -> current
+			return
 		}
-	}
 
-	// actions
-	fun register(){
-		viewModelScope.launch{
-			val current = regFormStateFlow.value
-			val errors = mutableMapOf<String, Int>()
-
-			if (current.username.isBlank())
-				errors["username"] = R.string.username_error
-			if (current.email.isBlank() ||
-				!Patterns.EMAIL_ADDRESS.matcher(current.email).matches()) {
-				errors["email"] = R.string.email_error
-			}
-			if (current.password.length < MINPASS)
-				errors["password"] = R.string.password_error
-			if (current.password != current.confirmPassword)
-				errors["confirmPassword"] = R.string.confirm_password_error
-
-			if (errors.isNotEmpty()) {
-				regFormStateFlow.value = current.copy(
-					usernameError = errors["username"],
-					emailError = errors["email"],
-					passwordError = errors["password"],
-					confirmPasswordError = errors["confirmPassword"]
-				)
-				return@launch
-			}
-
-			regFormStateFlow.value = current.copy(isSubmitting = true)
-			authResultFlow.value = null
-
-			// save data here
-
-			//authResultFlow.value = result
-			regFormStateFlow.value = regFormStateFlow.value.copy(isSubmitting = false)
-		}
-	}
-
-	fun login(){
 		viewModelScope.launch {
-			val current = loginFormStateFlow.value
-			val errors = mutableMapOf<String, Int>()
+			_regFormState.update { it.copy(isSubmitting = true) }
+			_authResult.value = null
 
-			if (current.email.isBlank() ||
-				!Patterns.EMAIL_ADDRESS.matcher(current.email)
-					.matches()
-			) {
-				errors["email"] = R.string.email_error
-			}
-			if (current.password.length < MINPASS)
-				errors["password"] = R.string.password_error
+			val result = runCatching {
+				// repo.register(...)
+			}.fold(
+				onSuccess = {
+					AuthResult.Success(
+						token = "",
+						userId = ""
+					)
+				},
+				onFailure = {
+					AuthResult.Failure(R.string.error_generic)
+				}
+			)
 
-			if (errors.isNotEmpty()) {
-				loginFormStateFlow.value = current.copy(
-					emailError = errors["email"],
-					passwordError = errors["password"]
+			_authResult.value = result
+			_regFormState.update { it.copy(isSubmitting = false) }
+		}
+	}
+
+	fun login() {
+		val current = _loginFormState.value
+
+		val emailError = if (!current.email.isValidEmail())
+			R.string.email_error else null
+		val passwordError = if (current.password.length < MIN_PASSWORD_LENGTH)
+			R.string.password_error else null
+
+		if (emailError != null || passwordError != null) {
+			_loginFormState.update {
+				it.copy(
+					emailError = emailError,
+					passwordError = passwordError
 				)
-				return@launch
 			}
+			return
+		}
 
-			loginFormStateFlow.value = current.copy(isSubmitting = true)
-			authResultFlow.value = null
+		viewModelScope.launch {
+			_loginFormState.update { it.copy(isSubmitting = true) }
+			_authResult.value = null
 
-			// save data here
+			val result = runCatching {
+				// repo.login(...)
+			}.fold(
+				onSuccess = {
+					AuthResult.Success(
+						token = "",
+						userId = ""
+					)
+				},
+				onFailure = {
+					AuthResult.Failure(R.string.error_generic)
+				}
+			)
 
-			//authResultFlow.value = result
-			loginFormStateFlow.value = loginFormStateFlow.value.copy(isSubmitting = false)
+			_authResult.value = result
+			_loginFormState.update { it.copy(isSubmitting = false) }
 		}
 	}
 
 	fun clearResult() {
-		authResultFlow.value = null
+		_authResult.value = null
 	}
 }
+
+private fun String.isValidEmail(): Boolean =
+	isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(this).matches()

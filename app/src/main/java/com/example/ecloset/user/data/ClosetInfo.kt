@@ -16,7 +16,7 @@ data class CategoryItem(
 data class ClosetItemData(
 	override val id: Int,
 	override val title: String,
-	override val type: String,
+	override val type: String = "item",
 	override val imageUrl: String?,
 	val category: String, // same as CategoryItem
 	val season: String,
@@ -29,11 +29,20 @@ data class ClosetItemData(
 data class OutfitItemData(
 	override val id: Int,
 	override val title: String,
-	override val type: String,
+	override val type: String = "outfit",
 	override val imageUrl: String?,
 	val season: String, // or Int if we go with season_id
 	val occasion: String,
 	override val dateAdded: Date
+) : PreviewCardData
+
+data class PreviewCard(
+	// mock preview placeholder
+	override val id: Int,
+	override val title: String,
+	override val type: String,
+	override val imageUrl: String? = null,
+	override val dateAdded: Date = Date(System.currentTimeMillis())
 ) : PreviewCardData
 
 interface PreviewCardData {
@@ -77,12 +86,3 @@ sealed interface ClosetError {
 	) : ClosetError
 }
 
-// for preview
-data class PreviewCard(
-	// wrapper for PreviewCardData ???
-	val id: Int,
-	val title: String,
-	val type: String,
-	val imageUrl: String? = null,
-	val dateAdded: Date = Date(System.currentTimeMillis())
-)

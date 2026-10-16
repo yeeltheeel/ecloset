@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
@@ -32,8 +33,10 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.UserViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
+import com.example.ecloset.ui.components.PageHeader
 
 @Composable
 fun UserProfile(
@@ -47,35 +50,10 @@ fun UserProfile(
 		contentPadding = PaddingValues(top = 0.dp)
 	) {
 		item{
-			Spacer(modifier = Modifier.padding(vertical = 20.dp))
-			Text(
-				text = "< " + stringResource(R.string.back_prompt),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					)
-					.clickable{
-						navController.navigate(Routes.MAIN)
-					},
-				style = MaterialTheme.typography.bodySmall,
-				color = MaterialTheme.colorScheme.secondary
+			PageHeader(
+				title = stringResource(R.string.user_profile_title),
+				navController = navController
 			)
-		}
-		item {
-			Text(
-				text = stringResource(R.string.user_profile_title),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				style = MaterialTheme.typography.titleLarge,
-				color = MaterialTheme.colorScheme.primary
-			)
-			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
 			val avatarUrl = userViewModel.userState.collectAsState().value.user?.avatarUrl
@@ -124,66 +102,23 @@ fun UserProfile(
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{
-			Text(
-				text = stringResource(R.string.username_title),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					)
-					.clickable{},
-				style = MaterialTheme.typography.bodyLarge
+			EditableLabel(
+				title = stringResource(R.string.username_title),
+				value = userViewModel.userState.collectAsState().value.user?.username ?: String(),
+				onClick = {}
 			)
-			Text(
-				text = userViewModel.userState.collectAsState().value.user?.username ?: String(),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 0.dp
-					),
-				style = MaterialTheme.typography.bodyMedium,
-				color = MaterialTheme.colorScheme.tertiary
-			)
-			Spacer(modifier = Modifier.padding(vertical = 8.dp))
-		}
-		item{
-			Text(
-				text = stringResource(R.string.email_title),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					)
-					.clickable{},
-				style = MaterialTheme.typography.bodyLarge
-			)
-			Text(
-				text = userViewModel.userState.collectAsState().value.user?.email ?: String(),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 0.dp
-					),
-				style = MaterialTheme.typography.bodyMedium,
-				color = MaterialTheme.colorScheme.tertiary
+
+			EditableLabel(
+				title = stringResource(R.string.email_title),
+				value = userViewModel.userState.collectAsState().value.user?.email ?: String(),
+				onClick = {}
 			)
 		}
 		item {
-			Spacer(modifier = Modifier.padding(vertical = 16.dp))
-			Text(
-				text = stringResource(R.string.location_title),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				style = MaterialTheme.typography.titleMedium
+			GroupTitle(
+				title = stringResource(R.string.location_title)
 			)
+
 			RadioButton(
 				selected = true,
 				onClick = {}
@@ -200,21 +135,15 @@ fun UserProfile(
 						vertical = 8.dp
 					),
 				value = "",
-				onValueChange = {}
+				onValueChange = {},
+				shape = RoundedCornerShape(16.dp)
 			)
 		}
 		item {
-			Spacer(modifier = Modifier.padding(vertical = 16.dp))
-			Text(
-				text = stringResource(R.string.theme_title),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				style = MaterialTheme.typography.titleMedium
+			GroupTitle(
+				title = stringResource(R.string.theme_title)
 			)
+
 			RadioButton(
 				selected = true,
 				onClick = {}
@@ -283,3 +212,70 @@ fun UserProfile(
 	}
 }
 
+@Composable
+fun EditableLabel(
+	title: String,
+	value: String,
+	onClick: () -> Unit
+){
+	Text(
+		text = title,
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 8.dp
+			)
+			.clickable{
+				onClick()
+			},
+		style = MaterialTheme.typography.bodyLarge
+	)
+	Text(
+		text = value,
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 0.dp
+			),
+		style = MaterialTheme.typography.bodyMedium,
+		color = MaterialTheme.colorScheme.tertiary
+	)
+	Spacer(modifier = Modifier.padding(vertical = 8.dp))
+}
+
+@Composable
+fun GroupTitle(
+	title: String
+){
+	Spacer(modifier = Modifier.padding(vertical = 8.dp))
+	Text(
+		text = title,
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 8.dp
+			),
+		style = MaterialTheme.typography.titleMedium
+	)
+}
+
+@Composable
+fun RadioDropdown(
+	choices: List<String>,
+	presets: List<String>,
+	userViewModel: UserViewModel
+){
+	val choice = true
+
+	RadioButton(
+		selected = true,
+		onClick = {}
+	)
+	RadioButton(
+		selected = false,
+		onClick = {}
+	)
+}

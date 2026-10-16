@@ -1,22 +1,25 @@
 package com.example.ecloset.user.data
 
-import androidx.compose.ui.graphics.Color
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.sql.Date
+import java.time.LocalDate
 import com.example.ecloset.user.data.MockData.testUser
+import kotlinx.coroutines.flow.update
 
 data class UserInfo(
 	val id: Int,
 	val username: String,
 	val email: String,
 	val avatarUrl: String? = null,
-	val birthday: Date? = null,
-	// val theme: String = "Violet" // presets or "Dynamic"
+	val birthday: LocalDate? = null,
+	val locationDynamic: Boolean = true,
+	val themeDynamic: Boolean = false,
+	val themePreset: String = "Violet"
 )
 
 data class UserState(
@@ -26,9 +29,16 @@ data class UserState(
 	val error: Int? = null
 )
 
-class UserViewModel(): ViewModel() {
-	private val userStateFlow = MutableStateFlow(UserState())
-	val userState: StateFlow<UserState> = userStateFlow.asStateFlow()
+sealed interface UpdateResult {
+	data object Success : UpdateResult
+	data class Invalid(
+		@StringRes val message: Int
+	) : UpdateResult
+}
+
+class UserViewModel: ViewModel() {
+	private val _userState = MutableStateFlow(UserState())
+	val userState: StateFlow<UserState> = _userState.asStateFlow()
 
 	init {
 		loadAccount()
@@ -36,34 +46,96 @@ class UserViewModel(): ViewModel() {
 
 	fun loadAccount(){
 		viewModelScope.launch {
-			userStateFlow.value = userStateFlow.value.copy(
-				isLoading = true,
-				error = null
-			)
-		}
+			_userState.update {
+				it.copy(
+					isLoading = true,
+					error = null
+				)
+			}
 
-		// placeholder for now
-		val loggedIn = true
-		userStateFlow.value = userStateFlow.value.copy(
-			isLoading = false,
-			loggedIn = loggedIn,
-			user = if (loggedIn) testUser else null
-		)
+			// placeholder for now
+			val loggedIn = true
+			val user = if (loggedIn) testUser else null
+
+			_userState.update {
+				it.copy(
+					isLoading = false,
+					loggedIn = loggedIn,
+					user = user
+				)
+			}
+		}
 	}
 
-	fun updateAccount(){
-		// update profile
+	fun updateAccount(updated: UserInfo){
+		_userState.update {
+			it.copy(user = updated)
+		}
+	}
+
+	private inline fun updateUser(
+		transform: (UserInfo) -> UserInfo
+	) {
+		_userState.update { state ->
+			val current = state.user ?: return@update state
+			state.copy(user = transform(current))
+		}
+	}
+
+	fun updateUsername(username: String) {
+		updateUser {
+			it.copy(username = username)
+		}
+	}
+
+	fun updateEmail(email: String) {
+		updateUser {
+			it.copy(email = email)
+		}
+	}
+
+	fun updateAvatarUrl(url: String?) {
+		updateUser {
+			it.copy(avatarUrl = url)
+		}
+	}
+
+	fun updateBirthday(birthday: LocalDate?) {
+		updateUser {
+			it.copy(birthday = birthday)
+		}
+	}
+
+	fun updateLocationDynamic(enabled: Boolean) {
+		updateUser {
+			it.copy(locationDynamic = enabled)
+		}
+	}
+
+	fun updateThemeDynamic(enabled: Boolean) {
+		updateUser {
+			it.copy(themeDynamic = enabled)
+		}
+	}
+
+	fun updateThemePreset(preset: String) {
+		updateUser {
+			it.copy(themePreset = preset)
+		}
 	}
 
 	fun logOut(){
-		userStateFlow.value = userStateFlow.value.copy(
-			loggedIn = false,
-			user = null,
-			error = null
-		)
+		_userState.update {
+			it.copy(
+				loggedIn = false,
+				user = null,
+				error = null
+			)
+		}
 	}
 
 	fun deleteAccount(){
-		// remove account
+		// call remote
+		logOut()
 	}
 }

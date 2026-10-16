@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -56,11 +57,12 @@ fun RegistrationPage(
 		}
 		item{
 			OutlinedTextField(
-				value = regFormState.username,
-				onValueChange = {
-					viewModel.updateRegField("username", it)
-				},
 				label = { Text(stringResource(com.example.ecloset.R.string.username_prompt)) },
+				value = regFormState.username,
+				shape = RoundedCornerShape(16.dp),
+				onValueChange = {
+					viewModel.updateRegUsername(it)
+				},
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				isError = regFormState.usernameError != null,
@@ -70,11 +72,12 @@ fun RegistrationPage(
 			)
 
 			OutlinedTextField(
-				value = regFormState.email,
-				onValueChange = {
-					viewModel.updateRegField("email", it)
-				},
 				label = { Text(stringResource(com.example.ecloset.R.string.email_prompt)) },
+				value = regFormState.email,
+				shape = RoundedCornerShape(16.dp),
+				onValueChange = {
+					viewModel.updateRegEmail(it)
+				},
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				isError = regFormState.emailError != null,
@@ -84,11 +87,12 @@ fun RegistrationPage(
 			)
 
 			OutlinedTextField(
-				value = regFormState.password,
-				onValueChange = {
-					viewModel.updateRegField("password", it)
-				},
 				label = { Text(stringResource(com.example.ecloset.R.string.password_prompt)) },
+				value = regFormState.password,
+				shape = RoundedCornerShape(16.dp),
+				onValueChange = {
+					viewModel.updateRegPassword(it)
+				},
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				isError = regFormState.passwordError != null,
@@ -98,11 +102,12 @@ fun RegistrationPage(
 			)
 
 			OutlinedTextField(
-				value = regFormState.confirmPassword,
-				onValueChange = {
-					viewModel.updateRegField("confirmPassword", it)
-				},
 				label = { Text(stringResource(com.example.ecloset.R.string.repeat_password_prompt)) },
+				value = regFormState.confirmPassword,
+				shape = RoundedCornerShape(16.dp),
+				onValueChange = {
+					viewModel.updateRegConfirmPassword(it)
+				},
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				isError = regFormState.confirmPasswordError != null,
@@ -110,6 +115,7 @@ fun RegistrationPage(
 						errId -> { Text(stringResource(errId)) }
 				}
 			)
+			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
 			Button(
 				modifier = Modifier
@@ -150,7 +156,8 @@ fun RegistrationPage(
 						navController.navigate(Routes.LOGIN)
 					},
 				style = MaterialTheme.typography.bodySmall,
-				color = MaterialTheme.colorScheme.secondary
+				color = MaterialTheme.colorScheme.secondary,
+				textAlign = TextAlign.Center
 			)
 		}
 	}

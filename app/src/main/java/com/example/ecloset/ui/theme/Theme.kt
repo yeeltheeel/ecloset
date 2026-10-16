@@ -2,12 +2,15 @@ package com.example.ecloset.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun EClosetTheme(
@@ -36,5 +39,8 @@ fun EClosetTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content,
+        shapes = Shapes(
+            small = RoundedCornerShape(16.dp)
+        )
     )
 }

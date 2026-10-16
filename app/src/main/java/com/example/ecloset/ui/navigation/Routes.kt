@@ -104,7 +104,7 @@ fun NavActionHost(
 		composable(Routes.ABOUT) {
 			AboutPage(
 				modifier = modifier,
-				navController = navController
+				navController = navController,
 			)
 		}
 		composable(Routes.LOGIN) {

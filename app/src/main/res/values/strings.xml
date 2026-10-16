@@ -53,4 +53,8 @@
 	<string name="email_title">Email</string>
 	<string name="username_title">Username</string>
 	<string name="theme_title">Theme</string>
+    <string name="about_description">Control your closet and utilize it to the maximum</string>
+	<string name="about_github">Our GitHub</string>
+	<string name="about_version">Version</string>
+    <string name="error_generic">Something went wrong. Please try again</string>
 </resources>

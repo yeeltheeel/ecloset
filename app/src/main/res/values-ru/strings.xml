@@ -54,4 +54,8 @@
     <string name="email_title">Почта</string>
     <string name="username_title">Имя пользователя</string>
     <string name="theme_title">Тема приложения</string>
+    <string name="about_description">Управляй своим гардеробом и используй его на максимум</string>
+    <string name="about_github">Наш GitHub</string>
+    <string name="about_version">Версия</string>
+    <string name="error_generic">Что-то пошло не так. Пожалуйста, попробуйте позже</string>
 </resources>
