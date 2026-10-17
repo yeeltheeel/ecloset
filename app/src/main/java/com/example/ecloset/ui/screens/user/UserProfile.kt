@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -33,10 +34,22 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.UserViewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ecloset.ui.components.PageHeader
+import com.example.ecloset.ui.components.RadioGroupBlock
+import com.example.ecloset.ui.components.RadioGroupWithDropdown
+import com.example.ecloset.ui.theme.Tint.Companion.Amber
+import com.example.ecloset.ui.theme.Tint.Companion.Indigo
+import com.example.ecloset.ui.theme.Tint.Companion.Rose
+import com.example.ecloset.ui.theme.Tint.Companion.Sage
+import com.example.ecloset.ui.theme.Tint.Companion.Violet
+import com.example.ecloset.user.data.locations
+import com.example.ecloset.user.data.presets
+import com.example.ecloset.user.data.selectOptions
 
 @Composable
 fun UserProfile(
@@ -44,6 +57,9 @@ fun UserProfile(
 	navController: NavHostController,
 	userViewModel: UserViewModel
 ){
+	val state by userViewModel.userState.collectAsStateWithLifecycle()
+	val user = state.user
+
 	LazyColumn(
 		modifier
 			.fillMaxWidth(),
@@ -115,42 +131,50 @@ fun UserProfile(
 			)
 		}
 		item {
+			val locationDynamic = user?.locationDynamic ?: false
+			val location = user?.location ?: ""
+
 			GroupTitle(
-				title = stringResource(R.string.location_title)
+				title = stringResource(R.string.location_title),
+				caption = location,
+				showCaption = true
 			)
 
-			RadioButton(
-				selected = true,
-				onClick = {}
+			RadioGroupWithDropdown(
+				options = selectOptions,
+				items = locations,
+				selectedIndex = if (locationDynamic) 1 else 0,
+				onOptionSelected = { index ->
+					userViewModel.updateLocationDynamic(index == 1)
+				},
+				selectedItem = presets.indexOf(location),
+				onItemSelected = {index ->
+					userViewModel.updateLocation(locations[index])
+				},
+				dropIndex = 0
 			)
-			RadioButton(
-				selected = false,
-				onClick = {}
-			)
-			OutlinedTextField(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				value = "",
-				onValueChange = {},
-				shape = RoundedCornerShape(16.dp)
-			)
+
 		}
 		item {
+			val themeDynamic = user?.themeDynamic ?: false
+			val themePreset  = user?.themePreset ?: presets.first()
+
 			GroupTitle(
 				title = stringResource(R.string.theme_title)
 			)
 
-			RadioButton(
-				selected = true,
-				onClick = {}
-			)
-			RadioButton(
-				selected = false,
-				onClick = {}
+			RadioGroupWithDropdown(
+				options = selectOptions,
+				items = presets,
+				selectedIndex = if (themeDynamic) 1 else 0,
+				onOptionSelected = { index ->
+					userViewModel.updateThemeDynamic(index == 1)
+				},
+				selectedItem = presets.indexOf(themePreset),
+				onItemSelected = {index ->
+					userViewModel.updateThemePreset(presets[index])
+				},
+				dropIndex = 0
 			)
 		}
 		item{
@@ -247,7 +271,9 @@ fun EditableLabel(
 
 @Composable
 fun GroupTitle(
-	title: String
+	title: String,
+	caption: String = "",
+	showCaption: Boolean = false
 ){
 	Spacer(modifier = Modifier.padding(vertical = 8.dp))
 	Text(
@@ -260,6 +286,20 @@ fun GroupTitle(
 			),
 		style = MaterialTheme.typography.titleMedium
 	)
+	if (showCaption){
+		Text(
+			text = caption,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(
+					horizontal = 16.dp,
+					vertical = 0.dp
+				),
+			style = MaterialTheme.typography.bodyMedium,
+			color = MaterialTheme.colorScheme.tertiary
+		)
+		Spacer(modifier = Modifier.padding(vertical = 8.dp))
+	}
 }
 
 @Composable

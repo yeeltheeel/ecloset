@@ -46,6 +46,9 @@ fun AnalyticsPage(
 				categories = clothesCategories,
 				items = clothesList
 			)
+
+			// add most worn color label or color ranking
+
 			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 		}
 		item{

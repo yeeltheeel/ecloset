@@ -18,9 +18,15 @@ data class UserInfo(
 	val avatarUrl: String? = null,
 	val birthday: LocalDate? = null,
 	val locationDynamic: Boolean = true,
+	val location: String = "Moscow",
 	val themeDynamic: Boolean = false,
 	val themePreset: String = "Violet"
 )
+
+// localize later (prob will be list<int>)
+val selectOptions = listOf("Static", "Dynamic")
+val locations = emptyList<String>()
+val presets = listOf("None", "Violet", "Sage", "Amber", "Indigo", "Rose")
 
 data class UserState(
 	val user: UserInfo? = null,
@@ -137,5 +143,11 @@ class UserViewModel: ViewModel() {
 	fun deleteAccount(){
 		// call remote
 		logOut()
+	}
+
+	fun updateLocation(location: String) {
+		updateUser {
+			it.copy(location = location)
+		}
 	}
 }

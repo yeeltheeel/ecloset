@@ -57,4 +57,9 @@
 	<string name="about_github">Our GitHub</string>
 	<string name="about_version">Version</string>
     <string name="error_generic">Something went wrong. Please try again</string>
+    <string name="total_label">items</string>
+	<string name="load_image_prompt">Load image</string>
+	<string name="no_match">No match</string>
+	<string name="search_prompt">Search</string>
+	<string name="color_prompt">Which color fits your mood today?</string>
 </resources>

@@ -3,8 +3,11 @@
 
 /* to-do:
 	main:
+		filters block
+		filters page
 		user actions (change username, etc)
 		closet view models
+		closet actions
 		connect backend
 		connect weather api
 		user tint selecting block to user settings
@@ -13,12 +16,13 @@
 		fix up preview card classes
 		empty card placeholder + no connection page
 	medium:
-		user theme preference + dynamic tinting for theme
+		implement user theme preference
 		add localizations for all hardcoded strings
 		add unused clothes
 		preview cards (last added items, relevant outfits)
 	misc:
 		remove type attribute from data classes, replace with type check
+		add admin/support functions
 */
 
 package com.example.ecloset

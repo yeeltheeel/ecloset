@@ -18,7 +18,7 @@ data class ClosetItemData(
 	override val title: String,
 	override val type: String = "item",
 	override val imageUrl: String?,
-	val category: String, // same as CategoryItem
+	val category: Int, // same as CategoryItem.id
 	val season: String,
 	val material: String,
 	val color: Int,

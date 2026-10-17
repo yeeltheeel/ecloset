@@ -47,7 +47,7 @@
     <string name="items_onepieces">Платья и комбинезоны</string>
     <string name="items_accessories">Аксессуары</string>
     <string name="items_cardigans">Кофты</string>
-    <string name="change_avatar_prompt">Изменить изображение</string>
+    <string name="change_avatar_prompt">Сменить изображение</string>
     <string name="no_connection">Пожалуйста, проверьте соединение с интернетом</string>
     <string name="no_content">Тут пока ничего нет</string>
     <string name="location_title">Локация</string>
@@ -58,4 +58,9 @@
     <string name="about_github">Наш GitHub</string>
     <string name="about_version">Версия</string>
     <string name="error_generic">Что-то пошло не так. Пожалуйста, попробуйте позже</string>
+    <string name="total_label">вещей</string>
+    <string name="load_image_prompt">Загрузить изображение</string>
+    <string name="no_match">Нет совпадений</string>
+    <string name="search_prompt">Поиск</string>
+    <string name="color_prompt">Какой цвет привлекает тебя сегодня,</string>
 </resources>

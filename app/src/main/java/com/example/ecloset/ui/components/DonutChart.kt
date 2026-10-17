@@ -1,17 +1,23 @@
 package com.example.ecloset.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -19,14 +25,18 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.ecloset.R
 import com.example.ecloset.user.data.CategoryItem
-import com.example.ecloset.user.data.ClosetItemData
 import com.example.ecloset.user.data.PreviewCardData
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.hypot
+import kotlin.math.min
 
-// merge it with categoryItem later
 data class DonutChartData(
 	val category: CategoryItem,
 	val units: Int,
@@ -37,8 +47,8 @@ data class DonutChartData(
 @Composable
 fun DonutChart(
 	categories: List<CategoryItem>,
-	items: List<PreviewCardData>
-){
+	items: List<PreviewCardData> // will become ClosetItemData
+) {
 	val colors = listOf(
 		Color(0xFF7FB88A),
 		Color(0xFF6BA8C9),
@@ -55,7 +65,6 @@ fun DonutChart(
 	)
 
 	val numbers = listOf<Int>(10, 5, 7, 2, 3, 15) // until proper data, then calculate
-	//val titles = categories.map { stringResource(it.titleId) }
 
 	val data = remember(categories, numbers) {
 		val total = numbers.sum().coerceAtLeast(1)
@@ -70,6 +79,13 @@ fun DonutChart(
 		}
 	}
 
+	var selectedIndex by remember { mutableStateOf<Int?>(null) }
+	val totalUnits = remember(data) { data.sumOf { it.units } }
+
+	val strokeWidth = 50.dp
+	val trackColor = MaterialTheme.colorScheme.surface
+	val maxSize = 250.dp
+
 	Box(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -79,11 +95,6 @@ fun DonutChart(
 			),
 		contentAlignment = Alignment.Center
 	) {
-		val strokeWidth = 50.dp
-		val trackColor = MaterialTheme.colorScheme.surface
-		val maxSize = 250.dp
-		val cornerRadiusPx = with(LocalDensity.current) { 4.dp.toPx() }
-
 		Canvas(
 			modifier = Modifier
 				.sizeIn(
@@ -91,6 +102,47 @@ fun DonutChart(
 					maxHeight = maxSize
 				)
 				.aspectRatio(1f)
+				.pointerInput(data) {
+					detectTapGestures { tapOffset ->
+						val minDimension = min(size.width, size.height)
+						val strokePx = strokeWidth.toPx()
+						val diameter = minDimension - strokePx
+						val radius = diameter / 2f
+						val center = Offset(size.width / 2f, size.height / 2f)
+
+						val dx = tapOffset.x - center.x
+						val dy = tapOffset.y - center.y
+						val dist = hypot(dx, dy)
+
+						// ignore taps outside the ring band
+						val inner = radius - strokePx / 2f
+						val outer = radius + strokePx / 2f
+						if (dist < inner || dist > outer) {
+							selectedIndex = null
+							return@detectTapGestures
+						}
+
+						// angle in degrees, 0 = 12 o'clock, clockwise
+						val angleDeg = ((Math.toDegrees(
+							atan2(dy.toDouble(), dx.toDouble())
+						) + 90.0 + 360.0) % 360.0).toFloat()
+
+						var accumulated = 0f
+						val hit = data.indexOfFirst { item ->
+							val sweep = item.percent * 360f
+							val inSegment = angleDeg >= accumulated &&
+									angleDeg < accumulated + sweep
+							accumulated += sweep
+							inSegment
+						}
+
+						selectedIndex = when {
+							hit < 0 -> null
+							selectedIndex == hit -> null // toggle off
+							else -> hit
+						}
+					}
+				}
 		) {
 			val strokePx = strokeWidth.toPx()
 			val diameter = size.minDimension - strokePx
@@ -99,13 +151,6 @@ fun DonutChart(
 				(size.width - diameter) / 2f,
 				(size.height - diameter) / 2f,
 			)
-
-			val radius = diameter / 2f
-			val gapDeg = 4f // gap between segments, in degrees
-			val capAngleDeg = if (radius > 0f) {
-				(strokePx / 2f) / radius * (180f / Math.PI.toFloat())
-			} else 0f // angular half-width of the rounded cap
-			var startAngle = -90f
 
 			// background track
 			drawArc(
@@ -122,6 +167,7 @@ fun DonutChart(
 			)
 
 			// segments
+			var startAngle = -90f
 			data.forEach { item ->
 				val sweep = item.percent * 360f
 				if (sweep > 0f) {
@@ -141,6 +187,30 @@ fun DonutChart(
 				startAngle += sweep
 			}
 		}
+
+		// center text overlay
+		val selected = selectedIndex?.let { data.getOrNull(it) }
+		val displayValue = selected?.units ?: totalUnits
+		val displayColor = selected?.color
+			?: MaterialTheme.colorScheme.onSurface
+
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			modifier = Modifier.padding(horizontal = 24.dp)
+		) {
+			Text(
+				text = displayValue.toString(),
+				style = MaterialTheme.typography.headlineMedium,
+				color = displayColor,
+				textAlign = TextAlign.Center
+			)
+			Text(
+				text = stringResource(R.string.total_label),
+				style = MaterialTheme.typography.bodySmall,
+				color = displayColor,
+				textAlign = TextAlign.Center
+			)
+		}
 	}
 
 	LazyRow(
@@ -152,8 +222,8 @@ fun DonutChart(
 			),
 		horizontalArrangement = Arrangement.spacedBy(8.dp)
 	) {
-		data.forEach { item ->
-			item{
+		data.forEachIndexed { index, item ->
+			item(key = item.category.id) {
 				CategoryCard(
 					category = item.category,
 					color = MaterialTheme.colorScheme.onPrimary,
