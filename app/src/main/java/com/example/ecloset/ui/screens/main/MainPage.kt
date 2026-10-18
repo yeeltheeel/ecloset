@@ -29,7 +29,12 @@ fun MainPage(
 		contentPadding = PaddingValues(top = 0.dp)
 	) {
 		item {
-			WeatherWidget(modifier = modifier, location = "Moscow")
+			WeatherWidget(
+				modifier = modifier,
+				location = "Moscow",
+				latitude = 55.7558,
+				longitude = 37.6173
+			)
 		}
 		item {
 			PreviewCarousel(

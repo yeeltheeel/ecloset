@@ -3,23 +3,25 @@
 
 /* to-do:
 	main:
-		filters block
-		filters page
-		user actions (change username, etc)
-		closet view models
-		closet actions
-		connect backend
-		connect weather api
-		user tint selecting block to user settings
-		filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
-		weather widget (add cute animation/gif)
-		fix up preview card classes
-		empty card placeholder + no connection page
+		functions:
+			user actions (change username, etc)
+			closet view models
+			closet actions
+			connect backend
+			implement user theme preference
+			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
+			last added items, relevant outfits
+			unused clothes
+		widgets:
+			filters block
+			filters page
+			user tint selecting block to user settings
+			prettify weather widget with lottie
+			fix up preview card classes
+			empty card placeholder
+			no connection page
 	medium:
-		implement user theme preference
 		add localizations for all hardcoded strings
-		add unused clothes
-		preview cards (last added items, relevant outfits)
 	misc:
 		remove type attribute from data classes, replace with type check
 		add admin/support functions
