@@ -132,7 +132,7 @@ fun UserProfile(
 		}
 		item {
 			val locationDynamic = user?.locationDynamic ?: false
-			val location = user?.location ?: ""
+			val location = user?.location?.location ?: ""
 
 			GroupTitle(
 				title = stringResource(R.string.location_title),
@@ -140,16 +140,22 @@ fun UserProfile(
 				showCaption = true
 			)
 
+			val locationStrings = locations.map { it.location }
+
 			RadioGroupWithDropdown(
 				options = selectOptions,
-				items = locations,
+				items = locationStrings,
 				selectedIndex = if (locationDynamic) 1 else 0,
 				onOptionSelected = { index ->
 					userViewModel.updateLocationDynamic(index == 1)
 				},
 				selectedItem = presets.indexOf(location),
 				onItemSelected = {index ->
-					userViewModel.updateLocation(locations[index])
+					val loc = locationStrings[index]
+					val newLocation = locations.find {
+						it.location == loc
+					}
+					newLocation?.let { userViewModel.updateLocation(it) }
 				},
 				dropIndex = 0
 			)

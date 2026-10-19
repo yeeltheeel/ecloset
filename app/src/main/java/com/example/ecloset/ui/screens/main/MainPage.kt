@@ -11,18 +11,25 @@ import com.example.ecloset.R
 import com.example.ecloset.user.data.PreviewCard
 import com.example.ecloset.ui.components.WeatherWidget
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.data.CategoryItem
 import com.example.ecloset.user.data.MockData.previewOutfits
 import com.example.ecloset.user.data.MockData.previewClothes
+import com.example.ecloset.user.data.UserViewModel
 
 @Composable
 fun MainPage(
 	modifier: Modifier = Modifier,
-	navController: NavHostController
+	navController: NavHostController,
+	userViewModel: UserViewModel
 ) {
+	val state by userViewModel.userState.collectAsStateWithLifecycle()
+	val user = state.user
+
 	LazyColumn(
 		modifier = modifier
 			.fillMaxWidth(),
@@ -31,9 +38,9 @@ fun MainPage(
 		item {
 			WeatherWidget(
 				modifier = modifier,
-				location = "Moscow",
-				latitude = 55.7558,
-				longitude = 37.6173
+				location = user?.location?.location ?: "",
+				latitude = user?.location?.latitude ?: .0,
+				longitude = user?.location?.longitude ?: .0
 			)
 		}
 		item {

@@ -62,7 +62,8 @@ fun NavActionHost(
 		composable(Routes.MAIN) {
 			MainPage(
 				modifier = modifier,
-				navController = navController
+				navController = navController,
+				userViewModel = userViewModel
 			)
 		}
 		composable(Routes.ANALYTICS) {

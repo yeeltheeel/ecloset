@@ -18,14 +18,25 @@ data class UserInfo(
 	val avatarUrl: String? = null,
 	val birthday: LocalDate? = null,
 	val locationDynamic: Boolean = true,
-	val location: String = "Moscow",
+	//val location: String = "Moscow",
+	val location: LocationInfo = LocationInfo(
+		location = "Moscow",
+		latitude = 55.7558,
+		longitude = 37.6173
+	),
 	val themeDynamic: Boolean = false,
 	val themePreset: String = "Violet"
 )
 
+data class LocationInfo(
+	val location: String,
+	val latitude: Double,
+	val longitude: Double
+)
+
 // localize later (prob will be list<int>)
 val selectOptions = listOf("Static", "Dynamic")
-val locations = emptyList<String>()
+val locations = emptyList<LocationInfo>()
 val presets = listOf("None", "Violet", "Sage", "Amber", "Indigo", "Rose")
 
 data class UserState(
@@ -145,7 +156,7 @@ class UserViewModel: ViewModel() {
 		logOut()
 	}
 
-	fun updateLocation(location: String) {
+	fun updateLocation(location: LocationInfo) {
 		updateUser {
 			it.copy(location = location)
 		}
