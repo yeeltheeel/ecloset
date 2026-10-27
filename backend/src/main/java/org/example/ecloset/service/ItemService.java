@@ -5,14 +5,19 @@ import org.example.ecloset.dto.request.ItemCreateRequest;
 import org.example.ecloset.dto.request.ItemUpdateRequest;
 import org.example.ecloset.dto.response.ItemResponseDto;
 import org.example.ecloset.entity.Item;
+import org.example.ecloset.entity.Outfit;
 import org.example.ecloset.entity.Season;
 import org.example.ecloset.entity.User;
-import org.example.ecloset.exception.AccessDeniedException;
+import org.example.ecloset.enums.Category;
+import org.example.ecloset.enums.Color;
+import org.example.ecloset.enums.Material;
+import org.example.ecloset.enums.Occasion;
 import org.example.ecloset.exception.ItemNotFoundException;
 import org.example.ecloset.exception.SeasonNotFoundException;
 import org.example.ecloset.exception.UserNotFoundException;
 import org.example.ecloset.mapper.ItemMapper;
 import org.example.ecloset.repository.ItemRepository;
+import org.example.ecloset.repository.OutfitRepository;
 import org.example.ecloset.repository.SeasonRepository;
 import org.example.ecloset.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +37,8 @@ public class ItemService {
     private final ItemMapper itemMapper;
     private final FileStorageService fileStorageService;
 
+    private final OutfitRepository outfitRepository;
+
     @Transactional(readOnly = true)
     public List<ItemResponseDto> getAllItemsByUser(Integer userId) {
         return itemRepository.findByUser_UserId(userId).stream()
@@ -50,7 +57,6 @@ public class ItemService {
                     .orElseThrow(() -> new SeasonNotFoundException("Сезон с ID " + request.getSeasonId() + " не найден"));
         }
 
-        // Сначала сохраняем файл — если что-то упадёт, в БД ничего не попадёт
         String imageUrl = fileStorageService.store(image);
 
         try {
@@ -59,7 +65,6 @@ public class ItemService {
             Item savedItem = itemRepository.save(item);
             return itemMapper.toResponseDto(savedItem);
         } catch (RuntimeException e) {
-            // откатываем файл, если БД упала
             fileStorageService.delete(imageUrl);
             throw e;
         }
@@ -81,7 +86,6 @@ public class ItemService {
         String oldImageUrl = existingItem.getImageUrl();
         String newImageUrl = null;
 
-        // Если пришла новая картинка — сохраняем её
         if (image != null && !image.isEmpty()) {
             newImageUrl = fileStorageService.store(image);
         }
@@ -93,14 +97,12 @@ public class ItemService {
             }
             Item savedItem = itemRepository.save(updatedItem);
 
-            // Только после успешного сохранения в БД удаляем старый файл
             if (newImageUrl != null) {
                 fileStorageService.delete(oldImageUrl);
             }
 
             return itemMapper.toResponseDto(savedItem);
         } catch (RuntimeException e) {
-            // если БД упала — удаляем только что сохранённый новый файл
             if (newImageUrl != null) {
                 fileStorageService.delete(newImageUrl);
             }
@@ -115,11 +117,24 @@ public class ItemService {
 
         checkOwnership(item, userId);
 
+        // 1. Находим все аутфиты, в которых есть эта вещь.
+        List<Outfit> affectedOutfits = outfitRepository.findByItems_ItemId(itemId);
+
+        // 2. Помечаем их как недоступные.
+        for (Outfit outfit : affectedOutfits) {
+            outfit.setUnavailable(true);
+        }
+
+        if (!affectedOutfits.isEmpty()) {
+            outfitRepository.saveAll(affectedOutfits);
+        }
+
         String imageUrl = item.getImageUrl();
+
+        // 3. Удаляем вещь.
         itemRepository.delete(item);
 
         // Удаляем файл после успешного удаления из БД.
-        // Если файл не удалится — БД уже консистентна, просто останется мусор.
         fileStorageService.delete(imageUrl);
     }
 
@@ -157,9 +172,46 @@ public class ItemService {
         return itemMapper.toResponseDto(item);
     }
 
+    // --- Методы поиска вещей ---
+
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getItemsByTimesWorn(Integer userId, Integer timesWorn) {
+        return itemRepository.findByUser_UserIdAndTimesWorn(userId, timesWorn).stream()
+                .map(itemMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getItemsByCategory(Integer userId, Category category) {
+        return itemRepository.findByUser_UserIdAndCategory(userId, category).stream()
+                .map(itemMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getItemsByColor(Integer userId, Color color) {
+        return itemRepository.findByUser_UserIdAndColor(userId, color).stream()
+                .map(itemMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getItemsByMaterial(Integer userId, Material material) {
+        return itemRepository.findByUser_UserIdAndMaterial(userId, material).stream()
+                .map(itemMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemResponseDto> getItemsByOccasion(Integer userId, Occasion occasion) {
+        return itemRepository.findByUser_UserIdAndOccasion(userId, occasion).stream()
+                .map(itemMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
     private void checkOwnership(Item item, Integer userId) {
         if (!item.getUser().getUserId().equals(userId)) {
-            throw new AccessDeniedException("У вас нет прав на это действие");
+            throw new ItemNotFoundException("Вещь не найдена или не принадлежит вам");
         }
     }
 }

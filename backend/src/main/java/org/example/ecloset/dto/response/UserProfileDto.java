@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -17,5 +18,6 @@ public class UserProfileDto {
     private String username;
     private String email;
     private LocalDate birthday;
-    private String location;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -37,6 +38,9 @@ public class User {
     @Column(name = "birthday")
     private LocalDate birthday;
 
-    @Column(name = "location", length = 100)
-    private String location;
+    @Column(name = "latitude", precision = 9, scale = 6)
+    private BigDecimal latitude = new BigDecimal("55.976858"); // Дефолт: Шереметьево
+
+    @Column(name = "longitude", precision = 9, scale = 6)
+    private BigDecimal longitude = new BigDecimal("37.411210"); // Дефолт: Шереметьево
 }
