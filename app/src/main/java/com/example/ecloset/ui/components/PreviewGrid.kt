@@ -13,8 +13,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.ecloset.user.data.CategoryItem
-import com.example.ecloset.user.data.PreviewCard
+import com.example.ecloset.user.local.CategoryItem
+import com.example.ecloset.user.local.PreviewCard
 
 @Composable
 fun GridLayout(

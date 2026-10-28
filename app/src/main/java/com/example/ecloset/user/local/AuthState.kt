@@ -1,4 +1,4 @@
-package com.example.ecloset.user.data
+package com.example.ecloset.user.local
 
 import android.util.Patterns
 import androidx.annotation.StringRes

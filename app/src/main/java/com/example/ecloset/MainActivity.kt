@@ -6,8 +6,8 @@
 		functions:
 			user actions (change username, etc)
 			closet view models
-			closet actions
 			connect backend
+
 			implement user theme preference
 			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 			last added items, relevant outfits
@@ -52,7 +52,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecloset.ui.navigation.NavActionHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.data.UserViewModel
+import com.example.ecloset.user.local.UserViewModel
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {

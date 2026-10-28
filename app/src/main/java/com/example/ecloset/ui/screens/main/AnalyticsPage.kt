@@ -1,6 +1,5 @@
 package com.example.ecloset.ui.screens.main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +15,9 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.components.DonutChart
 import com.example.ecloset.ui.components.PreviewSingleRow
 
-import com.example.ecloset.user.data.MockData.previewClothes
-import com.example.ecloset.user.data.MockData.clothesCategories
-import com.example.ecloset.user.data.MockData.clothesList
+import com.example.ecloset.user.local.MockData.previewClothes
+import com.example.ecloset.user.local.MockData.clothesCategories
+import com.example.ecloset.user.local.MockData.clothesList
 
 @Composable
 fun AnalyticsPage(

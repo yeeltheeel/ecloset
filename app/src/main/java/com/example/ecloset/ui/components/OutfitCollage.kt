@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.ecloset.user.data.ClosetItemData
-import com.example.ecloset.user.data.OutfitItemData
-import com.example.ecloset.user.data.PreviewCardData
+import com.example.ecloset.user.local.ClosetItemData
 
 @Composable
 fun OutfitCollageCanvas(

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,8 +46,8 @@ import com.example.ecloset.ui.components.PageHeader
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.unit.Dp
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.data.AuthViewModel
-import com.example.ecloset.user.data.CODE_LEN
+import com.example.ecloset.user.local.AuthViewModel
+import com.example.ecloset.user.local.CODE_LEN
 
 @Composable
 fun OtpPage(

@@ -29,9 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.R
-import com.example.ecloset.ui.components.PopupActionMenu
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.data.UserViewModel
+import com.example.ecloset.user.local.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

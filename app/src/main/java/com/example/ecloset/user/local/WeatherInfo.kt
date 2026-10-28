@@ -1,4 +1,4 @@
-package com.example.ecloset.user.remote.data
+package com.example.ecloset.user.local
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

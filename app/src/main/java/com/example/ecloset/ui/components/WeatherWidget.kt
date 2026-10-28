@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ecloset.user.remote.data.CurrentWeather
-import com.example.ecloset.user.remote.data.WeatherUiState
-import com.example.ecloset.user.remote.data.WeatherViewModel
+import com.example.ecloset.user.local.CurrentWeather
+import com.example.ecloset.user.local.WeatherUiState
+import com.example.ecloset.user.local.WeatherViewModel
 import kotlin.math.roundToInt
 
 @Composable

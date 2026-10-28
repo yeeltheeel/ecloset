@@ -2,13 +2,11 @@ package com.example.ecloset.ui.screens.main
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.ecloset.ui.components.PreviewCarousel
 import com.example.ecloset.R
-import com.example.ecloset.user.data.PreviewCard
 import com.example.ecloset.ui.components.WeatherWidget
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.getValue
@@ -16,10 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.data.CategoryItem
-import com.example.ecloset.user.data.MockData.previewOutfits
-import com.example.ecloset.user.data.MockData.previewClothes
-import com.example.ecloset.user.data.UserViewModel
+import com.example.ecloset.user.local.MockData.previewOutfits
+import com.example.ecloset.user.local.MockData.previewClothes
+import com.example.ecloset.user.local.UserViewModel
 
 @Composable
 fun MainPage(

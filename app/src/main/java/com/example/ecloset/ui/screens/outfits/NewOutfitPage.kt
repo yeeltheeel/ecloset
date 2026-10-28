@@ -2,7 +2,6 @@ package com.example.ecloset.ui.screens.outfits
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +20,7 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.components.OutfitCollageCanvas
 import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.RadioGroupBlock
-import com.example.ecloset.user.data.ClosetItemData
+import com.example.ecloset.user.local.ClosetItemData
 
 @Composable
 fun NewOutfitPage(

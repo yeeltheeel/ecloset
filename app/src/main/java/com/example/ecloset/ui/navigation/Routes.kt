@@ -21,7 +21,7 @@ import com.example.ecloset.ui.screens.auth.LoginPage
 import com.example.ecloset.ui.screens.auth.RegistrationPage
 import com.example.ecloset.ui.screens.auth.OtpPage
 import com.example.ecloset.ui.screens.main.NoConnectionPage
-import com.example.ecloset.user.data.UserViewModel
+import com.example.ecloset.user.local.UserViewModel
 
 object Routes {
 	const val MAIN = "main"

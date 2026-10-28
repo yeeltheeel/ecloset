@@ -1,6 +1,6 @@
 package com.example.ecloset.user.remote.api
 
-import com.example.ecloset.user.remote.data.WttrResponse
+import com.example.ecloset.user.local.WttrResponse
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

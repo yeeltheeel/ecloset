@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,9 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
-import com.example.ecloset.user.data.CategoryItem
-import com.example.ecloset.user.data.PreviewCardData
-import kotlin.math.PI
+import com.example.ecloset.user.local.CategoryItem
+import com.example.ecloset.user.local.PreviewCardData
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.min

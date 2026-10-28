@@ -1,4 +1,4 @@
-package com.example.ecloset.user.data
+package com.example.ecloset.user.local
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import com.example.ecloset.user.data.MockData.testUser
+import com.example.ecloset.user.local.MockData.testUser
 import kotlinx.coroutines.flow.update
 
 data class UserInfo(

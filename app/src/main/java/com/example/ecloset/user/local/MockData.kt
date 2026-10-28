@@ -1,10 +1,4 @@
-package com.example.ecloset.user.data
-
-import android.R
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.example.ecloset.user.data.PreviewCard
+package com.example.ecloset.user.local
 
 object MockData {
 	val testUser = UserInfo(
