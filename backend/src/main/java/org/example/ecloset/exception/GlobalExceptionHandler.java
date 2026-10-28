@@ -1,6 +1,6 @@
 package org.example.ecloset.exception;
-import io.swagger.v3.oas.annotations.Hidden;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.example.ecloset.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,31 +20,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyExists(UserAlreadyExistsException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT); // 409 Conflict
+        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFound(UserNotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND); // 404 Not Found
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleInvalidCredentials(InvalidCredentialsException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED); // 401 Unauthorized
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(RefreshTokenNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleRefreshTokenNotFound(RefreshTokenNotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED); // 401 Unauthorized
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
-    // Обработка ошибок Spring Security (например, неверный пароль при логине)
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
         return buildErrorResponse("Неверный email или пароль", HttpStatus.UNAUTHORIZED);
     }
 
-    // Обработка ошибок валидации (@Valid в контроллерах)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
@@ -56,17 +54,14 @@ public class GlobalExceptionHandler {
         body.put("error", "Ошибка валидации");
         body.put("details", fieldErrors);
 
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST); // 400 Bad Request
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Обработка всех остальных непредвиденных ошибок
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-        // В реальном проекте тут нужно логировать ex
-        return buildErrorResponse("Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR); // 500
+        return buildErrorResponse("Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // Вспомогательный метод для формирования тела ответа
     private ResponseEntity<Map<String, String>> buildErrorResponse(String message, HttpStatus status) {
         Map<String, String> errorBody = new HashMap<>();
         errorBody.put("error", message);
@@ -75,27 +70,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleItemNotFound(ItemNotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND); // 404
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SeasonNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleSeasonNotFound(SeasonNotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND); // 404
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN); // 403
+    @ExceptionHandler(OutfitNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleOutfitNotFound(OutfitNotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    // Обработка ошибок десериализации (например, неверное значение enum)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> handleEnumParsingError(HttpMessageNotReadableException ex) {
         String message = "Некорректный формат данных в запросе";
         if (ex.getMessage() != null && ex.getMessage().contains("Cannot deserialize value of type")) {
-            message = "Некорректное значение пер ечисления (enum). Проверьте правильность написания.";
+            message = "Некорректное значение перечисления (enum). Проверьте правильность написания.";
         }
-        return buildErrorResponse(message, HttpStatus.BAD_REQUEST); // 400
+        return buildErrorResponse(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(FileStorageException.class)

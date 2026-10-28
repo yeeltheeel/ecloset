@@ -14,6 +14,10 @@ import org.example.ecloset.dto.response.ErrorResponse;
 import org.example.ecloset.dto.response.ItemResponseDto;
 import org.example.ecloset.dto.response.ValidationErrorResponse;
 import org.example.ecloset.entity.User;
+import org.example.ecloset.enums.Category;
+import org.example.ecloset.enums.Color;
+import org.example.ecloset.enums.Material;
+import org.example.ecloset.enums.Occasion;
 import org.example.ecloset.exception.UserNotFoundException;
 import org.example.ecloset.repository.UserRepository;
 import org.example.ecloset.service.ItemService;
@@ -51,12 +55,9 @@ public class ItemController {
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Не авторизован\"}"))),
-            @ApiResponse(responseCode = "403", description = "Вещь принадлежит другому пользователю",
+            @ApiResponse(responseCode = "404", description = "Вещь не найдена или не принадлежит Вам.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"У вас нет прав на это действие\"}"))),
-            @ApiResponse(responseCode = "404", description = "Вещь не найдена",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Вещь не найдена\"}")))
+                            example = "{\"error\": \"Вещь не найдена или не принадлежит Вам.\"}")))
     })
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemResponseDto> getItemById(@PathVariable Integer itemId) {
@@ -114,12 +115,9 @@ public class ItemController {
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Не авторизован\"}"))),
-            @ApiResponse(responseCode = "403", description = "У пользователя нет прав на это действие (вещь принадлежит другому пользователю)",
+            @ApiResponse(responseCode = "404", description = "Вещь не найдена или не принадлежит Вам.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"У вас нет прав на это действие\"}"))),
-            @ApiResponse(responseCode = "404", description = "Вещь или сезон не найдены",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Вещь не найдена\"}")))
+                            example = "{\"error\": \"Вещь не найдена или не принадлежит Вам.\"}")))
     })
     @PutMapping(value = "/{itemId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ItemResponseDto> updateItem(
@@ -136,12 +134,9 @@ public class ItemController {
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Не авторизован\"}"))),
-            @ApiResponse(responseCode = "403", description = "У пользователя нет прав на это действие (вещь принадлежит другому пользователю)",
+            @ApiResponse(responseCode = "404", description = "Вещь не найдена или не принадлежит Вам.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"У вас нет прав на это действие\"}"))),
-            @ApiResponse(responseCode = "404", description = "Вещь не найдена",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Вещь не найдена\"}")))
+                            example = "{\"error\": \"Вещь не найдена или не принадлежит Вам.\"}")))
     })
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable Integer itemId) {
@@ -157,12 +152,9 @@ public class ItemController {
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Не авторизован\"}"))),
-            @ApiResponse(responseCode = "403", description = "У пользователя нет прав на это действие (вещь принадлежит другому пользователю)",
+            @ApiResponse(responseCode = "404", description = "Вещь не найдена или не принадлежит Вам",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"У вас нет прав на это действие\"}"))),
-            @ApiResponse(responseCode = "404", description = "Вещь не найдена",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Вещь не найдена\"}")))
+                            example = "{\"error\": \"Вещь не найдена или не принадлежит Вам\"}")))
     })
     @PostMapping("/{itemId}/wear")
     public ResponseEntity<ItemResponseDto> wearItem(@PathVariable Integer itemId) {
@@ -184,5 +176,90 @@ public class ItemController {
     @GetMapping("/temperature")
     public ResponseEntity<List<ItemResponseDto>> getItemsByTemperature(@RequestParam Integer temp) {
         return ResponseEntity.ok(itemService.getItemsByTemperature(getCurrentUserId(), temp));
+    }
+
+    @Operation(summary = "Найти вещи по times worn",
+            description = "Возвращает вещи с указанным times worn")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список вещей",
+                    content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Параметр count не указан",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Параметр count обязателен\"}"))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}")))
+    })
+    @GetMapping("/times-worn")
+    public ResponseEntity<List<ItemResponseDto>> getItemsByTimesWorn(@RequestParam Integer count) {
+        return ResponseEntity.ok(itemService.getItemsByTimesWorn(getCurrentUserId(), count));
+    }
+
+    @Operation(summary = "Найти вещи по категории",
+            description = "Возвращает вещи указанной категории")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список вещей",
+                    content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Некорректное значение категории",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}")))
+    })
+    @GetMapping("/category")
+    public ResponseEntity<List<ItemResponseDto>> getItemsByCategory(@RequestParam Category category) {
+        return ResponseEntity.ok(itemService.getItemsByCategory(getCurrentUserId(), category));
+    }
+
+    @Operation(summary = "Найти вещи по цвету",
+            description = "Возвращает вещи указанного цвета")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список вещей",
+                    content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Некорректное значение цвета",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}")))
+    })
+    @GetMapping("/color")
+    public ResponseEntity<List<ItemResponseDto>> getItemsByColor(@RequestParam Color color) {
+        return ResponseEntity.ok(itemService.getItemsByColor(getCurrentUserId(), color));
+    }
+
+    @Operation(summary = "Найти вещи по материалу",
+            description = "Возвращает вещи из указанного материала")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список вещей",
+                    content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Некорректное значение материала",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}")))
+    })
+    @GetMapping("/material")
+    public ResponseEntity<List<ItemResponseDto>> getItemsByMaterial(@RequestParam Material material) {
+        return ResponseEntity.ok(itemService.getItemsByMaterial(getCurrentUserId(), material));
+    }
+
+    @Operation(summary = "Найти вещи по случаю",
+            description = "Возвращает вещи для указанного повода")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список вещей",
+                    content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Некорректное значение повода",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}")))
+    })
+    @GetMapping("/occasion")
+    public ResponseEntity<List<ItemResponseDto>> getItemsByOccasion(@RequestParam Occasion occasion) {
+        return ResponseEntity.ok(itemService.getItemsByOccasion(getCurrentUserId(), occasion));
     }
 }

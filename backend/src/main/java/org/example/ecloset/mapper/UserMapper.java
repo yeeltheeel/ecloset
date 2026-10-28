@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    // RegisterRequest -> User (регистрация)
     public User toEntity(RegisterRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
                 .username(request.getUsername())
@@ -20,18 +19,17 @@ public class UserMapper {
                 .build();
     }
 
-    // User -> UserProfileDto (get в профиле)
     public UserProfileDto toProfileDto(User user) {
         return UserProfileDto.builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .birthday(user.getBirthday())
-                .location(user.getLocation())
+                .latitude(user.getLatitude())
+                .longitude(user.getLongitude())
                 .build();
     }
 
-    // User + токены -> AuthResponseDto (возвращает при авторизации)
     public AuthResponseDto toAuthResponse(User user, String accessToken, String refreshToken) {
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
