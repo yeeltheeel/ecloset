@@ -16,9 +16,9 @@
     <string name="mainpage_title">Home</string>
 	<string name="login_title">Login</string>
 	<string name="register_title">Registration</string>
-	<string name="username_prompt">Username</string>
+	<string name="username_prompt">Enter your username</string>
 	<string name="password_prompt">Password</string>
-	<string name="email_prompt">Email</string>
+	<string name="email_prompt">Enter your email</string>
 	<string name="repeat_password_prompt">Repeat password</string>
 	<string name="forgot_password_prompt">Forgot password?</string>
 	<string name="already_registered_prompt">Already have an account? Login</string>
@@ -62,4 +62,9 @@
 	<string name="no_match">No match</string>
 	<string name="search_prompt">Search</string>
 	<string name="color_prompt">Which color fits your mood today?</string>
+	<string name="about_devs_1" translatable="false">yeel</string>
+	<string name="about_devs_2" translatable="false">Kate Ryabova</string>
+	<string name="about_devs">Contacts</string>
+	<string name="retry_prompt">Retry</string>
+	<string name="get_items_prompt">Collect items</string>
 </resources>

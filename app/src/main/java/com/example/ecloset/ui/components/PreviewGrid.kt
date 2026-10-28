@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.user.local.CategoryItem
-import com.example.ecloset.user.local.PreviewCard
+import com.example.ecloset.user.local.PreviewCardData
 
 @Composable
 fun GridLayout(
-	itemList: List<PreviewCard>
+	itemList: List<PreviewCardData>
 ){
 	LazyVerticalGrid(
 		columns = GridCells.Adaptive(minSize = 100.dp),
@@ -27,15 +27,21 @@ fun GridLayout(
 			.heightIn(max = 1000.dp),
 		contentPadding = PaddingValues(16.dp),
 		horizontalArrangement = Arrangement.spacedBy(8.dp),
-		verticalArrangement = Arrangement.spacedBy(8.dp),
+		verticalArrangement = Arrangement.spacedBy(8.dp)
 	) {
-		items(
-			items = itemList,
-			key = { card -> card.id }
-		) { card ->
-			PreviewGridCard(
-				data = card
-			)
+		if (itemList.isNotEmpty()) {
+			items(
+				items = itemList,
+				key = { card -> card.id }
+			) { card ->
+				PreviewGridCard(
+					data = card
+				)
+			}
+		} else {
+			item{
+				EmptyPreviewCard()
+			}
 		}
 	}
 }

@@ -30,12 +30,13 @@ fun WeatherWidget(
 	viewModel: WeatherViewModel = viewModel()
 ) {
 	val state by viewModel.state.collectAsState()
-	val onRefresh: () -> Unit = {
-		viewModel.loadWeather(latitude, longitude)
-	}
 
 	LaunchedEffect(latitude, longitude) {
-		viewModel.loadWeather(latitude, longitude)
+		viewModel.loadWeatherIfNeeded(latitude, longitude)
+	}
+
+	val onRefresh: () -> Unit = {
+		viewModel.refresh(latitude, longitude) // (location.latitude, location.longitude)
 	}
 
 	Card(
@@ -150,12 +151,14 @@ private fun SuccessContent(
 					.padding(start = 24.dp),
 				verticalArrangement = Arrangement.Center
 			) {
-				Text(
-					text = "💧 ${weather.humidity}%",
+				LabelText(
+					text = "${weather.humidity}%",
+					icon = Icons.Default.WaterDrop,
 					style = MaterialTheme.typography.bodyMedium
 				)
-				Text(
-					text = "💨 ${weather.windSpeed.roundToInt()} km/h",
+				LabelText(
+					text = "${weather.windSpeed.roundToInt()} km/h",
+					icon = Icons.Default.Air,
 					style = MaterialTheme.typography.bodyMedium,
 					modifier = Modifier.padding(top = 4.dp)
 				)

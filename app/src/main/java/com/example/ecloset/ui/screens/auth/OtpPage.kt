@@ -46,7 +46,7 @@ import com.example.ecloset.ui.components.PageHeader
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.unit.Dp
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.local.AuthViewModel
+import com.example.ecloset.user.local.viewmodels.AuthViewModel
 import com.example.ecloset.user.local.CODE_LEN
 
 @Composable

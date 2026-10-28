@@ -1,10 +1,12 @@
 package com.example.ecloset.user.local
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.sql.Date
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 // data types
 data class CategoryItem(
@@ -15,41 +17,30 @@ data class CategoryItem(
 data class ClosetItemData(
 	override val id: Int,
 	override val title: String,
-	override val type: String = "item",
 	override val imageUrl: String?,
 	val category: Int, // same as CategoryItem.id
-	val season: String,
-	val material: String,
-	val color: Int,
+	val season: String, // or Int if we go with season_id
 	val occasion: String,
-	override val dateAdded: Date
+	val color: Int, // id in colorList
+	val material: String,
+	override val dateAdded: LocalDate = LocalDate.now()
 ) : PreviewCardData
 
 data class OutfitItemData(
 	override val id: Int,
 	override val title: String,
-	override val type: String = "outfit",
 	override val imageUrl: String?,
 	val season: String, // or Int if we go with season_id
 	val occasion: String,
-	override val dateAdded: Date
-) : PreviewCardData
-
-data class PreviewCard(
-	// mock preview placeholder
-	override val id: Int,
-	override val title: String,
-	override val type: String,
-	override val imageUrl: String? = null,
-	override val dateAdded: Date = Date(System.currentTimeMillis())
+	val color: Int, // id in colorList
+	override val dateAdded: LocalDate = LocalDate.now()
 ) : PreviewCardData
 
 interface PreviewCardData {
 	val id: Int
 	val title: String
-	val type: String
 	val imageUrl: String?
-	val dateAdded: Date
+	val dateAdded: LocalDate
 }
 
 // clothes
@@ -59,22 +50,12 @@ data class ClosetItemState(
 	val error: Int? = null
 )
 
-class ItemViewModel : ViewModel() {
-	private val itemStateFlow = MutableStateFlow(ClosetItemState())
-	val itemState: StateFlow<ClosetItemState> = itemStateFlow.asStateFlow()
-}
-
 // outfits
 data class OutfitItemState(
 	val outfits: List<OutfitItemData> = emptyList(),
 	val isLoading: Boolean = false,
 	val error: Int? = null
 )
-
-class OutfitViewModel : ViewModel() {
-	private val outfitStateFlow = MutableStateFlow(OutfitItemState())
-	val outfitState: StateFlow<OutfitItemState> = outfitStateFlow.asStateFlow()
-}
 
 sealed interface ClosetError {
 	data class Resource(

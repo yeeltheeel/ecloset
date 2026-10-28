@@ -1,54 +1,26 @@
-package com.example.ecloset.user.data
+package com.example.ecloset.user.local.viewmodels
 
 import android.util.Patterns
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecloset.R
+import com.example.ecloset.user.data.repo.AuthRepository
+import com.example.ecloset.user.local.AuthResult
+import com.example.ecloset.user.local.LoginFormState
+import com.example.ecloset.user.local.MIN_PASSWORD_LENGTH
+import com.example.ecloset.user.local.RegFormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-const val MIN_PASSWORD_LENGTH = 6
-const val CODE_LEN = 4
-
-data class LoginFormState(
-	val email: String = "",
-	val password: String = "",
-	val confirmCode: String? = null,
-	@StringRes val emailError: Int? = null,
-	@StringRes val passwordError: Int? = null,
-	@StringRes val codeError: Int? = null,
-	val isSubmitting: Boolean = false,
-)
-
-data class RegFormState(
-	val username: String = "",
-	val email: String = "",
-	val password: String = "",
-	val code: String = "",
-	val confirmPassword: String = "",
-	@StringRes val usernameError: Int? = null,
-	@StringRes val emailError: Int? = null,
-	@StringRes val passwordError: Int? = null,
-	@StringRes val confirmPasswordError: Int? = null,
-	val isSubmitting: Boolean = false,
-)
-
-sealed interface AuthResult {
-	data class Success(
-		val token: String,
-		val userId: String
-	) : AuthResult
-
-	data class Failure(
-		@StringRes val message: Int
-	) : AuthResult
-}
-
-class AuthViewModel : ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+	private val authRepository: AuthRepository
+): ViewModel() {
 
 	private val _regFormState = MutableStateFlow(RegFormState())
 	val regFormState: StateFlow<RegFormState> = _regFormState.asStateFlow()
@@ -88,6 +60,7 @@ class AuthViewModel : ViewModel() {
 	}
 
 	fun updateRegCode(value: String) = _regFormState.update {
+		// email code, check if value is same as sent
 		it.copy(
 			code = value
 		)

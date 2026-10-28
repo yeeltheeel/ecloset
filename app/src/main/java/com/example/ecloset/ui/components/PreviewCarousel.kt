@@ -13,12 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.ecloset.user.local.PreviewCard
+import com.example.ecloset.user.local.PreviewCardData
 
 @Composable
 fun PreviewCarousel(
 	previewTitle: String,
-	cards: List<PreviewCard>,
+	cards: List<PreviewCardData>,
 	navController: NavHostController,
 	currentRoute: String
 ){
@@ -46,20 +46,26 @@ fun PreviewCarousel(
 		),
 		horizontalArrangement = Arrangement.spacedBy(12.dp)
 	) {
-		items(
-			items = cards,
-			key = { card -> card.id }
-		) { card ->
-			PreviewGridCard(
-				data = card
-			)
+		if (cards.isNotEmpty()){
+			items(
+				items = cards,
+				key = { card -> card.id }
+			) { card ->
+				PreviewGridCard(
+					data = card
+				)
+			}
+		} else {
+			item{
+				EmptyPreviewCard()
+			}
 		}
 	}
 }
 
 @Composable
 fun PreviewSingleRow(
-	cards: List<PreviewCard>
+	cards: List<PreviewCardData>
 ){
 	LazyRow(
 		modifier = Modifier
@@ -70,13 +76,19 @@ fun PreviewSingleRow(
 		),
 		horizontalArrangement = Arrangement.spacedBy(12.dp)
 	) {
-		items(
-			items = cards,
-			key = { card -> card.id }
-		) { card ->
-			PreviewGridCard(
-				data = card
-			)
+		if (cards.isNotEmpty()) {
+			items(
+				items = cards,
+				key = { card -> card.id }
+			) { card ->
+				PreviewGridCard(
+					data = card
+				)
+			}
+		} else {
+			item{
+				EmptyPreviewCard()
+			}
 		}
 	}
 }

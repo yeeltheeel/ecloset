@@ -1,5 +1,9 @@
 package com.example.ecloset.ui.screens.user
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
@@ -23,17 +28,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.ecloset.R
-import com.example.ecloset.user.local.UserViewModel
+import com.example.ecloset.user.local.viewmodels.UserViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.RadioGroupWithDropdown
-import com.example.ecloset.user.local.locations
-import com.example.ecloset.user.local.presets
-import com.example.ecloset.user.local.selectOptions
+import com.example.ecloset.user.data.Presets.locations
+import com.example.ecloset.user.data.Presets.themePresets
+import com.example.ecloset.user.data.Presets.selectOptions
 
 @Composable
 fun UserProfile(
@@ -56,13 +67,24 @@ fun UserProfile(
 			)
 		}
 		item{
-			val avatarUrl = userViewModel.userState.collectAsState().value.user?.avatarUrl
+			val avatarUrl = user?.avatarUrl
+			var pendingUri by remember { mutableStateOf<Uri?>(null) }
+			val photoPicker = rememberLauncherForActivityResult(
+				contract = ActivityResultContracts.PickVisualMedia()
+			) { uri: Uri? ->
+				if (uri != null) {
+					pendingUri = uri
+					userViewModel.updateAvatarUrl(uri.toString())
+				}
+			}
 
 			Column(
 				modifier = Modifier
 					.fillMaxWidth(),
 				horizontalAlignment = Alignment.CenterHorizontally
 			){
+				val previewModel = pendingUri?.toString() ?: avatarUrl
+
 				if (avatarUrl == null){
 					Icon(
 						imageVector = Icons.Default.AccountCircle,
@@ -71,6 +93,16 @@ fun UserProfile(
 							.width(150.dp)
 							.aspectRatio(1f),
 						tint = MaterialTheme.colorScheme.tertiary
+					)
+				} else {
+					AsyncImage(
+						model = previewModel,
+						contentDescription = "profile picture",
+						contentScale = ContentScale.Crop,
+						modifier = Modifier
+							.width(150.dp)
+							.aspectRatio(1f)
+							.clip(CircleShape)
 					)
 				}
 
@@ -81,7 +113,13 @@ fun UserProfile(
 							horizontal = 16.dp,
 							vertical = 8.dp
 						),
-					onClick = {}
+					onClick = {
+						photoPicker.launch(
+							PickVisualMediaRequest(
+								ActivityResultContracts.PickVisualMedia.ImageOnly
+							)
+						)
+					}
 				) {
 					Text(
 						text = stringResource(com.example.ecloset.R.string.change_avatar_prompt),
@@ -133,7 +171,7 @@ fun UserProfile(
 				onOptionSelected = { index ->
 					userViewModel.updateLocationDynamic(index == 1)
 				},
-				selectedItem = presets.indexOf(location),
+				selectedItem = themePresets.indexOf(location),
 				onItemSelected = {index ->
 					val loc = locationStrings[index]
 					val newLocation = locations.find {
@@ -147,7 +185,7 @@ fun UserProfile(
 		}
 		item {
 			val themeDynamic = user?.themeDynamic ?: false
-			val themePreset  = user?.themePreset ?: presets.first()
+			val themePreset  = user?.themePreset ?: themePresets.first()
 
 			GroupTitle(
 				title = stringResource(R.string.theme_title)
@@ -155,20 +193,20 @@ fun UserProfile(
 
 			RadioGroupWithDropdown(
 				options = selectOptions,
-				items = presets,
+				items = themePresets,
 				selectedIndex = if (themeDynamic) 1 else 0,
 				onOptionSelected = { index ->
 					userViewModel.updateThemeDynamic(index == 1)
 				},
-				selectedItem = presets.indexOf(themePreset),
+				selectedItem = themePresets.indexOf(themePreset),
 				onItemSelected = {index ->
-					userViewModel.updateThemePreset(presets[index])
+					userViewModel.updateThemePreset(themePresets[index])
 				},
 				dropIndex = 0
 			)
 		}
 		item{
-			Spacer(modifier = Modifier.padding(vertical = 16.dp))
+			Spacer(modifier = Modifier.padding(vertical = 8.dp))
 			Button(
 				modifier = Modifier
 					.fillMaxWidth()
@@ -222,6 +260,9 @@ fun UserProfile(
 					textAlign = TextAlign.Center
 				)
 			}
+		}
+		item{
+			Spacer(modifier = Modifier.padding(vertical = 32.dp))
 		}
 	}
 }

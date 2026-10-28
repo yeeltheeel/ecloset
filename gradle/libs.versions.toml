@@ -1,39 +1,51 @@
 [versions]
 agp = "9.4.1"
-converterKotlinxSerialization = "2.11.0"
-datastorePreferences = "1.1.1"
-kotlin = "2.4.20"
-coreKtx = "1.18.0"
+coilCompose = "3.6.3"
+converterKotlinxSerialization = "3.0.0"
+datastorePreferences = "1.3.0"
+hiltAndroid = "2.60.1"
+hiltNavigationCompose = "1.4.0"
+kotlin = "2.4.21"
+coreKtx = "1.19.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-kotlinxCoroutinesAndroid = "1.9.0"
-kotlinxSerializationJson = "1.7.3"
-lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.3"
-composeBom = "2026.04.01"
+kotlinxCoroutinesAndroid = "1.11.0"
+kotlinxSerializationJson = "1.12.0"
+lifecycleRuntimeKtx = "2.11.0"
+activityCompose = "1.13.0"
+composeBom = "2026.09.00"
 lifecycleViewmodelKtxVersion = "2.8.6"
-loggingInterceptor = "4.12.0"
-lottieCompose = "6.1.0"
-moshiKotlin = "1.15.1"
-navigationCompose = "2.9.8"
-lifecycleViewmodelKtx = "2.10.0"
-foundationLayout = "1.11.1"
-okhttp = "4.12.0"
-retrofit = "2.11.0"
+loggingInterceptor = "5.5.1"
+lottieCompose = "6.7.1"
+moshiKotlin = "1.15.2"
+navigationCompose = "2.10.2"
+lifecycleViewmodelKtx = "2.11.0"
+foundationLayout = "1.12.1"
+okhttp = "5.5.1"
+retrofit = "3.0.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 uiGraphics = "1.12.1"
 uiUnit = "1.12.1"
 runtime = "1.12.1"
+uiGraphicsVersion = "1.12.1"
+ksp = "2.3.9"
+hilt = "2.60.1"
+androidx-hilt-navigation-compose = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 #androidx-lifecycle-viewmodel-ktx-v286 = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtxVersion" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterKotlinxSerialization" }
 converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterKotlinxSerialization" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -61,11 +73,13 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 androidx-compose-ui-unit = { group = "androidx.compose.ui", name = "ui-unit", version.ref = "uiUnit" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphicsVersion" }
 #androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp  = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 

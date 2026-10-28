@@ -12,8 +12,8 @@ import androidx.navigation.NavHostController
 import com.example.ecloset.ui.components.GridHeader
 import com.example.ecloset.ui.components.GridLayout
 import com.example.ecloset.ui.components.PageHeader
-import com.example.ecloset.user.local.MockData.clothesList
-import com.example.ecloset.user.local.MockData.clothesCategories
+import com.example.ecloset.user.data.MockData.clothesList
+import com.example.ecloset.user.data.Presets.clothesCategories
 
 @Composable
 fun ClosetPage(

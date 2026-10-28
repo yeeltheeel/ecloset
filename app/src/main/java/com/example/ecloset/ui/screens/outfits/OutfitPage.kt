@@ -11,8 +11,8 @@ import com.example.ecloset.R
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.components.GridLayout
 import com.example.ecloset.ui.components.PageHeader
-import com.example.ecloset.user.local.MockData.outfitsList
-//import com.example.ecloset.user.data.MockData.outfitsCategories
+import com.example.ecloset.user.data.MockData.outfitsList
+//import com.example.ecloset.user.data.Presets.outfitsCategories
 
 @Composable
 fun OutfitPage(

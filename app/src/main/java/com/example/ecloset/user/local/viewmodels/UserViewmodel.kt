@@ -1,57 +1,17 @@
-package com.example.ecloset.user.data
+package com.example.ecloset.user.local.viewmodels
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ecloset.user.data.MockData.testUser
+import com.example.ecloset.user.local.LocationInfo
+import com.example.ecloset.user.local.UserInfo
+import com.example.ecloset.user.local.UserState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import com.example.ecloset.user.data.MockData.testUser
-import kotlinx.coroutines.flow.update
-
-data class UserInfo(
-	val id: Int,
-	val username: String,
-	val email: String,
-	val avatarUrl: String? = null,
-	val birthday: LocalDate? = null,
-	val locationDynamic: Boolean = true,
-	//val location: String = "Moscow",
-	val location: LocationInfo = LocationInfo(
-		location = "Moscow",
-		latitude = 55.7558,
-		longitude = 37.6173
-	),
-	val themeDynamic: Boolean = false,
-	val themePreset: String = "Violet"
-)
-
-data class LocationInfo(
-	val location: String,
-	val latitude: Double,
-	val longitude: Double
-)
-
-// localize later (prob will be list<int>)
-val selectOptions = listOf("Static", "Dynamic")
-val locations = emptyList<LocationInfo>()
-val presets = listOf("None", "Violet", "Sage", "Amber", "Indigo", "Rose")
-
-data class UserState(
-	val user: UserInfo? = null,
-	val isLoading: Boolean = false,
-	val loggedIn: Boolean = false,
-	val error: Int? = null
-)
-
-sealed interface UpdateResult {
-	data object Success : UpdateResult
-	data class Invalid(
-		@StringRes val message: Int
-	) : UpdateResult
-}
 
 class UserViewModel: ViewModel() {
 	private val _userState = MutableStateFlow(UserState())
@@ -160,5 +120,6 @@ class UserViewModel: ViewModel() {
 		updateUser {
 			it.copy(location = location)
 		}
+		// weatherViewModel.refresh(location.latitude, location.longitude)
 	}
 }

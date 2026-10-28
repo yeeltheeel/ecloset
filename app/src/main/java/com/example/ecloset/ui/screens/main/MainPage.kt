@@ -9,14 +9,16 @@ import com.example.ecloset.ui.components.PreviewCarousel
 import com.example.ecloset.R
 import com.example.ecloset.ui.components.WeatherWidget
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.local.MockData.previewOutfits
-import com.example.ecloset.user.local.MockData.previewClothes
-import com.example.ecloset.user.local.UserViewModel
+import com.example.ecloset.user.data.MockData.previewOutfits
+import com.example.ecloset.user.data.MockData.previewClothes
+import com.example.ecloset.user.local.viewmodels.UserViewModel
 
 @Composable
 fun MainPage(
@@ -55,6 +57,9 @@ fun MainPage(
 				navController = navController,
 				currentRoute = Routes.CLOSET
 			)
+		}
+		item{
+			Spacer(modifier = Modifier.padding(vertical = 70.dp))
 		}
 	}
 }

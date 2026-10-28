@@ -3,7 +3,7 @@
 
     <string name="outfit_list_title">Мои аутфиты</string>
     <string name="clothes_list_title">Мой гардероб</string>
-    <string name="analytics_title">Статистика</string>
+    <string name="analytics_title">Моя статистика</string>
     <string name="unused_items_title">Утерянные сокровища</string>
     <string name="unused_items_text">Эти вещи давно не использовались. Не хочешь дать им втрой шанс?</string>
     <string name="new_outfit_title">Новый аутфит</string>
@@ -16,10 +16,10 @@
     <string name="outfit_text">аутфит</string>
     <string name="mainpage_title">Главная</string>
     <string name="password_prompt">Пароль</string>
-    <string name="email_prompt">Почта</string>
+    <string name="email_prompt">Введите почту</string>
     <string name="login_title">Вход</string>
     <string name="register_title">Регистрация</string>
-    <string name="username_prompt">Имя</string>
+    <string name="username_prompt">Введите имя пользователя</string>
     <string name="repeat_password_prompt">Введите пароль еще раз</string>
     <string name="forgot_password_prompt">Забыли пароль?</string>
     <string name="already_registered_prompt">Уже зарегистрированы? Войти</string>
@@ -63,4 +63,7 @@
     <string name="no_match">Нет совпадений</string>
     <string name="search_prompt">Поиск</string>
     <string name="color_prompt">Какой цвет привлекает тебя сегодня,</string>
+    <string name="about_devs">Контакты</string>
+    <string name="retry_prompt">Обновить</string>
+    <string name="get_items_prompt">Подобрать вещи</string>
 </resources>

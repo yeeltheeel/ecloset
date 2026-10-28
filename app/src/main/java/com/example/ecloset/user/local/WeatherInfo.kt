@@ -4,10 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecloset.user.remote.api.WttrApiClient
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 data class WttrResponse(
 	@SerializedName("current_condition")
@@ -63,10 +67,19 @@ sealed interface WeatherUiState {
 class WeatherViewModel : ViewModel() {
 	private val _state = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
 	val state: StateFlow<WeatherUiState> = _state.asStateFlow()
+	private var lastLoadedAt: Long = 0L
+	private var fetchJob: Job? = null
+	private var periodicJob: Job? = null
+
+	companion object {
+		private const val REFRESH_INTERVAL_MS = 3 * 60 * 60 * 1000L  // 3 hours
+		private const val STALE_AFTER_MS      = 30 * 60 * 1000L      // 30 minutes
+	}
 
 	fun loadWeather(latitude: Double, longitude: Double) {
-		_state.value = WeatherUiState.Loading
-		viewModelScope.launch {
+		fetchJob?.cancel()
+		fetchJob = viewModelScope.launch {
+			_state.value = WeatherUiState.Loading
 			_state.value = try {
 				val location = "$latitude,$longitude"
 				val response = WttrApiClient.api.getCurrentWeather(location)
@@ -80,12 +93,44 @@ class WeatherViewModel : ViewModel() {
 					humidity = cc.humidity.toIntOrNull() ?: 0,
 					windSpeed = cc.windSpeedKmph.toDoubleOrNull() ?: 0.0,
 					weatherCode = -1, // wttr.in doesn't use WMO codes
-					description = cc.weatherDesc.firstOrNull()?.value ?: "—"
+					description = cc.weatherDesc.firstOrNull()?.value ?: "-"
 				)
+
+				lastLoadedAt = System.currentTimeMillis()
+
 				WeatherUiState.Success(mapped)
 			} catch (e: Exception) {
 				WeatherUiState.Error(e.message ?: "Failed to load weather")
 			}
 		}
+	}
+
+	fun loadWeatherIfNeeded(latitude: Double, longitude: Double) {
+		val isStale = System.currentTimeMillis() - lastLoadedAt > STALE_AFTER_MS
+		if (isStale || _state.value is WeatherUiState.Error) {
+			loadWeather(latitude, longitude)
+		}
+		startPeriodicRefresh(latitude, longitude)
+	}
+
+	fun refresh(latitude: Double, longitude: Double) {
+		loadWeather(latitude, longitude)
+	}
+
+	private fun startPeriodicRefresh(latitude: Double, longitude: Double) {
+		if (periodicJob?.isActive == true) return
+
+		periodicJob = viewModelScope.launch {
+			while (isActive) {
+				delay(REFRESH_INTERVAL_MS.milliseconds)
+				loadWeather(latitude, longitude)
+			}
+		}
+	}
+
+	override fun onCleared() {
+		super.onCleared()
+		fetchJob?.cancel()
+		periodicJob?.cancel()
 	}
 }

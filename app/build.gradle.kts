@@ -1,6 +1,10 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -8,6 +12,13 @@ android {
     compileSdk {
         version = release(37) {
             minorApiLevel = 1
+        }
+    }
+
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) {
+            file.inputStream().use { load(it) }
         }
     }
 
@@ -19,6 +30,19 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val baseUrl = System.getenv("BASE_URL")
+            ?: localProperties.getProperty("BASE_URL")
+            ?: ""
+        val devUrl1 = System.getenv("DEV_URL_1")
+            ?: localProperties.getProperty("DEV_URL_1")
+            ?: ""
+        val devUrl2 = System.getenv("DEV_URL_2")
+            ?: localProperties.getProperty("DEV_URL_2")
+            ?: ""
+        buildConfigField( "String", "BASE_URL", "\"$baseUrl\"" )
+        buildConfigField( "String", "DEV_URL_1", "\"$devUrl1\"" )
+        buildConfigField( "String", "DEV_URL_2", "\"$devUrl2\"" )
     }
 
     buildTypes {
@@ -31,12 +55,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
@@ -59,23 +89,23 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
-    // Retrofit
+	implementation(libs.androidx.ui.graphics)
     implementation(libs.retrofit)
     implementation(libs.converter.kotlinx.serialization)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.converter.gson)
-    // Lottie
     implementation(libs.lottie.compose)
-    // OkHttp (logging + auth interceptor)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    // Kotlinx Serialization
     implementation(libs.kotlinx.serialization.json)
-    // Json
     implementation(libs.moshi.kotlin)
-    implementation(libs.converter.moshi)
-    // Coroutines
+    //implementation(libs.converter.moshi)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

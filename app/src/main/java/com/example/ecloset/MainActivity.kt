@@ -4,26 +4,25 @@
 /* to-do:
 	main:
 		functions:
-			user actions (change username, etc)
 			closet view models
 			connect backend
-
-			implement user theme preference
+			tokens
+			implement user theme preference (light/dark/system, static/dynamic)
 			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 			last added items, relevant outfits
 			unused clothes
+			call weather from backend
 		widgets:
+			user value update (text -> input)
+			outfit collage
+			location select
 			filters block
 			filters page
-			user tint selecting block to user settings
+			add user tint selecting block to user settings
 			prettify weather widget with lottie
-			fix up preview card classes
-			empty card placeholder
-			no connection page
 	medium:
 		add localizations for all hardcoded strings
 	misc:
-		remove type attribute from data classes, replace with type check
 		add admin/support functions
 */
 
@@ -34,8 +33,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -52,7 +54,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecloset.ui.navigation.NavActionHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.local.UserViewModel
+import com.example.ecloset.ui.screens.main.NoConnectionPage
+import com.example.ecloset.user.local.ConnectionState
+import com.example.ecloset.user.local.viewmodels.ConnectionViewModel
+import com.example.ecloset.user.local.viewmodels.UserViewModel
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,14 +66,39 @@ class MainActivity : ComponentActivity() {
 		window.isNavigationBarContrastEnforced = false
 		setContent {
 			EClosetTheme {
-				EclosetScreen()
+				EclosetApp()
 			}
 		}
 	}
 }
 
 @Composable
-fun EclosetScreen(){
+fun EclosetApp() {
+	val connectionViewModel: ConnectionViewModel = viewModel()
+	val connectionState by connectionViewModel.state.collectAsState()
+
+	when (val state = connectionState) {
+		ConnectionState.Loading -> EclosetScreen(
+			connectionViewModel = connectionViewModel
+		) // mb will be splash
+		ConnectionState.Offline -> NoConnectionPage(
+			modifier = Modifier
+				.fillMaxSize()
+				.windowInsetsPadding(WindowInsets.systemBars),
+			onRetry = {
+				connectionViewModel.retry()
+			}
+		)
+		ConnectionState.Online  -> EclosetScreen(
+			connectionViewModel = connectionViewModel
+		)
+	}
+}
+
+@Composable
+fun EclosetScreen(
+	connectionViewModel: ConnectionViewModel
+){
 	val userViewModel: UserViewModel = viewModel()
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()

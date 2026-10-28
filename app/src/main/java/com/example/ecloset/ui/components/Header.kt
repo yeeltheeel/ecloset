@@ -30,7 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecloset.R
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.local.UserViewModel
+import com.example.ecloset.user.local.viewmodels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

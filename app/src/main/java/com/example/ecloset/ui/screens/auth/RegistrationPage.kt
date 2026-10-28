@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
-import com.example.ecloset.user.local.AuthViewModel
+import com.example.ecloset.user.local.viewmodels.AuthViewModel
 
 
 @Composable

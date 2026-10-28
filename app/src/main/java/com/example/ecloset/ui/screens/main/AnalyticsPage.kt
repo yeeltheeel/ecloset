@@ -15,9 +15,9 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.components.DonutChart
 import com.example.ecloset.ui.components.PreviewSingleRow
 
-import com.example.ecloset.user.local.MockData.previewClothes
-import com.example.ecloset.user.local.MockData.clothesCategories
-import com.example.ecloset.user.local.MockData.clothesList
+import com.example.ecloset.user.data.MockData.previewUnusedClothes
+import com.example.ecloset.user.data.Presets.clothesCategories
+import com.example.ecloset.user.data.MockData.clothesList
 
 @Composable
 fun AnalyticsPage(
@@ -72,7 +72,7 @@ fun AnalyticsPage(
 					)
 			)
 			PreviewSingleRow(
-				cards = previewClothes // placeholder
+				cards =  previewUnusedClothes // placeholder
 			)
 		}
 		item{

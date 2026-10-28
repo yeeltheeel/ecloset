@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -32,7 +33,7 @@ import com.example.ecloset.R
 
 @Composable
 fun RadioGroupBlock(
-	options: List<String>, // CategoryItems ???
+	options: List<String>,
 	selectedIndex: Int,
 	onOptionSelected: (Int) -> Unit,
 ){
@@ -81,7 +82,7 @@ fun RadioGroupBlock(
 @Composable
 fun RadioGroupWithDropdown(
 	options: List<String>,
-	items: List<String>, // CategoryItems ???
+	items: List<String>,
 	selectedIndex: Int,
 	selectedItem: Int?,
 	onOptionSelected: (Int) -> Unit,
@@ -171,7 +172,8 @@ fun DropdownList(
 			.padding(
 				vertical = 16.dp,
 				horizontal = 8.dp
-			),
+			)
+			.clip(RoundedCornerShape(16.dp)),
 		expanded = expanded,
 		onExpandedChange = { expanded = !expanded }
 	) {

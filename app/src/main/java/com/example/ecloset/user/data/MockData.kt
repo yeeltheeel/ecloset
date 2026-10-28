@@ -1,149 +1,167 @@
 package com.example.ecloset.user.data
 
-import android.R
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.example.ecloset.user.data.PreviewCard
+import com.example.ecloset.user.local.ClosetItemData
+import com.example.ecloset.user.local.OutfitItemData
+import com.example.ecloset.user.local.UserInfo
+import java.time.LocalDate
 
 object MockData {
 	val testUser = UserInfo(
 		id = 1,
-		username = "User",
-		email = "user@example.com",
+		username = "yeel",
+		email = "yeeltheeel@github.com",
 		avatarUrl = null
 	)
 
-	/* main */
-	val previewOutfits = listOf(
-		PreviewCard(
-			id = 1,
-			title = "Outfit 1",
-			type = "outfit"
-		),
-		PreviewCard(
-			id = 2,
-			title = "Outfit 2",
-			type = "outfit"
-		),
-		PreviewCard(
-			id = 3,
-			title = "Outfit 3",
-			type = "outfit"
-		)
-	)
-
-	val previewClothes = listOf(
-		PreviewCard(
-			id = 1,
-			title = "Item 1",
-			type = "clothes"
-		),
-		PreviewCard(
-			id = 2,
-			title = "Item 2",
-			type = "clothes"
-		),
-		PreviewCard(
-			id = 3,
-			title = "Item 3",
-			type = "clothes"
-		)
-	)
-
 	/* closet  */
-	val clothesCategories = listOf(
-		CategoryItem(
-			id = 1,
-			titleId = com.example.ecloset.R.string.items_tops
-		),
-		CategoryItem(
-			id = 2,
-			titleId = com.example.ecloset.R.string.items_bottoms
-		),
-		CategoryItem(
-			id = 3,
-			titleId = com.example.ecloset.R.string.items_shoes
-		),
-		CategoryItem(
-			id = 4,
-			titleId = com.example.ecloset.R.string.items_cardigans
-		),
-		CategoryItem(
-			id = 5,
-			titleId = com.example.ecloset.R.string.items_coats
-		),
-		CategoryItem(
-			id = 6,
-			titleId = com.example.ecloset.R.string.items_accessories
-		)
-	)
-
 	val clothesList = listOf(
-		PreviewCard(
+		ClosetItemData(
 			id = 1,
-			title = "Item 1",
-			type = "clothes"
+			title = "White cotton t-shirt",
+			imageUrl = null,
+			category = 1,
+			season = "Summer",
+			material = "Cotton",
+			color = 8,
+			occasion = "Casual",
+			dateAdded = LocalDate.of(2024, 1, 1)
 		),
-		PreviewCard(
+		ClosetItemData(
 			id = 2,
-			title = "Item 2",
-			type = "clothes"
+			title = "Blue denim jeans",
+			imageUrl = null,
+			category = 2,
+			season = "All",
+			material = "Denim",
+			color = 7,
+			occasion = "Casual",
+			dateAdded = LocalDate.of(2024, 1, 2)
 		),
-		PreviewCard(
+		ClosetItemData(
 			id = 3,
-			title = "Item 3",
-			type = "clothes"
+			title = "Black leather jacket",
+			imageUrl = null,
+			category = 5,
+			season = "Autumn",
+			material = "Leather",
+			color = 9,
+			occasion = "Party",
+			dateAdded = LocalDate.of(2024, 1, 3)
 		),
-		PreviewCard(
+		ClosetItemData(
 			id = 4,
-			title = "Item 4",
-			type = "clothes"
+			title = "Floral summer dress",
+			imageUrl = null,
+			category = 1,
+			season = "Summer",
+			material = "Chiffon",
+			color = 4,
+			occasion = "Date",
+			dateAdded = LocalDate.of(2024, 1, 4)
 		),
-		PreviewCard(
+		ClosetItemData(
 			id = 5,
-			title = "Item 5",
-			type = "clothes"
+			title = "Grey wool sweater",
+			imageUrl = null,
+			category = 1,
+			season = "Winter",
+			material = "Wool",
+			color = 10,
+			occasion = "Casual",
+			dateAdded = LocalDate.of(2024, 1, 5)
 		),
-		PreviewCard(
+		ClosetItemData(
 			id = 6,
-			title = "Item 6",
-			type = "clothes"
+			title = "Beige chino pants",
+			imageUrl = null,
+			category = 2,
+			season = "Spring",
+			material = "Cotton",
+			color = 2,
+			occasion = "Work",
+			dateAdded = LocalDate.of(2024, 1, 6)
+		),
+		ClosetItemData(
+			id = 7,
+			title = "Red silk blouse",
+			imageUrl = null,
+			category = 1,
+			season = "Spring",
+			material = "Silk",
+			color = 5,
+			occasion = "Work",
+			dateAdded = LocalDate.of(2024, 1, 7)
+		),
+		ClosetItemData(
+			id = 8,
+			title = "Navy pencil skirt",
+			imageUrl = null,
+			category = 2,
+			season = "All",
+			material = "Polyester",
+			color = 7,
+			occasion = "Work",
+			dateAdded = LocalDate.of(2024, 1, 8)
+		),
+		ClosetItemData(
+			id = 9,
+			title = "White sneakers",
+			imageUrl = null,
+			category = 3,
+			season = "All",
+			material = "Canvas",
+			color = 8,
+			occasion = "Casual",
+			dateAdded = LocalDate.of(2024, 1, 9)
+		),
+		ClosetItemData(
+			id = 10,
+			title = "Brown trench coat",
+			imageUrl = null,
+			category = 5,
+			season = "Autumn",
+			material = "Cotton",
+			color = 2,
+			occasion = "Work",
+			dateAdded = LocalDate.of(2024, 1, 10)
 		)
 	)
 
 	/* outfits  */
-	//val outfitsCategories = listOf()
 	val outfitsList = listOf(
-		PreviewCard(
+		OutfitItemData(
 			id = 1,
-			title = "Outfit 1",
-			type = "outfit"
+			title = "Casual summer day",
+			imageUrl = null,
+			season = "Summer",
+			occasion = "Casual",
+			color = 8,
+			dateAdded = LocalDate.of(2024, 1, 11)
 		),
-		PreviewCard(
+		OutfitItemData(
 			id = 2,
-			title = "Outfit 2",
-			type = "outfit"
+			title = "Office chic",
+			imageUrl = null,
+			season = "Spring",
+			occasion = "Work",
+			color = 9,
+			dateAdded = LocalDate.of(2024, 1, 12)
 		),
-		PreviewCard(
+		OutfitItemData(
 			id = 3,
-			title = "Outfit 3",
-			type = "outfit"
-		),
-		PreviewCard(
-			id = 4,
-			title = "Outfit 4",
-			type = "outfit"
-		),
-		PreviewCard(
-			id = 5,
-			title = "Outfit 5",
-			type = "outfit"
-		),
-		PreviewCard(
-			id = 6,
-			title = "Outfit 6",
-			type = "outfit"
+			title = "Autumn evening look",
+			imageUrl = null,
+			season = "Autumn",
+			occasion = "Party",
+			color = 5,
+			dateAdded = LocalDate.of(2024, 1, 13)
 		)
 	)
+
+	/* main */
+	val previewOutfits = outfitsList.take(3)
+	val previewClothes = clothesList.take(3)
+
+	val previewUnusedClothes = emptyList<ClosetItemData>()
+
 }

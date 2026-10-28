@@ -2,6 +2,8 @@ package com.example.ecloset.ui.screens.user
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Web
 import androidx.compose.material3.Icon
@@ -56,6 +59,55 @@ fun AboutPage(
 					.padding(horizontal = 16.dp)
 			)
 			Spacer(modifier = Modifier.padding(8.dp))
+		}
+		item{
+			ListItem(
+				modifier = Modifier
+					.padding(top = 8.dp)
+					.fillMaxWidth(),
+				headlineContent = { Text(stringResource(R.string.about_devs)) },
+				leadingContent = {
+					Icon(
+						imageVector = Icons.Filled.Contacts,
+						contentDescription = null
+					)
+				},
+				supportingContent = {
+					Column(
+						modifier = Modifier
+							.fillMaxWidth(),
+						verticalArrangement = Arrangement.spacedBy(0.dp)
+					) {
+						Text(
+							text = stringResource(R.string.about_devs_1),
+							modifier = Modifier
+								.clickable{
+									context.startActivity(
+										Intent(
+											Intent.ACTION_VIEW,
+											BuildConfig.DEV_URL_1.toUri()
+										)
+									)
+								}
+						)
+						Text(
+							text = stringResource(R.string.about_devs_2),
+							modifier = Modifier
+								.clickable{
+									context.startActivity(
+										Intent(
+											Intent.ACTION_VIEW,
+											BuildConfig.DEV_URL_2.toUri()
+										)
+									)
+								}
+						)
+					}
+				},
+				colors = ListItemDefaults.colors(
+					containerColor = MaterialTheme.colorScheme.background
+				)
+			)
 		}
 		item{
 			ListItem(
