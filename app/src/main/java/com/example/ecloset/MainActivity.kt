@@ -1,17 +1,19 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 @file:SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
-/* to-do:
+/* TODO:
 	main:
 		functions:
 			closet view models
-			connect backend
-			tokens
+			connect backend:
+				dto
+				tokens
+				enums
+			call weather from backend
 			implement user theme preference (light/dark/system, static/dynamic)
 			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 			last added items, relevant outfits
 			unused clothes
-			call weather from backend
 		widgets:
 			user value update (text -> input)
 			outfit collage
@@ -22,6 +24,8 @@
 			prettify weather widget with lottie
 	medium:
 		add localizations for all hardcoded strings
+		donut chart placeholder if itemList empty
+		clear up paddings for consistency
 	misc:
 		add admin/support functions
 */
@@ -44,8 +48,11 @@ import androidx.compose.ui.Modifier
 import com.example.ecloset.ui.theme.EClosetTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ecloset.ui.components.ActionBarMenu
@@ -58,7 +65,9 @@ import com.example.ecloset.ui.screens.main.NoConnectionPage
 import com.example.ecloset.user.local.ConnectionState
 import com.example.ecloset.user.local.viewmodels.ConnectionViewModel
 import com.example.ecloset.user.local.viewmodels.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -107,12 +116,17 @@ fun EclosetScreen(
 	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER &&
 			currentRoute != Routes.USER_SETTINGS && currentRoute != Routes.ABOUT)
 
+	val snackbarHostState = remember { SnackbarHostState() }
+
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
 		topBar = { Header(
 			navController = navController,
 			userViewModel = userViewModel
 		) },
+		snackbarHost = {
+			SnackbarHost(snackbarHostState)
+		},
 		floatingActionButton = {
 			if (showNavBar && loggedIn) {
 				ActionBarMenu(
@@ -129,7 +143,8 @@ fun EclosetScreen(
 				.padding(top = 45.dp),
 			navController = navController,
 			innerPadding = innerPadding,
-			userViewModel = userViewModel
+			userViewModel = userViewModel,
+			snackbarHostState = snackbarHostState
 		)
 	}
 }

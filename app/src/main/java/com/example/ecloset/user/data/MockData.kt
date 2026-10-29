@@ -1,5 +1,6 @@
 package com.example.ecloset.user.data
 
+import com.example.ecloset.R
 import com.example.ecloset.user.local.ClosetItemData
 import com.example.ecloset.user.local.OutfitItemData
 import com.example.ecloset.user.local.UserInfo
@@ -10,6 +11,7 @@ object MockData {
 		id = 1,
 		username = "yeel",
 		email = "yeeltheeel@github.com",
+		birthday = LocalDate.of(2002, 1, 3),
 		avatarUrl = null
 	)
 

@@ -127,7 +127,6 @@ fun PageHeader(
 	backAddress: String = Routes.MAIN,
 	navController: NavHostController
 ){
-	Spacer(modifier = Modifier.padding(vertical = 20.dp))
 	Text(
 		text = "< " + stringResource(R.string.back_prompt),
 		modifier = Modifier

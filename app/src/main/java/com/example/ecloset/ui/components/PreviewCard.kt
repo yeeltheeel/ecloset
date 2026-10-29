@@ -72,6 +72,7 @@ fun PreviewGridCard(
 		Column(
 			modifier = Modifier
 				.fillMaxWidth()
+				.fillMaxHeight()
 				.padding(8.dp),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
@@ -184,7 +185,7 @@ fun CardDetails(
 			)
 		}
 		item{
-			// find color by id or title
+			// find color by id
 			when (data) {
 				is OutfitItemData -> {
 					Text(

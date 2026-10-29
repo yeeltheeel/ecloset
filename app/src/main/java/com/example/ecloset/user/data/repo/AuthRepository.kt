@@ -12,18 +12,41 @@ class AuthRepository(
 	private val modeManager: ConnectionModeManager
 ) {
 	suspend fun register(
-		username: String, email: String, password: String, code: String
+		username: String,
+		email: String,
+		password: String,
+		code: String? = null
 	): AuthResponseDto = when (modeManager.current()) {
 		ConnectionMode.FORCE_MOCK   -> local.register()
-		ConnectionMode.FORCE_REMOTE -> remote.register(username, email, password, code).getOrThrow()
-		ConnectionMode.AUTO         -> remote.register(username, email, password, code).getOrNull() ?: local.register()
+		ConnectionMode.FORCE_REMOTE -> remote.register(
+			username,
+			email,
+			password,
+			code ?: ""
+		).getOrThrow()
+		ConnectionMode.AUTO -> remote.register(
+			username,
+			email,
+			password,
+			code ?: ""
+		).getOrNull() ?: local.register()
 	}
 
 	suspend fun login(
-		email: String, password: String, code: String
+		email: String,
+		password: String,
+		code: String? = null
 	): AuthResponseDto = when (modeManager.current()) {
 		ConnectionMode.FORCE_MOCK   -> local.login()
-		ConnectionMode.FORCE_REMOTE -> remote.login(email, password, code).getOrThrow()
-		ConnectionMode.AUTO         -> remote.login(email, password, code).getOrNull() ?: local.login()
+		ConnectionMode.FORCE_REMOTE -> remote.login(
+			email,
+			password,
+			code ?: ""
+		).getOrThrow()
+		ConnectionMode.AUTO -> remote.login(
+			email,
+			password,
+			code ?: ""
+		).getOrNull() ?: local.login()
 	}
 }

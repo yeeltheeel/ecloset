@@ -122,19 +122,17 @@ class AuthViewModel @Inject constructor(
 			_regFormState.update { it.copy(isSubmitting = true) }
 			_authResult.value = null
 
-			val result = runCatching {
-				// repo.register(...)
-			}.fold(
-				onSuccess = {
-					AuthResult.Success(
-						token = "",
-						userId = ""
-					)
-				},
-				onFailure = {
-					AuthResult.Failure(R.string.error_generic)
-				}
-			)
+			val result = try {
+				val response = authRepository.register(
+					username = current.username,
+					email = current.email,
+					password = current.password,
+					code = current.code
+				)
+				AuthResult.Success(token = response.token, userId = response.userId)
+			} catch (e: Exception) {
+				AuthResult.Failure(R.string.error_generic)
+			}
 
 			_authResult.value = result
 			_regFormState.update { it.copy(isSubmitting = false) }
@@ -163,19 +161,16 @@ class AuthViewModel @Inject constructor(
 			_loginFormState.update { it.copy(isSubmitting = true) }
 			_authResult.value = null
 
-			val result = runCatching {
-				// repo.login(...)
-			}.fold(
-				onSuccess = {
-					AuthResult.Success(
-						token = "",
-						userId = ""
-					)
-				},
-				onFailure = {
-					AuthResult.Failure(R.string.error_generic)
-				}
-			)
+			val result = try {
+				val response = authRepository.login(
+					email = current.email,
+					password = current.password,
+					code = current.confirmCode
+				)
+				AuthResult.Success(token = response.token, userId = response.userId)
+			} catch (e: Exception) {
+				AuthResult.Failure(R.string.error_generic)
+			}
 
 			_authResult.value = result
 			_loginFormState.update { it.copy(isSubmitting = false) }

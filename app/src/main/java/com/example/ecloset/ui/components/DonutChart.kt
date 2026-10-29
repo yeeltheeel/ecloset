@@ -29,11 +29,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
+import com.example.ecloset.user.data.Presets.clothesCategories
 import com.example.ecloset.user.local.CategoryItem
-import com.example.ecloset.user.local.PreviewCardData
+import com.example.ecloset.user.local.ClosetItemData
+import kotlin.collections.set
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.min
+import kotlin.text.toFloat
+
+private val colors = listOf(
+	Color(0xFF7FB88A),
+	Color(0xFF6BA8C9),
+	Color(0xFF5B7FB0),
+	Color(0xFF6E5FA8),
+	Color(0xFFA97BC4),
+	Color(0xFFC97C9C),
+	Color(0xFFD97C9A),
+	Color(0xFFC97C7C),
+	Color(0xFFE09368),
+	Color(0xFFE0B15A),
+	Color(0xFFC9A87C),
+	Color(0xFF8FAF9C)
+)
 
 data class DonutChartData(
 	val category: CategoryItem,
@@ -45,37 +63,12 @@ data class DonutChartData(
 @Composable
 fun DonutChart(
 	categories: List<CategoryItem>,
-	items: List<PreviewCardData> // will become ClosetItemData
+	items: List<ClosetItemData>
 ) {
-	val colors = listOf(
-		Color(0xFF7FB88A),
-		Color(0xFF6BA8C9),
-		Color(0xFF5B7FB0),
-		Color(0xFF6E5FA8),
-		Color(0xFFA97BC4),
-		Color(0xFFC97C9C),
-		Color(0xFFD97C9A),
-		Color(0xFFC97C7C),
-		Color(0xFFE09368),
-		Color(0xFFE0B15A),
-		Color(0xFFC9A87C),
-		Color(0xFF8FAF9C),
+	val data = calcPercentage(
+		itemsList = items,
+		categoryList = categories
 	)
-
-	val numbers = listOf<Int>(10, 5, 7, 2, 3, 15) // until proper data, then calculate
-
-	val data = remember(categories, numbers) {
-		val total = numbers.sum().coerceAtLeast(1)
-		categories.mapIndexed { index, category ->
-			val num = numbers.getOrElse(index) { 0 }
-			DonutChartData(
-				category = category,
-				units = num,
-				color = colors[index % colors.size],
-				percent = if (total > 0) num.toFloat() / total else 0f
-			)
-		}
-	}
 
 	var selectedIndex by remember { mutableStateOf<Int?>(null) }
 	val totalUnits = remember(data) { data.sumOf { it.units } }
@@ -230,4 +223,49 @@ fun DonutChart(
 			}
 		}
 	}
+}
+
+fun calcPercentage(
+	itemsList: List<ClosetItemData>,
+	categoryList: List<CategoryItem> = clothesCategories
+): List<DonutChartData> {
+	val numbers = categoryList.associate { it.id to 0 }.toMutableMap()
+	itemsList.forEach { item ->
+		if (numbers.containsKey(item.id)) {
+			numbers.merge(item.id, 1, Int::plus)
+		}
+	}
+	val total = itemsList.count {
+		numbers.containsKey(it.id)
+	}.coerceAtLeast(1)
+
+	val donutItems = categoryList.mapIndexed { index, category ->
+		val num = numbers.getValue(category.id)
+		DonutChartData(
+			category = category,
+			units = num,
+			color = colors[index % colors.size],
+			percent = num.toFloat() / total,
+		)
+	}
+	return donutItems
+}
+
+fun calcMockPercentage(
+	itemsList: List<ClosetItemData>,
+	categoryList: List<CategoryItem> = clothesCategories
+): List<DonutChartData> {
+	val numbers = listOf<Int>(10, 5, 7, 2, 3, 15)
+	val total = numbers.sum().coerceAtLeast(1)
+
+	val donutItems = categoryList.mapIndexed { index, category ->
+		val num = numbers.getOrElse(index) { 0 }
+		DonutChartData(
+			category = category,
+			units = num,
+			color = colors[index % colors.size],
+			percent = if (total > 0) num.toFloat() / total else 0f
+		)
+	}
+	return donutItems
 }

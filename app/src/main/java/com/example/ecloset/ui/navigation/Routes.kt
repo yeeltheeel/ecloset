@@ -1,6 +1,7 @@
 package com.example.ecloset.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -8,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-
 import com.example.ecloset.ui.screens.main.MainPage
 import com.example.ecloset.ui.screens.main.AnalyticsPage
 import com.example.ecloset.ui.screens.closet.NewItemPage
@@ -20,7 +20,6 @@ import com.example.ecloset.ui.screens.user.AboutPage
 import com.example.ecloset.ui.screens.auth.LoginPage
 import com.example.ecloset.ui.screens.auth.RegistrationPage
 import com.example.ecloset.ui.screens.auth.OtpPage
-import com.example.ecloset.ui.screens.main.NoConnectionPage
 import com.example.ecloset.user.local.viewmodels.UserViewModel
 
 object Routes {
@@ -49,7 +48,8 @@ fun NavActionHost(
 	modifier: Modifier,
 	navController: NavHostController,
 	innerPadding: PaddingValues,
-	userViewModel: UserViewModel
+	userViewModel: UserViewModel,
+	snackbarHostState: SnackbarHostState
 ) {
 	val userState by userViewModel.userState.collectAsState()
 	val startDest = if (userState.loggedIn) Routes.MAIN else Routes.LOGIN
@@ -86,7 +86,8 @@ fun NavActionHost(
 		composable(Routes.CLOSET) {
 			ClosetPage(
 				modifier = modifier,
-				navController = navController
+				navController = navController,
+				snackbarHostState = snackbarHostState
 			)
 		}
 		composable(Routes.OUTFITS) {

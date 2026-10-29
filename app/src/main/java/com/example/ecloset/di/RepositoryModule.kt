@@ -1,5 +1,6 @@
 package com.example.ecloset.di
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.example.ecloset.user.data.ConnectionModeManager
 import com.example.ecloset.user.data.repo.AuthRepository
@@ -17,16 +18,21 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+	@Provides @Singleton
+	fun provideSharedPreferences(
+		@ApplicationContext context: Context
+	): SharedPreferences =
+		context.getSharedPreferences("ecloset_prefs", Context.MODE_PRIVATE)
 
 	@Provides @Singleton
-	fun provideConnectionModeManager(): ConnectionModeManager =
-		ConnectionModeManager(
-			//prefs =
-		)
+	fun provideConnectionModeManager(
+		prefs: SharedPreferences
+	): ConnectionModeManager = ConnectionModeManager(prefs)
 
 	@Provides @Singleton
 	fun provideLocalDataSource() = LocalDataSource()

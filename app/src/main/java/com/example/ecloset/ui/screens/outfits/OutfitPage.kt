@@ -1,7 +1,9 @@
 package com.example.ecloset.ui.screens.outfits
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,6 +27,9 @@ fun OutfitPage(
 		contentPadding = PaddingValues(top = 0.dp)
 	) {
 		item{
+			Spacer(modifier = Modifier
+				.padding(vertical = 20.dp)
+			)
 			PageHeader(
 				title = stringResource(R.string.outfit_list_title),
 				navController = navController
