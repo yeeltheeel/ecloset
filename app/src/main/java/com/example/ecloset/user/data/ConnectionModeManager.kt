@@ -15,7 +15,10 @@ enum class ConnectionMode {
 class ConnectionModeManager(private val prefs: SharedPreferences) {
 	private val _mode = MutableStateFlow(
 		ConnectionMode.valueOf(
-			prefs.getString("conn_mode", "AUTO") ?: "AUTO"
+			prefs.getString(
+				"conn_mode",
+				"FORCE_MOCK"
+			) ?: "AUTO"
 		)
 	)
 	val mode: StateFlow<ConnectionMode> = _mode.asStateFlow()
@@ -23,7 +26,10 @@ class ConnectionModeManager(private val prefs: SharedPreferences) {
 	fun setMode(newMode: ConnectionMode) {
 		_mode.value = newMode
 		prefs.edit {
-			putString("conn_mode", newMode.name)
+			putString(
+				"conn_mode",
+				newMode.name
+			)
 		}
 	}
 

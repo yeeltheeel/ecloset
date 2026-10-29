@@ -1,11 +1,11 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 @file:SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 
-/* TODO:
+/* todo:
 	main:
 		functions:
-			closet view models
-			connect backend:
+			connect hiltmodels to analytics, main and add item/outfit
+			connect backend in full:
 				dto
 				tokens
 				enums
@@ -15,16 +15,15 @@
 			last added items, relevant outfits
 			unused clothes
 		widgets:
-			user value update (text -> input)
 			outfit collage
 			location select
 			filters block
 			filters page
 			add user tint selecting block to user settings
-			prettify weather widget with lottie
 	medium:
 		add localizations for all hardcoded strings
 		donut chart placeholder if itemList empty
+		prettify weather widget with lottie
 		clear up paddings for consistency
 	misc:
 		add admin/support functions
@@ -54,7 +53,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ecloset.ui.components.ActionBarMenu
 import com.example.ecloset.ui.components.Header
 import androidx.navigation.compose.rememberNavController
@@ -66,6 +64,7 @@ import com.example.ecloset.user.local.ConnectionState
 import com.example.ecloset.user.local.viewmodels.ConnectionViewModel
 import com.example.ecloset.user.local.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -83,7 +82,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EclosetApp() {
-	val connectionViewModel: ConnectionViewModel = viewModel()
+	val connectionViewModel: ConnectionViewModel = hiltViewModel()
 	val connectionState by connectionViewModel.state.collectAsState()
 
 	when (val state = connectionState) {
@@ -108,7 +107,7 @@ fun EclosetApp() {
 fun EclosetScreen(
 	connectionViewModel: ConnectionViewModel
 ){
-	val userViewModel: UserViewModel = viewModel()
+	val userViewModel: UserViewModel = hiltViewModel()
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route

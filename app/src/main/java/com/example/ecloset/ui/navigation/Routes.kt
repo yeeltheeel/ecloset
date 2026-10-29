@@ -39,8 +39,6 @@ object Routes {
 	const val REGISTER = "registration"
 
 	const val OTP = "otp"
-
-//	const val NO_CONNECTION = "no connection"
 }
 
 @Composable
@@ -93,7 +91,8 @@ fun NavActionHost(
 		composable(Routes.OUTFITS) {
 			OutfitPage(
 				modifier = modifier,
-				navController = navController
+				navController = navController,
+				snackbarHostState = snackbarHostState
 			)
 		}
 		composable(Routes.USER_SETTINGS) {
@@ -127,10 +126,5 @@ fun NavActionHost(
 				navController = navController
 			)
 		}
-//		composable(Routes.NO_CONNECTION) {
-//			NoConnectionPage(
-//				modifier = modifier
-//			)
-//		}
 	}
 }

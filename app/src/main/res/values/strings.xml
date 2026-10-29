@@ -67,4 +67,6 @@
 	<string name="about_devs">Contacts</string>
 	<string name="retry_prompt">Retry</string>
 	<string name="get_items_prompt">Collect items</string>
+	<string name="save_prompt">Save</string>
+	<string name="new_value_prompt">Enter new value</string>
 </resources>

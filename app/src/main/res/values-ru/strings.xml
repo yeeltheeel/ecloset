@@ -66,4 +66,6 @@
     <string name="about_devs">Контакты</string>
     <string name="retry_prompt">Обновить</string>
     <string name="get_items_prompt">Подобрать вещи</string>
+    <string name="save_prompt">Сохранить</string>
+    <string name="new_value_prompt">Введите новое значение</string>
 </resources>

@@ -19,8 +19,8 @@ import javax.inject.Inject
 class ClosetItemViewModel @Inject constructor(
 	private val clothesRepo: ClothesRepository
 ): ViewModel() {
-	private val itemStateFlow = MutableStateFlow(ClosetItemState())
-	val itemState: StateFlow<ClosetItemState> = itemStateFlow.asStateFlow()
+	private val _itemStateFlow = MutableStateFlow(ClosetItemState())
+	val itemState: StateFlow<ClosetItemState> = _itemStateFlow.asStateFlow()
 
 	private val _closetError = MutableStateFlow<ClosetError?>(null)
 	val closetError: StateFlow<ClosetError?> = _closetError.asStateFlow()
@@ -33,23 +33,23 @@ class ClosetItemViewModel @Inject constructor(
 
 	fun loadAll(){
 		viewModelScope.launch {
-			itemStateFlow.update {
+			_itemStateFlow.update {
 				it.copy(isLoading = true, error = null)
 			}
 
 			try {
 				val items = clothesRepo.getClothes(currentUserId)
-				itemStateFlow.update {
+				_itemStateFlow.update {
 					it.copy(items = items, isLoading = false)
 				}
 
 				if (items.isEmpty()) {
-					itemStateFlow.update {
+					_itemStateFlow.update {
 						it.copy(error = R.string.error_generic)
 					}
 				}
 			} catch (e: Exception) {
-				itemStateFlow.update { 
+				_itemStateFlow.update {
 					it.copy(isLoading = false)
 				}
 				_closetError.value = ClosetError.Resource(
@@ -61,14 +61,14 @@ class ClosetItemViewModel @Inject constructor(
 
 	fun addNewItem(item: ClosetItemData){
 		viewModelScope.launch {
-			itemStateFlow.update {
+			_itemStateFlow.update {
 				it.copy(isLoading = true, error = null)
 			}
 
 			clothesRepo.addItem(item).fold(
 				onSuccess = { loadAll() },
 				onFailure = {
-					itemStateFlow.update {
+					_itemStateFlow.update {
 						it.copy(isLoading = false)
 					}
 					_closetError.value = ClosetError.Resource(
@@ -81,14 +81,14 @@ class ClosetItemViewModel @Inject constructor(
 
 	fun updateItem(id: Int, data: ClosetItemData){
 		viewModelScope.launch {
-			itemStateFlow.update {
+			_itemStateFlow.update {
 				it.copy(isLoading = true, error = null)
 			}
 
 			clothesRepo.updateItem(id, data).fold(
 				onSuccess = { loadAll() },
 				onFailure = {
-					itemStateFlow.update {
+					_itemStateFlow.update {
 						it.copy(isLoading = false)
 					}
 					_closetError.value = ClosetError.Resource(
@@ -101,14 +101,14 @@ class ClosetItemViewModel @Inject constructor(
 
 	fun removeItem(id: Int){
 		viewModelScope.launch {
-			itemStateFlow.update {
+			_itemStateFlow.update {
 				it.copy(isLoading = true, error = null)
 			}
 
 			clothesRepo.removeItem(id).fold(
 				onSuccess = { loadAll() },
 				onFailure = {
-					itemStateFlow.update {
+					_itemStateFlow.update {
 						it.copy(isLoading = false)
 					}
 					_closetError.value = ClosetError.Resource(

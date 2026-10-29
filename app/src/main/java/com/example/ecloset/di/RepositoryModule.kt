@@ -27,7 +27,10 @@ object RepositoryModule {
 	fun provideSharedPreferences(
 		@ApplicationContext context: Context
 	): SharedPreferences =
-		context.getSharedPreferences("ecloset_prefs", Context.MODE_PRIVATE)
+		context.getSharedPreferences(
+			"ecloset_prefs",
+			Context.MODE_PRIVATE
+		)
 
 	@Provides @Singleton
 	fun provideConnectionModeManager(

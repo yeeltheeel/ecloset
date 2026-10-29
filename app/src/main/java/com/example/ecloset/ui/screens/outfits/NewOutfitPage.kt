@@ -1,8 +1,10 @@
 package com.example.ecloset.ui.screens.outfits
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -54,78 +56,83 @@ fun NewOutfitPage(
 
 	var selectedItems = mutableListOf<ClosetItemData>()
 
-	LazyColumn(
-		modifier
-			.fillMaxWidth(),
-		contentPadding = PaddingValues(top = 0.dp),
-		horizontalAlignment = Alignment.CenterHorizontally
+	Box(
+		modifier = modifier
+			.fillMaxSize()
 	) {
-		item{
-			PageHeader(
-				title = stringResource(R.string.new_outfit_title),
-				navController = navController
-			)
-		}
-		item{
-			SelectBlock(
-				title = stringResource(R.string.occasion_prompt),
-				itemList = occasionList,
-				selectedIndex = 0,
-				onSelectedIndex = { index ->
-					occasion = index
-				}
-			)
-		}
-		item {
-			SelectBlock(
-				title = stringResource(R.string.location_prompt),
-				itemList = locationList,
-				selectedIndex = 0,
-				onSelectedIndex = { index ->
-					location = index
-				}
-			)
-		}
-		item{
-			MultiSelectColorGrid(
-				title = stringResource(R.string.color_prompt),
-				itemList = colorList,
-				onSelected = { indexes ->
-					colors = indexes.map { colorList[it] }
-				}
-			)
-		}
-		item{
-			// get item suggestions
-			Button(
-				modifier = Modifier
-					.width(300.dp)
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				onClick = {},
-			) {
-				Text(
-					text = stringResource(R.string.get_items_prompt),
-					modifier = Modifier
-						.fillMaxWidth()
-						.padding(
-							horizontal = 12.dp,
-							vertical = 8.dp
-						),
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onPrimary,
-					textAlign = TextAlign.Center,
-					maxLines = 1
+		LazyColumn(
+			modifier
+				.fillMaxWidth(),
+			contentPadding = PaddingValues(top = 0.dp),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			item {
+				PageHeader(
+					title = stringResource(R.string.new_outfit_title),
+					navController = navController
 				)
 			}
-		}
-		item{
-			// load canvas
-			OutfitCollageCanvas(
-				selectedItems = selectedItems
-			)
+			item {
+				SelectBlock(
+					title = stringResource(R.string.occasion_prompt),
+					itemList = occasionList,
+					selectedIndex = 0,
+					onSelectedIndex = { index ->
+						occasion = index
+					}
+				)
+			}
+			item {
+				SelectBlock(
+					title = stringResource(R.string.location_prompt),
+					itemList = locationList,
+					selectedIndex = 0,
+					onSelectedIndex = { index ->
+						location = index
+					}
+				)
+			}
+			item {
+				MultiSelectColorGrid(
+					title = stringResource(R.string.color_prompt),
+					itemList = colorList,
+					onSelected = { indexes ->
+						colors = indexes.map { colorList[it] }
+					}
+				)
+			}
+			item {
+				// get item suggestions
+				Button(
+					modifier = Modifier
+						.width(300.dp)
+						.padding(
+							horizontal = 16.dp,
+							vertical = 8.dp
+						),
+					onClick = {},
+				) {
+					Text(
+						text = stringResource(R.string.get_items_prompt),
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(
+								horizontal = 12.dp,
+								vertical = 8.dp
+							),
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.onPrimary,
+						textAlign = TextAlign.Center,
+						maxLines = 1
+					)
+				}
+			}
+			item {
+				// load canvas
+				OutfitCollageCanvas(
+					selectedItems = selectedItems
+				)
+			}
 		}
 	}
 }

@@ -4,7 +4,9 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,93 +35,98 @@ fun NewItemPage(
 	modifier: Modifier = Modifier,
 	navController: NavHostController
 ){
-	LazyColumn(
-		modifier
-			.fillMaxWidth(),
-		contentPadding = PaddingValues(top = 0.dp),
-		horizontalAlignment = Alignment.CenterHorizontally
+	Box(
+		modifier = modifier
+			.fillMaxSize()
 	) {
-		item{
-			PageHeader(
-				title = stringResource(R.string.new_item_title),
-				navController = navController
-			)
-		}
-		item{
-			var pendingUri by remember { mutableStateOf<Uri?>(null) }
-			val photoPicker = rememberLauncherForActivityResult(
-				contract = ActivityResultContracts.PickVisualMedia()
-			) { uri: Uri? ->
-				if (uri != null) {
-					pendingUri = uri
-				}
+		LazyColumn(
+			modifier
+				.fillMaxWidth(),
+			contentPadding = PaddingValues(top = 0.dp),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			item {
+				PageHeader(
+					title = stringResource(R.string.new_item_title),
+					navController = navController
+				)
 			}
+			item {
+				var pendingUri by remember { mutableStateOf<Uri?>(null) }
+				val photoPicker = rememberLauncherForActivityResult(
+					contract = ActivityResultContracts.PickVisualMedia()
+				) { uri: Uri? ->
+					if (uri != null) {
+						pendingUri = uri
+					}
+				}
 
-			val previewModel = pendingUri?.toString() ?: R.drawable.hanger
+				val previewModel = pendingUri?.toString() ?: R.drawable.hanger
 
-			AsyncImage(
-				model = previewModel,
-				contentDescription = null,
-				contentScale = ContentScale.Fit,
-				modifier = Modifier
-					.width(150.dp)
-			)
+				AsyncImage(
+					model = previewModel,
+					contentDescription = null,
+					contentScale = ContentScale.Fit,
+					modifier = Modifier
+						.width(150.dp)
+				)
 
-			Button(
-				modifier = Modifier
-					.width(300.dp)
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				onClick = {
-					photoPicker.launch(
-						PickVisualMediaRequest(
-							ActivityResultContracts.PickVisualMedia.ImageOnly
+				Button(
+					modifier = Modifier
+						.width(300.dp)
+						.padding(
+							horizontal = 16.dp,
+							vertical = 8.dp
+						),
+					onClick = {
+						photoPicker.launch(
+							PickVisualMediaRequest(
+								ActivityResultContracts.PickVisualMedia.ImageOnly
+							)
 						)
+					}
+				) {
+					Text(
+						text = stringResource(com.example.ecloset.R.string.load_image_prompt),
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(
+								horizontal = 12.dp,
+								vertical = 8.dp
+							),
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.onPrimary,
+						textAlign = TextAlign.Center,
+						maxLines = 1
 					)
 				}
-			) {
-				Text(
-					text = stringResource(com.example.ecloset.R.string.load_image_prompt),
-					modifier = Modifier
-						.fillMaxWidth()
-						.padding(
-							horizontal = 12.dp,
-							vertical = 8.dp
-						),
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onPrimary,
-					textAlign = TextAlign.Center,
-					maxLines = 1
-				)
 			}
-		}
-		item{
-			Button(
-				modifier = Modifier
-					.width(300.dp)
-					.padding(
-						horizontal = 16.dp,
-						vertical = 8.dp
-					),
-				onClick = {}
-			) {
-				Text(
-					text = stringResource(com.example.ecloset.R.string.add_prompt) +
-							" " +
-							stringResource(R.string.item_text),
+			item {
+				Button(
 					modifier = Modifier
-						.fillMaxWidth()
+						.width(300.dp)
 						.padding(
-							horizontal = 12.dp,
+							horizontal = 16.dp,
 							vertical = 8.dp
 						),
-					style = MaterialTheme.typography.bodyMedium,
-					color = MaterialTheme.colorScheme.onPrimary,
-					textAlign = TextAlign.Center,
-					maxLines = 1
-				)
+					onClick = {}
+				) {
+					Text(
+						text = stringResource(com.example.ecloset.R.string.add_prompt) +
+								" " +
+								stringResource(R.string.item_text),
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(
+								horizontal = 12.dp,
+								vertical = 8.dp
+							),
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.onPrimary,
+						textAlign = TextAlign.Center,
+						maxLines = 1
+					)
+				}
 			}
 		}
 	}

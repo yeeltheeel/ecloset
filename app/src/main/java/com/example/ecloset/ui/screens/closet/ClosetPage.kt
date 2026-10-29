@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
@@ -86,7 +85,7 @@ fun ClosetPage(
 							categoryList = clothesCategories
 						)
 						GridLayout(
-							itemList = clothesList // state.items
+							itemList = state.items // clothesList
 						)
 					}
 				}
