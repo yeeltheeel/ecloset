@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: ecloset-backend
+    
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecloset
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:mySuperSecretKeyForLocalDevOnly4752!}
+    access-expiration-ms: 3600000      # 60 минут
+    refresh-expiration-ms: 2592000000  # 30 дней
+
+  upload:
+    dir: uploads/items
+    url-prefix: /uploads/items
+
+  weather:
+    base-url: https://wttr.in/
+    user-agent: Wget/1.21
+    connect-timeout-sec: 15
+    read-timeout-sec: 30
+    default-format: j2
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.springframework.security:

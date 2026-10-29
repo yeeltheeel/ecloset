@@ -97,4 +97,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ex.getMessage()));
     }
+
+    @ExceptionHandler(WeatherException.class)
+    public ResponseEntity<Map<String, String>> handleWeatherException(WeatherException ex) {
+        // Используем 400 Bad Request, если координаты не заданы,
+        // или 500 Internal Server Error, если упал внешний API.
+        // Для универсальности возьмем 500, но сообщение будет из эксепшена.
+        return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
