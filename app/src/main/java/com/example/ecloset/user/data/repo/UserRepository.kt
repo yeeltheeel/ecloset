@@ -22,4 +22,8 @@ class UserRepository(
 		}
 		return result
 	}
+
+	fun deleteUser(userId: Int){
+		// todo: remote
+	}
 }

@@ -3,7 +3,9 @@ package com.example.ecloset.user.local.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecloset.R
+import com.example.ecloset.user.data.DevLoginOverride
 import com.example.ecloset.user.data.MockData.testUser
+import com.example.ecloset.user.data.SessionManager
 import com.example.ecloset.user.data.repo.UserRepository
 import com.example.ecloset.user.local.LocationInfo
 import com.example.ecloset.user.local.UpdateResult
@@ -20,21 +22,39 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-	private val userRepo: UserRepository
+	private val userRepo: UserRepository,
+	private val sessionManager: SessionManager
 ): ViewModel() {
 	private val _userState = MutableStateFlow(UserState())
 	val userState: StateFlow<UserState> = _userState.asStateFlow()
+
 	private val _updateResult = MutableStateFlow<UpdateResult?>(null)
 	val updateResult: StateFlow<UpdateResult?> = _updateResult.asStateFlow()
-	val currentUserId = 1
-	var user = UserInfo(-1, "", "")
-	var loggedIn = false
 
-	init {
-		loadAccount()
+	companion object {
+		private const val DEV_USER_ID = 1
 	}
 
-	fun loadAccount(){
+	init {
+		if (sessionManager.currentUserId() == null) {
+			sessionManager.setSession(
+				DEV_USER_ID,
+				"dev-token"
+			)
+		}
+
+		viewModelScope.launch {
+			sessionManager.session.collect { session ->
+				if (session == null) {
+					_userState.value = UserState()
+				} else {
+					loadAccount(session.userId)
+				}
+			}
+		}
+	}
+
+	fun loadAccount(userId: Int){
 		viewModelScope.launch {
 			_userState.update {
 				it.copy(
@@ -44,25 +64,20 @@ class UserViewModel @Inject constructor(
 			}
 
 			try {
-				user = userRepo.getUser(currentUserId)
+				val user = userRepo.getUser(userId)
 				_userState.update {
-					it.copy(user = user, isLoading = false)
+					it.copy(
+						user = user,
+						isLoading = false,
+						loggedIn = true
+					)
 				}
-				loggedIn = true
 			} catch (e: Exception) {
 				_userState.update {
 					it.copy(isLoading = false)
 				}
 				_updateResult.value = UpdateResult.Invalid(
 					R.string.error_generic
-				)
-			}
-
-			_userState.update {
-				it.copy(
-					isLoading = false,
-					loggedIn = loggedIn,
-					user = user
 				)
 			}
 		}
@@ -125,25 +140,19 @@ class UserViewModel @Inject constructor(
 		}
 	}
 
-	fun logOut(){
-		_userState.update {
-			it.copy(
-				loggedIn = false,
-				user = null,
-				error = null
-			)
-		}
-	}
-
-	fun deleteAccount(){
-		// call remote
-		logOut()
-	}
-
 	fun updateLocation(location: LocationInfo) {
 		updateUser {
 			it.copy(location = location)
 		}
 		// weatherViewModel.refresh(location.latitude, location.longitude)
+	}
+
+	fun logOut(){
+		sessionManager.clear()
+	}
+
+	fun deleteAccount(userId: Int){
+		userRepo.deleteUser(userId)
+		logOut()
 	}
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.navigation.Routes
@@ -28,7 +29,7 @@ import com.example.ecloset.user.local.viewmodels.AuthViewModel
 fun RegistrationPage(
 	modifier: Modifier = Modifier,
 	navController: NavHostController,
-	viewModel: AuthViewModel = viewModel()
+	viewModel: AuthViewModel = hiltViewModel()
 ){
 	val regFormState by viewModel.regFormState.collectAsState()
 	val authResult by viewModel.authResult.collectAsState()

@@ -45,6 +45,7 @@ import androidx.navigation.NavHostController
 import com.example.ecloset.ui.components.PageHeader
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.unit.Dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.ecloset.ui.navigation.Routes
 import com.example.ecloset.user.local.viewmodels.AuthViewModel
 import com.example.ecloset.user.local.CODE_LEN
@@ -54,7 +55,7 @@ fun OtpPage(
 	modifier: Modifier = Modifier,
 	navController: NavHostController,
 	backAddredss: String = Routes.LOGIN,
-	viewModel: AuthViewModel = viewModel()
+	viewModel: AuthViewModel = hiltViewModel()
 ) {
 	val loginFormState by viewModel.loginFormState.collectAsState()
 	val authResult by viewModel.authResult.collectAsState()

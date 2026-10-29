@@ -3,6 +3,7 @@ package com.example.ecloset.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.ecloset.user.data.ConnectionModeManager
+import com.example.ecloset.user.data.SessionManager
 import com.example.ecloset.user.data.repo.AuthRepository
 import com.example.ecloset.user.data.repo.ClothesRepository
 import com.example.ecloset.user.data.repo.OutfitsRepository
@@ -36,6 +37,11 @@ object RepositoryModule {
 	fun provideConnectionModeManager(
 		prefs: SharedPreferences
 	): ConnectionModeManager = ConnectionModeManager(prefs)
+
+	@Provides @Singleton
+	fun provideSessionManager(
+		prefs: SharedPreferences
+	): SessionManager = SessionManager(prefs)
 
 	@Provides @Singleton
 	fun provideLocalDataSource() = LocalDataSource()

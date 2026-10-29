@@ -254,7 +254,7 @@ fun UserProfile(
 							vertical = 4.dp
 						),
 					onClick = {
-						userViewModel.deleteAccount()
+						userViewModel.deleteAccount(user?.id ?: -1)
 					},
 					colors = ButtonDefaults.buttonColors(
 						containerColor = MaterialTheme.colorScheme.errorContainer

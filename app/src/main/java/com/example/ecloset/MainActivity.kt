@@ -4,7 +4,7 @@
 /* todo:
 	main:
 		functions:
-			connect hiltmodels to analytics, main and add item/outfit
+			pass hiltmodel data to analytics, main and add item/outfit
 			connect backend in full:
 				dto
 				tokens
@@ -20,6 +20,9 @@
 			filters block
 			filters page
 			add user tint selecting block to user settings
+			outfit preview card grays out if item not available
+		general:
+			image cache for outfit/item preview
 	medium:
 		add localizations for all hardcoded strings
 		donut chart placeholder if itemList empty
@@ -33,6 +36,7 @@ package com.example.ecloset
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -84,6 +88,7 @@ class MainActivity : ComponentActivity() {
 fun EclosetApp() {
 	val connectionViewModel: ConnectionViewModel = hiltViewModel()
 	val connectionState by connectionViewModel.state.collectAsState()
+	//Log.d("AppDebug", "connectionState = $connectionState")
 
 	when (val state = connectionState) {
 		ConnectionState.Loading -> EclosetScreen(

@@ -37,6 +37,7 @@ import com.example.ecloset.ui.components.OutfitCollageCanvas
 import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.PreviewGridCard
 import com.example.ecloset.ui.components.RadioGroupBlock
+import com.example.ecloset.user.data.MockData.clothesList
 import com.example.ecloset.user.local.ClosetItemData
 import com.example.ecloset.user.data.Presets.ColorSelect
 import com.example.ecloset.user.data.Presets.colorList
@@ -54,7 +55,7 @@ fun NewOutfitPage(
 
 	var colors by remember { mutableStateOf(emptyList<ColorSelect>()) }
 
-	var selectedItems = mutableListOf<ClosetItemData>()
+	var selectedItems = clothesList
 
 	Box(
 		modifier = modifier
@@ -244,4 +245,16 @@ fun MultiSelectColorGrid(
 			}
 		}
 	}
+}
+
+fun filterItems(
+	itemList: List<ClosetItemData>,
+	occasion: String? = null,
+	colors: List<Int> = emptyList()
+) : MutableList<ClosetItemData> {
+	return itemList
+		.asSequence()
+		.filter { occasion == null || it.occasion == occasion }
+		.filter { colors.isEmpty() || it.color in colors }
+		.toMutableList()
 }

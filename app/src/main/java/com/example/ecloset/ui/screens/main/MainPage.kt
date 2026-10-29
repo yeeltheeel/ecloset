@@ -29,6 +29,9 @@ fun MainPage(
 	val state by userViewModel.userState.collectAsStateWithLifecycle()
 	val user = state.user
 
+	//val previewClothes = clothesViewModel.fetchPreviewClothes()
+	//val previewOutfits = outfitViewModel.fetchPreviewOutfits()
+
 	LazyColumn(
 		modifier = modifier
 			.fillMaxWidth(),
