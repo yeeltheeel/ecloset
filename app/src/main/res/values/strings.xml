@@ -69,4 +69,6 @@
 	<string name="get_items_prompt">Collect items</string>
 	<string name="save_prompt">Save</string>
 	<string name="new_value_prompt">Enter new value</string>
+	<string name="get_code_prompt">Get code</string>
+	<string name="resend_code_prompt">Resend code</string>
 </resources>

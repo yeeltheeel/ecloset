@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.ecloset.R
 import com.example.ecloset.ui.components.OutfitCollageCanvas
@@ -41,11 +42,13 @@ import com.example.ecloset.user.data.MockData.clothesList
 import com.example.ecloset.user.local.ClosetItemData
 import com.example.ecloset.user.data.Presets.ColorSelect
 import com.example.ecloset.user.data.Presets.colorList
+import com.example.ecloset.user.local.viewmodels.NewOutfitViewmodel
 
 @Composable
 fun NewOutfitPage(
 	modifier: Modifier = Modifier,
-	navController: NavHostController
+	navController: NavHostController,
+	newOutfitViewmodel: NewOutfitViewmodel = hiltViewModel()
 ){
 	val occasionList = listOf("Casual", "Party", "Business")
 	var occasion by remember { mutableIntStateOf(0) }

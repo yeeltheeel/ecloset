@@ -4,30 +4,32 @@
 /* todo:
 	main:
 		functions:
-			pass hiltmodel data to analytics, main and add item/outfit
 			connect backend in full:
 				dto
 				tokens
 				enums
+				api
 			call weather from backend
 			implement user theme preference (light/dark/system, static/dynamic)
-			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
-			last added items, relevant outfits
-			unused clothes
 		widgets:
+			after item image loaded show data and add button
 			outfit collage
+			new outfit quiz is a popup
 			location select
-			filters block
-			filters page
+			filters block and page
+			item/oufit details clean up and add actions
 			add user tint selecting block to user settings
 			outfit preview card grays out if item not available
 		general:
 			image cache for outfit/item preview
+			last added items, relevant outfits
+			add load more button to grid
+			login if email then otp input else email first
+			resend code button with timer to otp page
+			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 	medium:
 		add localizations for all hardcoded strings
-		donut chart placeholder if itemList empty
 		prettify weather widget with lottie
-		clear up paddings for consistency
 	misc:
 		add admin/support functions
 */
@@ -69,6 +71,7 @@ import com.example.ecloset.user.local.viewmodels.ConnectionViewModel
 import com.example.ecloset.user.local.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -112,15 +115,20 @@ fun EclosetApp() {
 fun EclosetScreen(
 	connectionViewModel: ConnectionViewModel
 ){
-	val userViewModel: UserViewModel = hiltViewModel()
+	//val userViewModel: UserViewModel = hiltViewModel()
+	val userViewModel: UserViewModel = androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel(
+		checkNotNull<androidx.lifecycle.ViewModelStoreOwner>(LocalViewModelStoreOwner.current) {
+			"No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+		},
+		null
+	)
+	val snackbarHostState = remember { SnackbarHostState() }
 	val navController = rememberNavController()
 	val backStackEntry by navController.currentBackStackEntryAsState()
 	val currentRoute = backStackEntry?.destination?.route
 	val loggedIn = userViewModel.userState.collectAsState().value.loggedIn
 	val showNavBar = (currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER &&
 			currentRoute != Routes.USER_SETTINGS && currentRoute != Routes.ABOUT)
-
-	val snackbarHostState = remember { SnackbarHostState() }
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),

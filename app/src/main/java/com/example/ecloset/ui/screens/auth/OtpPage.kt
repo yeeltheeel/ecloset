@@ -40,10 +40,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.ecloset.ui.components.PageHeader
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.Dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.ecloset.ui.navigation.Routes
@@ -54,53 +56,99 @@ import com.example.ecloset.user.local.CODE_LEN
 fun OtpPage(
 	modifier: Modifier = Modifier,
 	navController: NavHostController,
-	backAddredss: String = Routes.LOGIN,
+	backAddress: String = Routes.LOGIN,
+	userEmail: String? = null,
 	viewModel: AuthViewModel = hiltViewModel()
 ) {
 	val loginFormState by viewModel.loginFormState.collectAsState()
-	val authResult by viewModel.authResult.collectAsState()
+	var emailAvailable by remember { mutableStateOf(userEmail != null) }
+	var submittedEmail = userEmail
 
-	LazyColumn(
-		modifier = modifier.fillMaxWidth(),
-		contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp)
+	Box(
+		modifier = modifier
+			.fillMaxSize()
 	) {
-		item {
-			PageHeader(
-				title = stringResource(com.example.ecloset.R.string.otp_title),
-				backAddress = backAddredss,
-				navController = navController
-			)
-		}
-		item {
-			OtpInputField(
-				label = { Text(stringResource(com.example.ecloset.R.string.code_prompt)) },
-				value = loginFormState.confirmCode ?: "",
-				shape = RoundedCornerShape(16.dp),
-				onValueChange = { viewModel.updateLoginCode(it) },
-				modifier = Modifier.fillMaxWidth(),
-				singleLine = true,
-				isError = loginFormState.codeError != null,
-				supportingText = loginFormState.codeError?.let { errId ->
-					{ Text(stringResource(errId)) }
-				}
-			)
-			Spacer(modifier = Modifier.padding(vertical = 8.dp))
+		LazyColumn(
+			modifier = modifier.fillMaxWidth(),
+			contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp)
+		) {
+			item {
+				PageHeader(
+					title = stringResource(com.example.ecloset.R.string.otp_title),
+					backAddress = backAddress,
+					navController = navController
+				)
+			}
+			item {
+				OutlinedTextField(
+					label = { Text(stringResource(com.example.ecloset.R.string.email_prompt)) },
+					value = loginFormState.email,
+					shape = RoundedCornerShape(16.dp),
+					onValueChange = {
+						submittedEmail = it
+						emailAvailable = true
+					},
+					modifier = Modifier.fillMaxWidth(),
+					singleLine = true,
+					isError = loginFormState.emailError != null,
+					supportingText = loginFormState.emailError?.let { errId ->
+						{ Text(stringResource(errId)) }
+					}
+				)
 
-			Button(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 50.dp, vertical = 4.dp),
-				onClick = { viewModel.login() }
-			) {
-				Text(
-					text = stringResource(com.example.ecloset.R.string.confirm_prompt),
+				Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+				Button(
 					modifier = Modifier
 						.fillMaxWidth()
-						.padding(horizontal = 16.dp, vertical = 12.dp),
-					style = MaterialTheme.typography.titleLarge,
-					color = MaterialTheme.colorScheme.onPrimary,
-					textAlign = TextAlign.Center
+						.padding(horizontal = 50.dp, vertical = 4.dp),
+					onClick = {
+						//loginFormState.updateCode()
+						//loginFormState.sendCodeToEmail(submittedEmail)
+					}
+				) {
+					Text(
+						text = stringResource(com.example.ecloset.R.string.get_code_prompt),
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(horizontal = 16.dp, vertical = 12.dp),
+						style = MaterialTheme.typography.titleLarge,
+						color = MaterialTheme.colorScheme.onPrimary,
+						textAlign = TextAlign.Center
+					)
+				}
+			}
+			item {
+				OtpInputField(
+					label = { Text(stringResource(com.example.ecloset.R.string.code_prompt)) },
+					value = loginFormState.confirmCode ?: "",
+					shape = RoundedCornerShape(16.dp),
+					onValueChange = { viewModel.updateLoginCode(it) },
+					modifier = Modifier.fillMaxWidth(),
+					singleLine = true,
+					isError = loginFormState.codeError != null,
+					supportingText = loginFormState.codeError?.let { errId ->
+						{ Text(stringResource(errId)) }
+					}
 				)
+				Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+				Button(
+					modifier = Modifier
+						.fillMaxWidth()
+						.padding(horizontal = 50.dp, vertical = 4.dp),
+					onClick = { viewModel.login() }
+				) {
+					Text(
+						text = stringResource(com.example.ecloset.R.string.confirm_prompt),
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(horizontal = 16.dp, vertical = 12.dp),
+						style = MaterialTheme.typography.titleLarge,
+						color = MaterialTheme.colorScheme.onPrimary,
+						textAlign = TextAlign.Center
+					)
+				}
 			}
 		}
 	}
@@ -119,18 +167,14 @@ fun OtpInputField(
 	singleLine: Boolean = true,
 	length: Int = CODE_LEN,
 	shape: Shape = RoundedCornerShape(16.dp),
-	// Matches Material 3 OutlinedTextField default height
-	cellHeight: Dp = 56.dp,
-	// Width of each cell (mini text-field)
-	cellWidth: Dp = 48.dp,
-	// Spacing between cells
+	cellHeight: Dp = 52.dp,
+	cellWidth: Dp = 44.dp,
 	cellSpacing: Dp = 8.dp
 ) {
 	val focusRequester = remember { FocusRequester() }
 	val interactionSource = remember { MutableInteractionSource() }
 	val isFocused by interactionSource.collectIsFocusedAsState()
 
-	// Thin outline (1.dp) normally, 2.dp when focused, error color on error
 	val cellBorderColor = when {
 		isError   -> MaterialTheme.colorScheme.error
 		isFocused -> MaterialTheme.colorScheme.primary
@@ -139,8 +183,6 @@ fun OtpInputField(
 	val cellBorderWidth = if (isFocused) 2.dp else 1.dp
 
 	Column(modifier = modifier) {
-
-		// ---- Label ----
 		if (label != null) {
 			CompositionLocalProvider(
 				LocalContentColor provides if (isError)
@@ -154,7 +196,7 @@ fun OtpInputField(
 			}
 		}
 
-		// ---- Digit cells + invisible input, centered ----
+		// digit cells + invisible input
 		Box(
 			modifier = Modifier.fillMaxWidth(),
 			contentAlignment = Alignment.Center
@@ -222,7 +264,6 @@ fun OtpInputField(
 			}
 		}
 
-		// ---- Supporting text ----
 		if (supportingText != null) {
 			CompositionLocalProvider(
 				LocalContentColor provides if (isError)

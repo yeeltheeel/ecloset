@@ -26,7 +26,10 @@ import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
 
 enum class PopupDirection {
-	UP, DOWN, LEFT, RIGHT
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
 }
 
 data class PopupAction(

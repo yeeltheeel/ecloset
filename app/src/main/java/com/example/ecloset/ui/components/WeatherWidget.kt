@@ -24,6 +24,7 @@ import kotlin.math.roundToInt
 @Composable
 fun WeatherWidget(
 	modifier: Modifier = Modifier,
+	// location: LocationInfo? = null,
 	location: String,
 	latitude: Double,
 	longitude: Double,
@@ -175,7 +176,7 @@ private fun SuccessContent(
 				IconButton(onClick = onRefresh) {
 					Icon(
 						imageVector = Icons.Default.Refresh,
-						contentDescription = "Refresh weather",
+						contentDescription = "refresh weather",
 						tint = MaterialTheme.colorScheme.primary
 					)
 				}

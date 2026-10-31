@@ -8,21 +8,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ecloset.R
 import com.example.ecloset.ui.components.DonutChart
 import com.example.ecloset.ui.components.PreviewSingleRow
-
-import com.example.ecloset.user.data.MockData.previewUnusedClothes
 import com.example.ecloset.user.data.Presets.clothesCategories
-import com.example.ecloset.user.data.MockData.clothesList
+import com.example.ecloset.user.local.viewmodels.AnalyticsViewmodel
 
 @Composable
 fun AnalyticsPage(
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	analyticsViewmodel: AnalyticsViewmodel = hiltViewModel()
 ){
+	val clothesList by analyticsViewmodel.clothesList.collectAsStateWithLifecycle()
+	val previewUnusedClothes by analyticsViewmodel.unusedClothes.collectAsStateWithLifecycle()
+
 	LazyColumn(
 		modifier
 			.fillMaxWidth(),
@@ -43,7 +48,7 @@ fun AnalyticsPage(
 			)
 			DonutChart(
 				categories = clothesCategories,
-				items = clothesList
+				items = clothesList.items
 			)
 
 			// add most worn color label or color ranking
@@ -72,7 +77,7 @@ fun AnalyticsPage(
 					)
 			)
 			PreviewSingleRow(
-				cards =  previewUnusedClothes // placeholder
+				cards =  previewUnusedClothes.items
 			)
 		}
 		item{

@@ -68,4 +68,6 @@
     <string name="get_items_prompt">Подобрать вещи</string>
     <string name="save_prompt">Сохранить</string>
     <string name="new_value_prompt">Введите новое значение</string>
+    <string name="get_code_prompt">Получить код</string>
+    <string name="resend_code_prompt">Отправить код еще раз</string>
 </resources>

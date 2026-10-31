@@ -1,5 +1,6 @@
 package com.example.ecloset.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -32,11 +33,12 @@ import com.example.ecloset.R
 import com.example.ecloset.user.data.Presets.clothesCategories
 import com.example.ecloset.user.local.CategoryItem
 import com.example.ecloset.user.local.ClosetItemData
-import kotlin.collections.set
+import java.time.LocalDate
 import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.min
-import kotlin.text.toFloat
+import kotlin.math.sin
 
 private val colors = listOf(
 	Color(0xFF7FB88A),
@@ -70,12 +72,22 @@ fun DonutChart(
 		categoryList = categories
 	)
 
+	DrawDonut(data = data)
+	DonutLegend(data = data)
+}
+
+@Composable
+fun DrawDonut(
+	data: List<DonutChartData>
+){
 	var selectedIndex by remember { mutableStateOf<Int?>(null) }
+	val total = data.sumOf { it.units }
 	val totalUnits = remember(data) { data.sumOf { it.units } }
+	val segmentOffset = data.count { it.units > 0 } != 1
 
 	val strokeWidth = 50.dp
-	val trackColor = MaterialTheme.colorScheme.surface
 	val maxSize = 250.dp
+	val trackColor = if (total == 0) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background
 
 	Box(
 		modifier = Modifier
@@ -108,7 +120,7 @@ fun DonutChart(
 						// ignore taps outside the ring band
 						val inner = radius - strokePx / 2f
 						val outer = radius + strokePx / 2f
-						if (dist < inner || dist > outer) {
+						if (dist !in inner..outer) {
 							selectedIndex = null
 							return@detectTapGestures
 						}
@@ -142,6 +154,8 @@ fun DonutChart(
 				(size.width - diameter) / 2f,
 				(size.height - diameter) / 2f,
 			)
+			val borderPx = 8.dp.toPx()
+			val expansionPx = 8.dp.toPx()
 
 			// background track
 			drawArc(
@@ -159,21 +173,50 @@ fun DonutChart(
 
 			// segments
 			var startAngle = -90f
-			data.forEach { item ->
+			data.forEachIndexed  { index, item ->
 				val sweep = item.percent * 360f
 				if (sweep > 0f) {
-					drawArc(
-						color = item.color,
-						startAngle = startAngle,
-						sweepAngle = sweep,
-						useCenter = false,
-						topLeft = topLeft,
-						size = arcSize,
-						style = Stroke(
-							width = strokePx,
-							cap = StrokeCap.Butt
-						),
-					)
+					val isSelected = (index == selectedIndex)
+					if (isSelected) {
+						// selected segment
+						var selTopLeft = topLeft
+						if (segmentOffset) {
+							val midAngleDeg = startAngle + sweep / 2f
+							val midAngleRad = Math.toRadians(midAngleDeg.toDouble())
+							val offsetX = (cos(midAngleRad) * expansionPx).toFloat()
+							val offsetY = (sin(midAngleRad) * expansionPx).toFloat()
+							selTopLeft = Offset(
+								x = topLeft.x + offsetX,
+								y = topLeft.y + offsetY,
+							)
+						}
+
+						drawArc(
+							color = item.color,
+							startAngle = startAngle,
+							sweepAngle = sweep,
+							useCenter = false,
+							topLeft = selTopLeft,
+							size = arcSize,
+							style = Stroke(
+								width = strokePx,
+								cap = StrokeCap.Butt
+							),
+						)
+					} else {
+						// regular segment
+						drawArc(
+							color = item.color,
+							startAngle = startAngle,
+							sweepAngle = sweep,
+							useCenter = false,
+							topLeft = topLeft,
+							size = arcSize,
+							style = Stroke(
+								width = strokePx,
+								cap = StrokeCap.Butt),
+						)
+					}
 				}
 				startAngle += sweep
 			}
@@ -182,8 +225,7 @@ fun DonutChart(
 		// center text overlay
 		val selected = selectedIndex?.let { data.getOrNull(it) }
 		val displayValue = selected?.units ?: totalUnits
-		val displayColor = selected?.color
-			?: MaterialTheme.colorScheme.onSurface
+		val displayColor = selected?.color ?: MaterialTheme.colorScheme.onSurface
 
 		Column(
 			horizontalAlignment = Alignment.CenterHorizontally,
@@ -204,6 +246,12 @@ fun DonutChart(
 		}
 	}
 
+}
+
+@Composable
+fun DonutLegend(
+	data: List<DonutChartData>
+){
 	LazyRow(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -231,13 +279,11 @@ fun calcPercentage(
 ): List<DonutChartData> {
 	val numbers = categoryList.associate { it.id to 0 }.toMutableMap()
 	itemsList.forEach { item ->
-		if (numbers.containsKey(item.id)) {
-			numbers.merge(item.id, 1, Int::plus)
+		if (numbers.containsKey(item.category)) {
+			numbers.merge(item.category, 1, Int::plus)
 		}
 	}
-	val total = itemsList.count {
-		numbers.containsKey(it.id)
-	}.coerceAtLeast(1)
+	val total = numbers.values.sum().coerceAtLeast(1)
 
 	val donutItems = categoryList.mapIndexed { index, category ->
 		val num = numbers.getValue(category.id)

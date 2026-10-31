@@ -6,6 +6,10 @@ import com.example.ecloset.user.local.ClosetItemData
 import com.example.ecloset.user.local.OutfitItemData
 import com.example.ecloset.user.local.datasource.LocalDataSource
 import com.example.ecloset.user.remote.datasource.OutfitsRemoteDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class OutfitsRepository(
 	private val remote: OutfitsRemoteDataSource,
@@ -13,6 +17,7 @@ class OutfitsRepository(
 	private val modeManager: ConnectionModeManager
 ) {
 	private var cachedOutfits: List<OutfitItemData> = local.getOutfits()
+	private val cachedOutfitsFlow = MutableStateFlow<List<OutfitItemData>>(cachedOutfits)
 
 	suspend fun getOutfits(userId: Int): List<OutfitItemData> {
 		val result = when (modeManager.current()) {
@@ -22,6 +27,13 @@ class OutfitsRepository(
 		}
 		cachedOutfits = result
 		return result
+	}
+
+	fun getPreview(userId: Int, limit: Int): Flow<List<OutfitItemData>> {
+		val preview = cachedOutfitsFlow.map { outfits ->
+			outfits.take(limit)
+		}
+		return preview
 	}
 
 	suspend fun addOutfit(outfit: OutfitItemData): Result<Unit> {

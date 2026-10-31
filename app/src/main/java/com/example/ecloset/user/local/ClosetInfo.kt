@@ -8,7 +8,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-// data types
+data class PreviewListState<out T>(
+	val items: List<T> = emptyList(),
+	val isLoading: Boolean = false,
+	val error: Throwable? = null
+)
+
 data class CategoryItem(
 	val id: Int,
 	val titleId: Int

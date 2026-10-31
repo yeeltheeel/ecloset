@@ -4,13 +4,16 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,19 +24,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.example.ecloset.R
 import com.example.ecloset.ui.components.PageHeader
+import com.example.ecloset.user.local.viewmodels.NewItemViewmodel
 
 @Composable
 fun NewItemPage(
 	modifier: Modifier = Modifier,
-	navController: NavHostController
+	navController: NavHostController,
+	newItemViewmodel: NewItemViewmodel = hiltViewModel()
 ){
 	Box(
 		modifier = modifier
@@ -60,16 +68,24 @@ fun NewItemPage(
 						pendingUri = uri
 					}
 				}
-
 				val previewModel = pendingUri?.toString() ?: R.drawable.hanger
 
-				AsyncImage(
-					model = previewModel,
-					contentDescription = null,
-					contentScale = ContentScale.Fit,
+				Box(
 					modifier = Modifier
-						.width(150.dp)
-				)
+						.size(250.dp)
+						.clip(RoundedCornerShape(16.dp))
+						.background(MaterialTheme.colorScheme.surfaceVariant),
+					contentAlignment = Alignment.Center,
+				){
+					AsyncImage(
+						model = previewModel,
+						contentDescription = null,
+						contentScale = ContentScale.Fit,
+						colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.tertiary),
+						modifier = Modifier
+							.width(150.dp)
+					)
+				}
 
 				Button(
 					modifier = Modifier

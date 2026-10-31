@@ -3,6 +3,7 @@ package com.example.ecloset.user.local.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecloset.R
+import com.example.ecloset.user.data.SessionManager
 import com.example.ecloset.user.data.repo.OutfitsRepository
 import com.example.ecloset.user.local.ClosetError
 import com.example.ecloset.user.local.OutfitItemData
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OutfitViewModel @Inject constructor(
-	private val outfitsRepo: OutfitsRepository
+	private val outfitsRepo: OutfitsRepository,
+	private val sessionManager: SessionManager
 ): ViewModel() {
 	private val _outfitStateFlow = MutableStateFlow(OutfitItemState())
 	val outfitState: StateFlow<OutfitItemState> = _outfitStateFlow.asStateFlow()
@@ -25,7 +27,7 @@ class OutfitViewModel @Inject constructor(
 	private val _closetError = MutableStateFlow<ClosetError?>(null)
 	val closetError: StateFlow<ClosetError?> = _closetError.asStateFlow()
 
-	private val currentUserId = 1 // replace with actual user.getId()
+	private val currentUserId = sessionManager.currentUserId()?: error("OutfitsViewModel requires an authenticated session")
 
 	init {
 		loadAll()

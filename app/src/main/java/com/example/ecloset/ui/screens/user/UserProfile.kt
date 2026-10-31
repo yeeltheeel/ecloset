@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,20 +11,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -47,6 +42,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.RadioGroupWithDropdown
+import com.example.ecloset.ui.components.GroupTitle
+import com.example.ecloset.ui.components.EditableLabel
 import com.example.ecloset.user.data.Presets.locations
 import com.example.ecloset.user.data.Presets.themePresets
 import com.example.ecloset.user.data.Presets.selectOptions
@@ -278,116 +275,5 @@ fun UserProfile(
 				Spacer(modifier = Modifier.padding(vertical = 32.dp))
 			}
 		}
-	}
-}
-
-@Composable
-fun EditableLabel(
-	title: String,
-	value: String,
-	onClick: (String) -> Unit
-){
-	var newValue = value
-	var expanded by remember { mutableStateOf(false) }
-
-	Text(
-		text = title,
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(
-				horizontal = 16.dp,
-				vertical = 8.dp
-			)
-			.clickable{
-				expanded = !expanded
-			},
-		style = MaterialTheme.typography.bodyLarge
-	)
-	if (!expanded) {
-		Text(
-			text = value,
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(
-					horizontal = 16.dp,
-					vertical = 0.dp
-				),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.tertiary
-		)
-	} else {
-		OutlinedTextField(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(horizontal = 8.dp, vertical = 8.dp),
-			value = value,
-			onValueChange = { newValue = it },
-			shape = RoundedCornerShape(16.dp),
-			singleLine = true,
-			placeholder = {
-				Text(stringResource(R.string.new_value_prompt))
-			}
-		)
-
-		Button(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(
-					horizontal = 90.dp,
-					vertical = 8.dp
-				),
-			onClick = {
-				expanded = !expanded
-				onClick(newValue)
-			}
-		) {
-			Text(
-				text = stringResource(R.string.save_prompt),
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(
-						horizontal = 12.dp,
-						vertical = 8.dp
-					),
-				style = MaterialTheme.typography.bodyMedium,
-				color = MaterialTheme.colorScheme.onPrimary,
-				textAlign = TextAlign.Center
-			)
-		}
-	}
-
-	Spacer(modifier = Modifier.padding(vertical = 8.dp))
-}
-
-@Composable
-fun GroupTitle(
-	title: String,
-	caption: String = "",
-	showCaption: Boolean = false
-){
-	Spacer(modifier = Modifier.padding(vertical = 8.dp))
-	Text(
-		text = title,
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(
-				horizontal = 16.dp,
-				vertical = 8.dp
-			),
-		style = MaterialTheme.typography.titleMedium
-	)
-	if (showCaption){
-		Text(
-			text = caption,
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(
-					horizontal = 16.dp,
-					vertical = 0.dp
-				),
-			style = MaterialTheme.typography.bodyMedium,
-			color = MaterialTheme.colorScheme.tertiary
-		)
-		Spacer(modifier = Modifier.padding(vertical = 8.dp))
 	}
 }
