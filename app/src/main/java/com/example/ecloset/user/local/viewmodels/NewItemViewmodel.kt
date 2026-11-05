@@ -27,7 +27,7 @@ class NewItemViewmodel @Inject constructor(
 	private val currentUserId = sessionManager.currentUserId() ?: error("NewItemViewModel requires an authenticated session")
 
 	val clothesList: StateFlow<PreviewListState<ClosetItemData>> = clothesRepo.getAllClothes().toPreviewState()
-	val _newItem = MutableStateFlow<ClosetItemData>(ClosetItemData(
+	private val _newItem = MutableStateFlow<ClosetItemData>(ClosetItemData(
 		id = -1,
 		title = "",
 		imageUrl = null,
@@ -41,6 +41,10 @@ class NewItemViewmodel @Inject constructor(
 
 	fun addNewItem(item: ClosetItemData){
 		clothesRepo.addItem(item)
+	}
+
+	fun updateNewItem(newItemData: ClosetItemData){
+		//
 	}
 
 	private fun <T> Flow<List<T>>.toPreviewState(): StateFlow<PreviewListState<T>> = map {

@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.example.ecloset.R
@@ -43,6 +44,7 @@ fun NewItemPage(
 	navController: NavHostController,
 	newItemViewmodel: NewItemViewmodel = hiltViewModel()
 ){
+	val newItem by newItemViewmodel.newItem.collectAsStateWithLifecycle()
 	Box(
 		modifier = modifier
 			.fillMaxSize()

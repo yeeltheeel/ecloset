@@ -2,6 +2,7 @@ package com.example.ecloset.ui.screens.outfits
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,13 +53,6 @@ fun NewOutfitPage(
 	newOutfitViewmodel: NewOutfitViewmodel = hiltViewModel()
 ){
 	val newOutfitState by newOutfitViewmodel.clothesList.collectAsStateWithLifecycle()
-
-	val occasionList = listOf("Casual", "Party", "Business")
-	var occasion by remember { mutableIntStateOf(0) }
-	val locationList = listOf("Inside", "Outside", "Both")
-	var location by remember { mutableIntStateOf(0) }
-	var colors by remember { mutableStateOf(emptyList<ColorSelect>()) }
-
 	var selectedItems by remember { mutableStateOf(newOutfitState.items) }
 
 	Box(
@@ -77,60 +71,8 @@ fun NewOutfitPage(
 					navController = navController
 				)
 			}
-			item {
-				SelectBlock(
-					title = stringResource(R.string.occasion_prompt),
-					itemList = occasionList,
-					selectedIndex = 0,
-					onSelectedIndex = { index ->
-						occasion = index
-					}
-				)
-			}
-			item {
-				SelectBlock(
-					title = stringResource(R.string.location_prompt),
-					itemList = locationList,
-					selectedIndex = 0,
-					onSelectedIndex = { index ->
-						location = index
-					}
-				)
-			}
-			item {
-				MultiSelectColorGrid(
-					title = stringResource(R.string.color_prompt),
-					itemList = colorList,
-					onSelected = { indexes ->
-						colors = indexes.map { colorList[it] }
-					}
-				)
-			}
-			item {
-				// get item suggestions
-				Button(
-					modifier = Modifier
-						.width(300.dp)
-						.padding(
-							horizontal = 16.dp,
-							vertical = 8.dp
-						),
-					onClick = {},
-				) {
-					Text(
-						text = stringResource(R.string.get_items_prompt),
-						modifier = Modifier
-							.fillMaxWidth()
-							.padding(
-								horizontal = 12.dp,
-								vertical = 8.dp
-							),
-						style = MaterialTheme.typography.bodyMedium,
-						color = MaterialTheme.colorScheme.onPrimary,
-						textAlign = TextAlign.Center,
-						maxLines = 1
-					)
-				}
+			item{
+				QuizBlock(newOutfitViewmodel)
 			}
 			item {
 				// load canvas
@@ -252,8 +194,66 @@ fun MultiSelectColorGrid(
 }
 
 @Composable
-fun QuizBlock(){
+fun QuizBlock(
+	newOutfitViewmodel: NewOutfitViewmodel
+){
 
+
+	val occasionList = listOf("Casual", "Party", "Business")
+	var occasion by remember { mutableIntStateOf(0) }
+	val locationList = listOf("Inside", "Outside", "Both")
+	var location by remember { mutableIntStateOf(0) }
+	var colors by remember { mutableStateOf(emptyList<ColorSelect>()) }
+
+	Column() {
+		SelectBlock(
+			title = stringResource(R.string.occasion_prompt),
+			itemList = occasionList,
+			selectedIndex = 0,
+			onSelectedIndex = { index ->
+				occasion = index
+			}
+		)
+		SelectBlock(
+			title = stringResource(R.string.location_prompt),
+			itemList = locationList,
+			selectedIndex = 0,
+			onSelectedIndex = { index ->
+				location = index
+			}
+		)
+		MultiSelectColorGrid(
+			title = stringResource(R.string.color_prompt),
+			itemList = colorList,
+			onSelected = { indexes ->
+				colors = indexes.map { colorList[it] }
+			}
+		)
+		// get item suggestions
+		Button(
+			modifier = Modifier
+				.width(300.dp)
+				.padding(
+					horizontal = 16.dp,
+					vertical = 8.dp
+				),
+			onClick = {},
+		) {
+			Text(
+				text = stringResource(R.string.get_items_prompt),
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(
+						horizontal = 12.dp,
+						vertical = 8.dp
+					),
+				style = MaterialTheme.typography.bodyMedium,
+				color = MaterialTheme.colorScheme.onPrimary,
+				textAlign = TextAlign.Center,
+				maxLines = 1
+			)
+		}
+	}
 }
 
 fun filterItems(
