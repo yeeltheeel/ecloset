@@ -36,13 +36,13 @@ class OutfitsRepository(
 		return preview
 	}
 
-	suspend fun addOutfit(outfit: OutfitItemData): Result<Unit> {
+	fun addOutfit(outfit: OutfitItemData): Result<Unit> {
 		// TODO: Replace with remote.addItem() when endpoint is ready
 		cachedOutfits = cachedOutfits + outfit
 		return Result.success(Unit)
 	}
 
-	suspend fun updateOutfit(id: Int, data: OutfitItemData): Result<Unit> {
+	fun updateOutfit(id: Int, data: OutfitItemData): Result<Unit> {
 		// TODO: Replace with remote.updateItem() when endpoint is ready
 		val index = cachedOutfits.indexOfFirst { it.id == id }
 		if (index == -1)
@@ -52,7 +52,7 @@ class OutfitsRepository(
 		return Result.success(Unit)
 	}
 
-	suspend fun removeOutfit(id: Int): Result<Unit> {
+	fun removeOutfit(id: Int): Result<Unit> {
 		// TODO: Replace with remote.removeItem() when endpoint is ready
 		cachedOutfits = cachedOutfits.filterNot { it.id == id }
 		return Result.success(Unit)

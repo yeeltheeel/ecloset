@@ -45,13 +45,13 @@ class ClothesRepository(
 		return unused
 	}
 
-	suspend fun addItem(item: ClosetItemData): Result<Unit> {
+	fun addItem(item: ClosetItemData): Result<Unit> {
 		// TODO: Replace with remote.addItem() when endpoint is ready
 		cachedItems = cachedItems + item
 		return Result.success(Unit)
 	}
 
-	suspend fun updateItem(id: Int, data: ClosetItemData): Result<Unit> {
+	fun updateItem(id: Int, data: ClosetItemData): Result<Unit> {
 		// TODO: Replace with remote.updateItem() when endpoint is ready
 		val index = cachedItems.indexOfFirst { it.id == id }
 		if (index == -1) return Result.failure(Exception("Item not found"))
@@ -60,7 +60,7 @@ class ClothesRepository(
 		return Result.success(Unit)
 	}
 
-	suspend fun removeItem(id: Int): Result<Unit> {
+	fun removeItem(id: Int): Result<Unit> {
 		// TODO: Replace with remote.removeItem() when endpoint is ready
 		cachedItems = cachedItems.filterNot { it.id == id }
 		return Result.success(Unit)

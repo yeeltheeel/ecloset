@@ -11,6 +11,7 @@
 				api
 			call weather from backend
 			implement user theme preference (light/dark/system, static/dynamic)
+			weather viewmodel
 		widgets:
 			after item image loaded show data and add button
 			outfit collage

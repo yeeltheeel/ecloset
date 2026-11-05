@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.ecloset.R
 import com.example.ecloset.ui.components.OutfitCollageCanvas
@@ -50,15 +51,15 @@ fun NewOutfitPage(
 	navController: NavHostController,
 	newOutfitViewmodel: NewOutfitViewmodel = hiltViewModel()
 ){
+	val newOutfitState by newOutfitViewmodel.clothesList.collectAsStateWithLifecycle()
+
 	val occasionList = listOf("Casual", "Party", "Business")
 	var occasion by remember { mutableIntStateOf(0) }
-
 	val locationList = listOf("Inside", "Outside", "Both")
 	var location by remember { mutableIntStateOf(0) }
-
 	var colors by remember { mutableStateOf(emptyList<ColorSelect>()) }
 
-	var selectedItems = clothesList
+	var selectedItems by remember { mutableStateOf(newOutfitState.items) }
 
 	Box(
 		modifier = modifier
@@ -248,6 +249,11 @@ fun MultiSelectColorGrid(
 			}
 		}
 	}
+}
+
+@Composable
+fun QuizBlock(){
+
 }
 
 fun filterItems(
