@@ -1,6 +1,7 @@
 package com.example.ecloset.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
@@ -107,8 +108,12 @@ private fun SuccessContent(
 	LazyRow(
 		modifier = Modifier
 			.fillMaxHeight()
-			.padding(16.dp),
-		verticalAlignment = Alignment.CenterVertically
+			.padding(
+				vertical = 16.dp,
+				horizontal = 8.dp
+			),
+		verticalAlignment = Alignment.CenterVertically,
+		horizontalArrangement = Arrangement.Center
 	) {
 		item {
 			Icon(
@@ -116,6 +121,7 @@ private fun SuccessContent(
 				contentDescription = weather.description,
 				modifier = Modifier
 					.fillMaxHeight()
+					.padding(0.dp)
 					.aspectRatio(1f),
 				tint = MaterialTheme.colorScheme.primary
 			)
@@ -123,8 +129,8 @@ private fun SuccessContent(
 		item {
 			Column(
 				modifier = Modifier
-					.fillMaxHeight()
-					.padding(start = 16.dp),
+					.padding(end = 16.dp)
+					.fillMaxHeight(),
 				verticalArrangement = Arrangement.Center
 			) {
 				Text(
@@ -148,8 +154,7 @@ private fun SuccessContent(
 		item {
 			Column(
 				modifier = Modifier
-					.fillMaxHeight()
-					.padding(start = 24.dp),
+					.fillMaxHeight(),
 				verticalArrangement = Arrangement.Center
 			) {
 				LabelText(
@@ -161,15 +166,14 @@ private fun SuccessContent(
 					text = "${weather.windSpeed.roundToInt()} km/h",
 					icon = Icons.Default.Air,
 					style = MaterialTheme.typography.bodyMedium,
-					modifier = Modifier.padding(top = 4.dp)
+					modifier = Modifier.padding(top = 8.dp)
 				)
 			}
 		}
 		item {
 			Column(
 				modifier = Modifier
-					.fillMaxHeight()
-					.padding(start = 12.dp),
+					.fillMaxHeight(),
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.End
 			) {

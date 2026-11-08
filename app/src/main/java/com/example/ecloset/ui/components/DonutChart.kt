@@ -33,6 +33,7 @@ import com.example.ecloset.R
 import com.example.ecloset.user.data.Presets.clothesCategories
 import com.example.ecloset.user.local.CategoryItem
 import com.example.ecloset.user.local.ClosetItemData
+import java.nio.file.Path
 import java.time.LocalDate
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -94,7 +95,7 @@ fun DrawDonut(
 			.fillMaxWidth()
 			.padding(
 				horizontal = 50.dp,
-				vertical = 8.dp
+				vertical = 16.dp
 			),
 		contentAlignment = Alignment.Center
 	) {
@@ -111,7 +112,10 @@ fun DrawDonut(
 						val strokePx = strokeWidth.toPx()
 						val diameter = minDimension - strokePx
 						val radius = diameter / 2f
-						val center = Offset(size.width / 2f, size.height / 2f)
+						val center = Offset(
+							x = size.width / 2f,
+							y = size.height / 2f
+						)
 
 						val dx = tapOffset.x - center.x
 						val dy = tapOffset.y - center.y
@@ -152,10 +156,8 @@ fun DrawDonut(
 			val arcSize = Size(diameter, diameter)
 			val topLeft = Offset(
 				(size.width - diameter) / 2f,
-				(size.height - diameter) / 2f,
+				(size.height - diameter) / 2f
 			)
-			val borderPx = 8.dp.toPx()
-			val expansionPx = 8.dp.toPx()
 
 			// background track
 			drawArc(
@@ -171,25 +173,26 @@ fun DrawDonut(
 				),
 			)
 
+			val gapPx = 4.dp.toPx()
+			val expansionPx = 12.dp.toPx()
+			val arcRadiusPx = arcSize.width / 2f
+			val innerRadiusPx = arcRadiusPx - strokePx / 2f
+
 			// segments
 			var startAngle = -90f
 			data.forEachIndexed  { index, item ->
 				val sweep = item.percent * 360f
 				if (sweep > 0f) {
 					val isSelected = (index == selectedIndex)
+
 					if (isSelected) {
-						// selected segment
-						var selTopLeft = topLeft
-						if (segmentOffset) {
-							val midAngleDeg = startAngle + sweep / 2f
-							val midAngleRad = Math.toRadians(midAngleDeg.toDouble())
-							val offsetX = (cos(midAngleRad) * expansionPx).toFloat()
-							val offsetY = (sin(midAngleRad) * expansionPx).toFloat()
-							selTopLeft = Offset(
-								x = topLeft.x + offsetX,
-								y = topLeft.y + offsetY,
-							)
-						}
+						val selStrokePx = strokePx + expansionPx
+						val selRadiusPx = arcRadiusPx + expansionPx / 2f
+						val selArcSize = Size(selRadiusPx * 2f, selRadiusPx * 2f)
+						val selTopLeft = Offset(
+							x = size.width / 2f - selRadiusPx,
+							y = size.height / 2f - selRadiusPx
+						)
 
 						drawArc(
 							color = item.color,
@@ -197,14 +200,13 @@ fun DrawDonut(
 							sweepAngle = sweep,
 							useCenter = false,
 							topLeft = selTopLeft,
-							size = arcSize,
+							size = selArcSize,
 							style = Stroke(
-								width = strokePx,
+								width = selStrokePx,
 								cap = StrokeCap.Butt
-							),
+							)
 						)
 					} else {
-						// regular segment
 						drawArc(
 							color = item.color,
 							startAngle = startAngle,
@@ -214,7 +216,8 @@ fun DrawDonut(
 							size = arcSize,
 							style = Stroke(
 								width = strokePx,
-								cap = StrokeCap.Butt),
+								cap = StrokeCap.Butt
+							)
 						)
 					}
 				}
@@ -245,7 +248,6 @@ fun DrawDonut(
 			)
 		}
 	}
-
 }
 
 @Composable
@@ -292,25 +294,6 @@ fun calcPercentage(
 			units = num,
 			color = colors[index % colors.size],
 			percent = num.toFloat() / total,
-		)
-	}
-	return donutItems
-}
-
-fun calcMockPercentage(
-	itemsList: List<ClosetItemData>,
-	categoryList: List<CategoryItem> = clothesCategories
-): List<DonutChartData> {
-	val numbers = listOf<Int>(10, 5, 7, 2, 3, 15)
-	val total = numbers.sum().coerceAtLeast(1)
-
-	val donutItems = categoryList.mapIndexed { index, category ->
-		val num = numbers.getOrElse(index) { 0 }
-		DonutChartData(
-			category = category,
-			units = num,
-			color = colors[index % colors.size],
-			percent = if (total > 0) num.toFloat() / total else 0f
 		)
 	}
 	return donutItems

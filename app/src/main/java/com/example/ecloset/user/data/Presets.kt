@@ -9,8 +9,6 @@ object Presets {
 	// localize later (prob will be list<int>)
 	val selectOptions = listOf("Static", "Dynamic")
 	val luminenceOptions = listOf("Light", "Dark", "System")
-	val locations = emptyList<LocationInfo>()
-	val themePresets = listOf("None", "Violet", "Sage", "Amber", "Indigo", "Rose")
 
 	enum class selectOptionsEnum {
 		STATIC,
@@ -23,6 +21,8 @@ object Presets {
 		SYSTEM
 	}
 
+	val themePresets = listOf("None", "Violet", "Sage", "Amber", "Indigo", "Rose")
+
 	enum class themePresetsEnum {
 		NONE,
 		VIOLET,
@@ -31,6 +31,8 @@ object Presets {
 		INDIGO,
 		ROSE
 	}
+
+	val locations = emptyList<LocationInfo>()
 
 	enum class categoriesEnum {
 		NONE,
