@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.ecloset.R
 import com.example.ecloset.user.data.DevLoginOverride
 import com.example.ecloset.user.data.MockData.testUser
+import com.example.ecloset.user.data.Presets
 import com.example.ecloset.user.data.SessionManager
 import com.example.ecloset.user.data.repo.UserRepository
 import com.example.ecloset.user.local.LocationInfo
@@ -137,6 +138,12 @@ class UserViewModel @Inject constructor(
 	fun updateThemePreset(preset: String) {
 		updateUser {
 			it.copy(themePreset = preset)
+		}
+	}
+
+	fun updateThemeMode(mode: Presets.luminanceOptionsEnum) {
+		updateUser {
+			it.copy(themeMode = mode)
 		}
 	}
 

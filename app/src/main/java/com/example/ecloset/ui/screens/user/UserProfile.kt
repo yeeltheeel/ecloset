@@ -44,7 +44,12 @@ import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.RadioGroupWithDropdown
 import com.example.ecloset.ui.components.GroupTitle
 import com.example.ecloset.ui.components.EditableLabel
+import com.example.ecloset.ui.components.GroupSubTitle
+import com.example.ecloset.ui.components.RadioGroupBlock
+import com.example.ecloset.user.data.Presets
 import com.example.ecloset.user.data.Presets.locations
+import com.example.ecloset.user.data.Presets.luminanceOptions
+import com.example.ecloset.user.data.Presets.luminanceOptionsEnum as Luminance
 import com.example.ecloset.user.data.Presets.themePresets
 import com.example.ecloset.user.data.Presets.selectOptions
 
@@ -201,6 +206,10 @@ fun UserProfile(
 					title = stringResource(R.string.theme_title)
 				)
 
+				GroupSubTitle(
+					title = stringResource(R.string.theme_color_title)
+				)
+
 				RadioGroupWithDropdown(
 					options = selectOptions,
 					items = themePresets,
@@ -213,6 +222,19 @@ fun UserProfile(
 						userViewModel.updateThemePreset(themePresets[index])
 					},
 					dropIndex = 0
+				)
+
+				GroupSubTitle(
+					title = stringResource(R.string.theme_lumi_title)
+				)
+
+				RadioGroupBlock(
+					options = luminanceOptions,
+					selectedIndex = 2,
+					onOptionSelected = { index ->
+						val newMode = Luminance.entries[index]
+						userViewModel.updateThemeMode(newMode)
+					}
 				)
 			}
 			item {

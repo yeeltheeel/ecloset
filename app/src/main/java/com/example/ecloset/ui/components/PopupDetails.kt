@@ -1,5 +1,6 @@
 package com.example.ecloset.ui.components
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
@@ -21,6 +22,7 @@ fun DetailsPopup(
 ){
 	ModalBottomSheet(
 		modifier = Modifier
+			.fillMaxHeight()
 			.fillMaxWidth(),
 		onDismissRequest = onDismiss,
 		dragHandle = {

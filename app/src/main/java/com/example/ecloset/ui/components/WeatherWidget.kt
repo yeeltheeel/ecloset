@@ -110,7 +110,7 @@ private fun SuccessContent(
 			.fillMaxHeight()
 			.padding(
 				vertical = 16.dp,
-				horizontal = 8.dp
+				horizontal = 16.dp
 			),
 		verticalAlignment = Alignment.CenterVertically,
 		horizontalArrangement = Arrangement.Center
@@ -129,7 +129,7 @@ private fun SuccessContent(
 		item {
 			Column(
 				modifier = Modifier
-					.padding(end = 16.dp)
+					.padding(horizontal = 16.dp)
 					.fillMaxHeight(),
 				verticalArrangement = Arrangement.Center
 			) {
@@ -157,6 +157,9 @@ private fun SuccessContent(
 					.fillMaxHeight(),
 				verticalArrangement = Arrangement.Center
 			) {
+				Spacer(
+					modifier = Modifier.height(28.dp)
+				)
 				LabelText(
 					text = "${weather.humidity}%",
 					icon = Icons.Default.WaterDrop,

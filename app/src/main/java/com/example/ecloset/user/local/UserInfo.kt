@@ -2,6 +2,7 @@ package com.example.ecloset.user.local
 
 import androidx.annotation.StringRes
 import java.time.LocalDate
+import com.example.ecloset.user.data.Presets.luminanceOptionsEnum as Luminance
 
 data class UserInfo(
 	val id: Int,
@@ -16,7 +17,8 @@ data class UserInfo(
 		longitude = 37.6173
 	),
 	val themeDynamic: Boolean = false,
-	val themePreset: String = "Violet"
+	val themePreset: String = "Violet",
+	val themeMode: Luminance = Luminance.SYSTEM
 )
 
 data class LocationInfo(

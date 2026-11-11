@@ -1,5 +1,6 @@
 package com.example.ecloset.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -181,7 +182,7 @@ fun DropdownList(
 			modifier = Modifier
 				.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
 				.fillMaxWidth(),
-			value = selectedItem?.let { items.getOrNull(it) } ?: "Select…",
+			value = selectedItem?.let { items.getOrNull(it) } ?: "Select...",
 			onValueChange = {},
 			readOnly = true,
 			trailingIcon = {
@@ -222,7 +223,7 @@ fun DropdownList(
 						onClick = {
 							onItemSelected(sourceIndex)
 							expanded = false
-							searchQuery = ""   // reset for next open
+							searchQuery = "" // reset for next open
 						}
 					)
 				}

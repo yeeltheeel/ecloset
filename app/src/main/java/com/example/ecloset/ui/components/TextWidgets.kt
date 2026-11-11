@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.ecloset.R
@@ -71,7 +75,15 @@ fun GroupTitle(
 				horizontal = 16.dp,
 				vertical = 8.dp
 			),
-		style = MaterialTheme.typography.titleMedium
+		style = MaterialTheme.typography.titleLarge
+	)
+	HorizontalDivider(
+		modifier = Modifier
+			.padding(horizontal = 16.dp)
+			.padding(bottom = 8.dp)
+			.fillMaxWidth(),
+		thickness = 1.dp,
+		color = MaterialTheme.colorScheme.secondary
 	)
 	if (showCaption){
 		Text(
@@ -85,7 +97,38 @@ fun GroupTitle(
 			style = MaterialTheme.typography.bodyMedium,
 			color = MaterialTheme.colorScheme.tertiary
 		)
-		Spacer(modifier = Modifier.padding(vertical = 8.dp))
+	}
+}
+
+@Composable
+fun GroupSubTitle(
+	title: String,
+	caption: String = "",
+	showCaption: Boolean = false
+){
+	Text(
+		text = title,
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(
+				horizontal = 16.dp,
+				vertical = 8.dp
+			),
+		style = MaterialTheme.typography.titleMedium,
+		color = MaterialTheme.colorScheme.secondary
+	)
+	if (showCaption){
+		Text(
+			text = caption,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(
+					horizontal = 16.dp,
+					vertical = 0.dp
+				),
+			style = MaterialTheme.typography.bodyMedium,
+			color = MaterialTheme.colorScheme.tertiary
+		)
 	}
 }
 
@@ -93,6 +136,7 @@ fun GroupTitle(
 fun EditableLabel(
 	title: String,
 	value: String,
+	style: TextStyle = MaterialTheme.typography.titleLarge,
 	onClick: (String) -> Unit
 ){
 	var newValue = value
@@ -109,8 +153,17 @@ fun EditableLabel(
 			.clickable{
 				expanded = !expanded
 			},
-		style = MaterialTheme.typography.bodyLarge
+		style = style
 	)
+	HorizontalDivider(
+		modifier = Modifier
+			.padding(horizontal = 16.dp)
+			.padding(bottom = 8.dp)
+			.fillMaxWidth(),
+		thickness = 1.dp,
+		color = MaterialTheme.colorScheme.secondary
+	)
+
 	if (!expanded) {
 		Text(
 			text = value,

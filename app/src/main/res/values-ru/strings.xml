@@ -70,4 +70,7 @@
     <string name="new_value_prompt">Введите новое значение</string>
     <string name="get_code_prompt">Получить код</string>
     <string name="resend_code_prompt">Отправить код еще раз</string>
+    <string name="theme_color_title">Цвет</string>
+    <string name="theme_lumi_title">Режим</string>
+    <string name="get_suggestions_prompt">Получить рекомендации</string>
 </resources>

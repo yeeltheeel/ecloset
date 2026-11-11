@@ -41,7 +41,7 @@ fun buildColorScheme(tint: Tint, isDark: Boolean) = with(GrayRamp) {
 			error               = ErrorDark,
 			onError             = OnErrorDark,
 			errorContainer      = ErrorContainerDark,
-			onErrorContainer    = OnErrorContainerDark,
+			onErrorContainer    = OnErrorContainerDark
 		)
 	} else {
 		lightColorScheme(
@@ -77,7 +77,7 @@ fun buildColorScheme(tint: Tint, isDark: Boolean) = with(GrayRamp) {
 			error               = ErrorLight,
 			onError             = OnErrorLight,
 			errorContainer      = ErrorContainerLight,
-			onErrorContainer    = OnErrorContainerLight,
+			onErrorContainer    = OnErrorContainerLight
 		)
 	}
 }

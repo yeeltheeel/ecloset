@@ -8,20 +8,21 @@ import com.example.ecloset.user.local.LocationInfo
 object Presets {
 	// localize later (prob will be list<int>)
 	val selectOptions = listOf("Static", "Dynamic")
-	val luminenceOptions = listOf("Light", "Dark", "System")
+	val luminanceOptions = listOf("Light", "Dark", "System")
 
 	enum class selectOptionsEnum {
 		STATIC,
 		DYNAMIC
 	}
 
-	enum class luminenceOptionsEnum {
+	enum class luminanceOptionsEnum {
 		LIGHT,
 		DARK,
 		SYSTEM
 	}
 
 	val themePresets = listOf("None", "Violet", "Sage", "Amber", "Indigo", "Rose")
+	//  Нет, Сиреневый, Зеленый, Оранжевый, Синий, Розовый (надо аналогично красиво)
 
 	enum class themePresetsEnum {
 		NONE,
@@ -32,7 +33,7 @@ object Presets {
 		ROSE
 	}
 
-	val locations = emptyList<LocationInfo>()
+	val locations = emptyList<LocationInfo>() // fetch remote, for weather
 
 	enum class categoriesEnum {
 		NONE,
@@ -59,7 +60,7 @@ object Presets {
 
 	data class ColorSelect(
 		val id: Int,
-		val name: String, // will become int when localized
+		val name: String, // will become int when localized (r string)
 		val value: Color
 	)
 

@@ -1,6 +1,7 @@
 package com.example.ecloset.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,16 +11,20 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -43,9 +48,18 @@ fun OutfitCollageCanvas(
 				maxWidth = maxSize,
 				maxHeight = maxSize
 			)
-			.aspectRatio(1f)
-	){}
+			.background(
+				color = MaterialTheme.colorScheme.surfaceVariant
+			)
+			.clip(
+				shape = RoundedCornerShape(16.dp)
+			)
+			.aspectRatio(1f),
+	){
+		// selected images are piled in the middle, draggable (generic collage behavior)
+	}
 
+	// weird delay, so need loaded status
 	Box(
 		modifier = Modifier
 			.fillMaxWidth()

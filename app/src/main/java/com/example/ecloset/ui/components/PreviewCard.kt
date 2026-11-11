@@ -2,6 +2,7 @@ package com.example.ecloset.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,7 +49,7 @@ fun PreviewGridCard(
 		},
 		modifier = Modifier
 			.width(150.dp)
-			.height(200.dp),
+			.height(170.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = MaterialTheme.colorScheme.surfaceVariant,
 			contentColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -66,7 +67,7 @@ fun PreviewGridCard(
 		) {
 			val previewModel: Any? = when (data) {
 				is OutfitItemData -> {
-					data.imageUrl ?: R.drawable.thimking
+					data.imageUrl ?: R.drawable.fashion_design
 				}
 				is ClosetItemData -> {
 					data.imageUrl ?: R.drawable.hanger
@@ -76,7 +77,7 @@ fun PreviewGridCard(
 
 			val tintVar: Boolean = when (data) {
 				is OutfitItemData -> {
-					false
+					data.imageUrl == null
 				}
 				is ClosetItemData -> {
 					data.imageUrl == null

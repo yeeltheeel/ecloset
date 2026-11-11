@@ -9,23 +9,21 @@
 				tokens
 				enums
 				api
-			call weather from backend
-			implement user theme preference (light/dark/system, static/dynamic)
+				call weather from backend
+			fix user selection on radio block (ignores click)
+			theme viewmodel
 			weather viewmodel
 		widgets:
-			after item image loaded show data and add button
 			outfit collage
-			new outfit quiz is a popup
 			location select
-			filters block and page
+			filters block and popup
 			item/oufit details clean up and add actions
-			add user tint selecting block to user settings
 			outfit preview card grays out if item not available
 		general:
 			image cache for outfit/item preview
 			last added items, relevant outfits
 			add load more button to grid
-			login if email then otp input else email first
+			login - if email then otp input else email first
 			resend code button with timer to otp page
 			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
 	medium:
@@ -39,7 +37,6 @@ package com.example.ecloset
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -71,7 +68,7 @@ import com.example.ecloset.user.local.ConnectionState
 import com.example.ecloset.user.local.viewmodels.ConnectionViewModel
 import com.example.ecloset.user.local.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 
 @AndroidEntryPoint
@@ -90,9 +87,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EclosetApp() {
-	val connectionViewModel: ConnectionViewModel = hiltViewModel()
+	val connectionViewModel: ConnectionViewModel = androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel(
+		checkNotNull<ViewModelStoreOwner>(LocalViewModelStoreOwner.current) {
+	            "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+	        },
+		null
+	)
 	val connectionState by connectionViewModel.state.collectAsState()
-	//Log.d("AppDebug", "connectionState = $connectionState")
 
 	when (val state = connectionState) {
 		ConnectionState.Loading -> EclosetScreen(
@@ -116,9 +117,8 @@ fun EclosetApp() {
 fun EclosetScreen(
 	connectionViewModel: ConnectionViewModel
 ){
-	//val userViewModel: UserViewModel = hiltViewModel()
 	val userViewModel: UserViewModel = androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel(
-		checkNotNull<androidx.lifecycle.ViewModelStoreOwner>(LocalViewModelStoreOwner.current) {
+		checkNotNull(LocalViewModelStoreOwner.current) {
 			"No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
 		},
 		null
@@ -133,10 +133,12 @@ fun EclosetScreen(
 
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
-		topBar = { Header(
-			navController = navController,
-			userViewModel = userViewModel
-		) },
+		topBar = {
+			Header(
+				navController = navController,
+				userViewModel = userViewModel
+			)
+		},
 		snackbarHost = {
 			SnackbarHost(snackbarHostState)
 		},
@@ -146,7 +148,8 @@ fun EclosetScreen(
 					navController = navController,
 					currentRoute = currentRoute
 				)
-			}},
+			}
+		},
 		floatingActionButtonPosition = FabPosition.Center
 	) {
 		innerPadding ->

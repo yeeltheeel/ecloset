@@ -71,4 +71,11 @@
 	<string name="new_value_prompt">Enter new value</string>
 	<string name="get_code_prompt">Get code</string>
 	<string name="resend_code_prompt">Resend code</string>
+    <string name="theme_color_title">Color</string>
+	<string name="theme_lumi_title">Mode</string>
+    <string name="get_suggestions_prompt">Get suggestions</string>
+    <string name="item_title_text">Title</string>
+	<string name="item_color_text">Color</string>
+	<string name="item_season_text">Season</string>
+	<string name="item_material_text">Material</string>
 </resources>
