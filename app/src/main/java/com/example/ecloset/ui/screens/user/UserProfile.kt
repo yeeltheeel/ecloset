@@ -201,6 +201,7 @@ fun UserProfile(
 			item {
 				val themeDynamic = user?.themeDynamic ?: false
 				val themePreset = user?.themePreset ?: themePresets.first()
+				val themeLuminance = user?.themeMode ?: Luminance.SYSTEM
 
 				GroupTitle(
 					title = stringResource(R.string.theme_title)
@@ -230,7 +231,7 @@ fun UserProfile(
 
 				RadioGroupBlock(
 					options = luminanceOptions,
-					selectedIndex = 2,
+					selectedIndex = Luminance.entries.indexOf(themeLuminance),
 					onOptionSelected = { index ->
 						val newMode = Luminance.entries[index]
 						userViewModel.updateThemeMode(newMode)

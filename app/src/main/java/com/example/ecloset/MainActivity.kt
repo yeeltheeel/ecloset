@@ -10,11 +10,11 @@
 				enums
 				api
 				call weather from backend
-			fix user selection on radio block (ignores click)
 			theme viewmodel
 			weather viewmodel
 		widgets:
 			outfit collage
+			add wait for items to load on collage
 			location select
 			filters block and popup
 			item/oufit details clean up and add actions
