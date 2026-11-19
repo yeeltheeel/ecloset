@@ -1,8 +1,11 @@
 package org.example.ecloset.service;
 
 import lombok.RequiredArgsConstructor;
+
+import org.example.ecloset.dto.ai.AiAnalysisResult;
 import org.example.ecloset.dto.request.ItemCreateRequest;
 import org.example.ecloset.dto.request.ItemUpdateRequest;
+import org.example.ecloset.dto.response.ItemAnalysisResponse;
 import org.example.ecloset.dto.response.ItemResponseDto;
 import org.example.ecloset.entity.Item;
 import org.example.ecloset.entity.Outfit;
@@ -15,6 +18,7 @@ import org.example.ecloset.enums.Occasion;
 import org.example.ecloset.exception.ItemNotFoundException;
 import org.example.ecloset.exception.SeasonNotFoundException;
 import org.example.ecloset.exception.UserNotFoundException;
+import org.example.ecloset.mapper.ColorMapper;
 import org.example.ecloset.mapper.ItemMapper;
 import org.example.ecloset.repository.ItemRepository;
 import org.example.ecloset.repository.OutfitRepository;
@@ -212,6 +216,68 @@ public class ItemService {
     private void checkOwnership(Item item, Integer userId) {
         if (!item.getUser().getUserId().equals(userId)) {
             throw new ItemNotFoundException("Вещь не найдена или не принадлежит вам");
+        }
+    }
+
+    private final AiService aiService;
+    private final ColorMapper colorMapper;
+
+    @Transactional(readOnly = true)
+    public ItemAnalysisResponse analyzeImage(MultipartFile image) {
+        // 1. Сохраняем оригинал
+        String originalUrl = fileStorageService.store(image);
+
+        String processedUrl = null;
+        try {
+            // 2. Дёргаем Python
+            AiAnalysisResult aiResult = aiService.analyze(image);
+
+            // 3. Сохраняем обработанный PNG (если пришёл)
+            if (aiResult.getProcessedImageBase64() != null
+                    && !aiResult.getProcessedImageBase64().isBlank()) {
+                byte[] processedBytes = java.util.Base64.getDecoder()
+                        .decode(aiResult.getProcessedImageBase64());
+                processedUrl = fileStorageService.storeBytes(processedBytes, ".png");
+            }
+
+            // 4. Категория: "t-shirt" → T_SHIRT
+            Category predictedCategory = null;
+            if (aiResult.getCategory() != null) {
+                try {
+                    predictedCategory = Category.valueOf(
+                            aiResult.getCategory()
+                                    .toUpperCase()
+                                    .replace('-', '_')
+                                    .replace(' ', '_')
+                    );
+                } catch (IllegalArgumentException ignored) {
+                    // не маппится — оставляем null
+                }
+            }
+
+            // 5. Цвета
+            List<Color> colors = aiResult.getColorsHex() == null
+                    ? List.of()
+                    : aiResult.getColorsHex().stream()
+                    .map(colorMapper::fromHex)
+                    .filter(java.util.Objects::nonNull)
+                    .distinct()
+                    .limit(3)
+                    .toList();
+
+            return ItemAnalysisResponse.builder()
+                    .imageUrl(processedUrl != null ? processedUrl : originalUrl)
+                    .originalImageUrl(originalUrl)
+                    .predictedCategory(predictedCategory)
+                    .categoryConfidence(aiResult.getCategoryConfidence())
+                    .predictedColors(colors)
+                    .rawColors(aiResult.getColorsHex())
+                    .build();
+        } catch (RuntimeException e) {
+            // Откатываем сохранённые файлы, чтобы не мусорить
+            fileStorageService.delete(originalUrl);
+            if (processedUrl != null) fileStorageService.delete(processedUrl);
+            throw e;
         }
     }
 }

@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -41,6 +41,10 @@ app:
     connect-timeout-sec: 15
     read-timeout-sec: 30
     default-format: j2
+
+  ai:
+    base-url: ${AI_BASE_URL:http://localhost:8000}
+    timeout-sec: 120
 
 logging:
   level:

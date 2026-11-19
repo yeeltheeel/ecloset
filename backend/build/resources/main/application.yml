@@ -42,6 +42,10 @@ app:
     read-timeout-sec: 30
     default-format: j2
 
+  ai:
+    base-url: ${AI_BASE_URL:http://localhost:8000}
+    timeout-sec: 120
+
 logging:
   level:
     org.hibernate.SQL: DEBUG

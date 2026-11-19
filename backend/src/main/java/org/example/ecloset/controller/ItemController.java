@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ecloset.dto.request.ItemCreateRequest;
 import org.example.ecloset.dto.request.ItemUpdateRequest;
 import org.example.ecloset.dto.response.ErrorResponse;
+import org.example.ecloset.dto.response.ItemAnalysisResponse;
 import org.example.ecloset.dto.response.ItemResponseDto;
 import org.example.ecloset.dto.response.ValidationErrorResponse;
 import org.example.ecloset.entity.User;
@@ -261,5 +262,27 @@ public class ItemController {
     @GetMapping("/occasion")
     public ResponseEntity<List<ItemResponseDto>> getItemsByOccasion(@RequestParam Occasion occasion) {
         return ResponseEntity.ok(itemService.getItemsByOccasion(getCurrentUserId(), occasion));
+    }
+
+    @Operation(summary = "Проанализировать фото вещи",
+            description = "Загружает фото, сегментирует объект (SAM 2), определяет категорию (Fashion-CLIP) "
+                    + "и основные цвета (K-Means). Возвращает URL обработанного изображения и подсказки. "
+                    + "Используется на первом этапе создания вещи.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Анализ выполнен",
+                    content = @Content(schema = @Schema(implementation = ItemAnalysisResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Ошибка валидации файла",
+                    content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"Не авторизован\"}"))),
+            @ApiResponse(responseCode = "503", description = "AI-сервис недоступен",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"AI-сервис недоступен\"}")))
+    })
+    @PostMapping(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ItemAnalysisResponse> analyzeItem(
+            @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.ok(itemService.analyzeImage(image));
     }
 }

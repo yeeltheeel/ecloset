@@ -23,5 +23,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ecloset"
-include(":app")
 include(":backend")
+
+// Android-модуль подключаем только если не собираем backend в Docker.
+if (System.getenv("SKIP_APP") != "true") {
+    include(":app")
+}

@@ -1,0 +1,13 @@
+# .dockerignore
+app/
+.gradle/
+**/build/
+uploads/
+.env
+.git/
+ai-service/.cache/
+ai-service/__pycache__/
+ai-service/*.pyc
+*.iml
+.idea/
+local.properties

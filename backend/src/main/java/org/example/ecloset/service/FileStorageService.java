@@ -68,4 +68,17 @@ public class FileStorageService {
         String ext = originalName.substring(dot).toLowerCase();
         return ext.length() <= 10 ? ext : "";
     }
+
+    public String storeBytes(byte[] bytes, String extension) {
+        String filename = UUID.randomUUID() + extension;
+        try {
+            Path dir = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Files.createDirectories(dir);
+            Path target = dir.resolve(filename);
+            Files.write(target, bytes);
+        } catch (IOException e) {
+            throw new FileStorageException("Не удалось сохранить файл", e);
+        }
+        return urlPrefix + "/" + filename;
+    }
 }
