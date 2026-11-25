@@ -30,14 +30,18 @@ services:
       - "${AI_PORT:-8000}:8000"
     environment:
       HF_HOME: /app/.cache/huggingface
+      YOLO_CONFIG_DIR: /app/.cache/Ultralytics
+      YOLO_MODEL: yoloe-26n-seg.pt
+      YOLO_CONFIDENCE: 0.15
+      YOLO_IMAGE_SIZE: 640
     volumes:
-      - ai-cache:/app/.cache/huggingface
+      - ai-cache:/app/.cache
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 15s
       timeout: 5s
       retries: 20
-      start_period: 180s   # SAM 2 + Fashion-CLIP грузятся долго на CPU
+      start_period: 300s
     networks:
       - ecloset-net
 

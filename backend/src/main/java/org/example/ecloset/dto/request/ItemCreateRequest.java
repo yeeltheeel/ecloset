@@ -42,4 +42,7 @@ public class ItemCreateRequest {
     @Min(value = 0, message = "Количество надеваний не может быть отрицательным")
     @Builder.Default
     private Integer initialTimesWorn = 0;
+
+    @NotBlank(message = "imageUrl обязателен: сначала загрузите фото через /api/items/analyze")
+    private String imageUrl;
 }

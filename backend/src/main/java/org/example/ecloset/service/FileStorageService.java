@@ -1,6 +1,7 @@
 package org.example.ecloset.service;
 
 import org.example.ecloset.exception.FileStorageException;
+import org.example.ecloset.exception.InvalidImageUrlException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,9 @@ public class FileStorageService {
     private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of(
             "image/jpeg", "image/png", "image/webp"
     );
+
+    /** Имя файла в хранилище: UUID + расширение. Заодно режет ../ и вложенные пути. */
+    private static final String FILENAME_PATTERN = "[A-Za-z0-9._-]+";
 
     @Value("${app.upload.dir}")
     private String uploadDir;
@@ -53,6 +57,9 @@ public class FileStorageService {
             return;
         }
         String filename = imageUrl.substring((urlPrefix + "/").length());
+        if (!filename.matches(FILENAME_PATTERN)) {
+            return;
+        }
         Path path = Paths.get(uploadDir).toAbsolutePath().normalize().resolve(filename);
         try {
             Files.deleteIfExists(path);
@@ -80,5 +87,22 @@ public class FileStorageService {
             throw new FileStorageException("Не удалось сохранить файл", e);
         }
         return urlPrefix + "/" + filename;
+    }
+
+    public String requireStoredFile(String imageUrl) {
+        String prefix = urlPrefix + "/";
+        if (imageUrl == null || !imageUrl.startsWith(prefix)) {
+            throw new InvalidImageUrlException("imageUrl должен быть ссылкой, полученной из /api/items/analyze");
+        }
+        String filename = imageUrl.substring(prefix.length());
+        if (!filename.matches(FILENAME_PATTERN)) {
+            throw new InvalidImageUrlException("Некорректный imageUrl");
+        }
+        Path dir = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path file = dir.resolve(filename).normalize();
+        if (!file.startsWith(dir) || !Files.isRegularFile(file)) {
+            throw new InvalidImageUrlException("Файл не найден: сначала загрузите фото через /api/items/analyze");
+        }
+        return prefix + filename;
     }
 }

@@ -1,7 +1,6 @@
 package org.example.ecloset.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.example.ecloset.dto.ai.AiAnalysisResult;
 import org.example.ecloset.dto.request.ItemCreateRequest;
 import org.example.ecloset.dto.request.ItemUpdateRequest;
@@ -15,6 +14,7 @@ import org.example.ecloset.enums.Category;
 import org.example.ecloset.enums.Color;
 import org.example.ecloset.enums.Material;
 import org.example.ecloset.enums.Occasion;
+import org.example.ecloset.exception.AiProcessingException;
 import org.example.ecloset.exception.ItemNotFoundException;
 import org.example.ecloset.exception.SeasonNotFoundException;
 import org.example.ecloset.exception.UserNotFoundException;
@@ -28,7 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,10 +40,11 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final SeasonRepository seasonRepository;
+    private final OutfitRepository outfitRepository;
     private final ItemMapper itemMapper;
     private final FileStorageService fileStorageService;
-
-    private final OutfitRepository outfitRepository;
+    private final AiService aiService;
+    private final ColorMapper colorMapper;
 
     @Transactional(readOnly = true)
     public List<ItemResponseDto> getAllItemsByUser(Integer userId) {
@@ -51,7 +54,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemResponseDto createItem(Integer userId, ItemCreateRequest request, MultipartFile image) {
+    public ItemResponseDto createItem(Integer userId, ItemCreateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
@@ -61,24 +64,18 @@ public class ItemService {
                     .orElseThrow(() -> new SeasonNotFoundException("Сезон с ID " + request.getSeasonId() + " не найден"));
         }
 
-        String imageUrl = fileStorageService.store(image);
+        // Файл уже сохранён на этапе /analyze — только валидируем ссылку.
+        String imageUrl = fileStorageService.requireStoredFile(request.getImageUrl());
 
-        try {
-            Item item = itemMapper.toEntity(request, user, season);
-            item.setImageUrl(imageUrl);
-            Item savedItem = itemRepository.save(item);
-            return itemMapper.toResponseDto(savedItem);
-        } catch (RuntimeException e) {
-            fileStorageService.delete(imageUrl);
-            throw e;
-        }
+        Item item = itemMapper.toEntity(request, user, season);
+        item.setImageUrl(imageUrl);
+        return itemMapper.toResponseDto(itemRepository.save(item));
     }
 
     @Transactional
-    public ItemResponseDto updateItem(Integer userId, Integer itemId, ItemUpdateRequest request, MultipartFile image) {
+    public ItemResponseDto updateItem(Integer userId, Integer itemId, ItemUpdateRequest request) {
         Item existingItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена"));
-
         checkOwnership(existingItem, userId);
 
         Season season = null;
@@ -90,28 +87,27 @@ public class ItemService {
         String oldImageUrl = existingItem.getImageUrl();
         String newImageUrl = null;
 
-        if (image != null && !image.isEmpty()) {
-            newImageUrl = fileStorageService.store(image);
+        if (request.getImageUrl() != null && !request.getImageUrl().isBlank()) {
+            String candidate = fileStorageService.requireStoredFile(request.getImageUrl());
+            if (!candidate.equals(oldImageUrl)) {
+                newImageUrl = candidate;
+            }
         }
 
-        try {
-            Item updatedItem = itemMapper.updateEntity(request, existingItem, season);
-            if (newImageUrl != null) {
-                updatedItem.setImageUrl(newImageUrl);
-            }
-            Item savedItem = itemRepository.save(updatedItem);
-
-            if (newImageUrl != null) {
-                fileStorageService.delete(oldImageUrl);
-            }
-
-            return itemMapper.toResponseDto(savedItem);
-        } catch (RuntimeException e) {
-            if (newImageUrl != null) {
-                fileStorageService.delete(newImageUrl);
-            }
-            throw e;
+        // Маппер не трогает imageUrl — меняем фото только если пришёл новый URL.
+        itemMapper.updateEntity(request, existingItem, season);
+        if (newImageUrl != null) {
+            existingItem.setImageUrl(newImageUrl);
         }
+
+        Item savedItem = itemRepository.save(existingItem);
+
+        // Старый файл удаляем только после успешного сохранения.
+        if (newImageUrl != null) {
+            fileStorageService.delete(oldImageUrl);
+        }
+
+        return itemMapper.toResponseDto(savedItem);
     }
 
     @Transactional
@@ -128,7 +124,6 @@ public class ItemService {
         for (Outfit outfit : affectedOutfits) {
             outfit.setUnavailable(true);
         }
-
         if (!affectedOutfits.isEmpty()) {
             outfitRepository.saveAll(affectedOutfits);
         }
@@ -170,9 +165,7 @@ public class ItemService {
     public ItemResponseDto getItemById(Integer userId, Integer itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена"));
-
         checkOwnership(item, userId);
-
         return itemMapper.toResponseDto(item);
     }
 
@@ -219,65 +212,61 @@ public class ItemService {
         }
     }
 
-    private final AiService aiService;
-    private final ColorMapper colorMapper;
-
-    @Transactional(readOnly = true)
+    /**
+     * Первый этап создания вещи: анализ фото.
+     * Сохраняется ТОЛЬКО обработанное изображение (PNG без фона), оригинал не хранится.
+     * В БД ничего не пишется, поэтому @Transactional не нужен.
+     */
     public ItemAnalysisResponse analyzeImage(MultipartFile image) {
-        // 1. Сохраняем оригинал
-        String originalUrl = fileStorageService.store(image);
+        // 1. Дёргаем Python (ошибки 422/503 маппятся в AiService).
+        AiAnalysisResult aiResult = aiService.analyze(image);
 
-        String processedUrl = null;
-        try {
-            // 2. Дёргаем Python
-            AiAnalysisResult aiResult = aiService.analyze(image);
-
-            // 3. Сохраняем обработанный PNG (если пришёл)
-            if (aiResult.getProcessedImageBase64() != null
-                    && !aiResult.getProcessedImageBase64().isBlank()) {
-                byte[] processedBytes = java.util.Base64.getDecoder()
-                        .decode(aiResult.getProcessedImageBase64());
-                processedUrl = fileStorageService.storeBytes(processedBytes, ".png");
-            }
-
-            // 4. Категория: "t-shirt" → T_SHIRT
-            Category predictedCategory = null;
-            if (aiResult.getCategory() != null) {
-                try {
-                    predictedCategory = Category.valueOf(
-                            aiResult.getCategory()
-                                    .toUpperCase()
-                                    .replace('-', '_')
-                                    .replace(' ', '_')
-                    );
-                } catch (IllegalArgumentException ignored) {
-                    // не маппится — оставляем null
-                }
-            }
-
-            // 5. Цвета
-            List<Color> colors = aiResult.getColorsHex() == null
-                    ? List.of()
-                    : aiResult.getColorsHex().stream()
-                    .map(colorMapper::fromHex)
-                    .filter(java.util.Objects::nonNull)
-                    .distinct()
-                    .limit(3)
-                    .toList();
-
-            return ItemAnalysisResponse.builder()
-                    .imageUrl(processedUrl != null ? processedUrl : originalUrl)
-                    .originalImageUrl(originalUrl)
-                    .predictedCategory(predictedCategory)
-                    .categoryConfidence(aiResult.getCategoryConfidence())
-                    .predictedColors(colors)
-                    .rawColors(aiResult.getColorsHex())
-                    .build();
-        } catch (RuntimeException e) {
-            // Откатываем сохранённые файлы, чтобы не мусорить
-            fileStorageService.delete(originalUrl);
-            if (processedUrl != null) fileStorageService.delete(processedUrl);
-            throw e;
+        if (aiResult.getProcessedImageBase64() == null || aiResult.getProcessedImageBase64().isBlank()) {
+            throw new AiProcessingException("AI-сервис не вернул обработанное изображение");
         }
+
+        // 2. Декодируем PNG.
+        byte[] processedBytes;
+        try {
+            processedBytes = Base64.getDecoder().decode(aiResult.getProcessedImageBase64());
+        } catch (IllegalArgumentException e) {
+            throw new AiProcessingException("AI-сервис вернул некорректное изображение");
+        }
+
+        // 3. Категория: "t-shirt" → T_SHIRT.
+        Category predictedCategory = null;
+        if (aiResult.getCategory() != null) {
+            try {
+                predictedCategory = Category.valueOf(
+                        aiResult.getCategory()
+                                .toUpperCase()
+                                .replace('-', '_')
+                                .replace(' ', '_')
+                );
+            } catch (IllegalArgumentException ignored) {
+                // не маппится — оставляем null
+            }
+        }
+
+        // 4. Цвета.
+        List<Color> colors = aiResult.getColorsHex() == null
+                ? List.of()
+                : aiResult.getColorsHex().stream()
+                .map(colorMapper::fromHex)
+                .filter(Objects::nonNull)
+                .distinct()
+                .limit(3)
+                .toList();
+
+        // 5. Сохраняем файл ПОСЛЕДНИМ: если что-то выше упало — на диске ничего не осталось.
+        String processedUrl = fileStorageService.storeBytes(processedBytes, ".png");
+
+        return ItemAnalysisResponse.builder()
+                .imageUrl(processedUrl)
+                .predictedCategory(predictedCategory)
+                .categoryConfidence(aiResult.getCategoryConfidence())
+                .predictedColors(colors)
+                .rawColors(aiResult.getColorsHex())
+                .build();
     }
 }

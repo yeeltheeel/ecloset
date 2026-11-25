@@ -14,10 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemAnalysisResponse {
-    private String imageUrl;              // URL обработанного изображения
-    private String originalImageUrl;      // URL исходного загруженного файла
+
+    // URL обработанного изображения (PNG с прозрачным фоном)
+    private String imageUrl;
+
     private Category predictedCategory;
+
     private Double categoryConfidence;
+
     private List<Color> predictedColors;
+
     private List<String> rawColors;
 }

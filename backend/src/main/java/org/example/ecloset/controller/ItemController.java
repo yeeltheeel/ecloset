@@ -83,12 +83,13 @@ public class ItemController {
     }
 
     @Operation(summary = "Создать новую вещь",
-            description = "Добавляет новую вещь в гардероб текущего пользователя. "
-                    + "Запрос multipart/form-data: часть `data` — JSON, часть `image` — файл изображения.")
+            description = "Добавляет новую вещь в гардероб текущего пользователя. Тело — application/json. "
+                    + "Фото заранее загружается через POST /api/items/analyze; "
+                    + "сюда передаётся imageUrl из ответа анализа.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Вещь успешно создана",
                     content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Ошибка валидации входных данных или файла",
+            @ApiResponse(responseCode = "400", description = "Ошибка валидации полей или imageUrl",
                     content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
@@ -97,21 +98,20 @@ public class ItemController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Сезон с ID 5 не найден\"}")))
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ItemResponseDto> createItem(
-            @Valid @RequestPart("data") ItemCreateRequest request,
-            @RequestPart("image") MultipartFile image) {
+    @PostMapping
+    public ResponseEntity<ItemResponseDto> createItem(@Valid @RequestBody ItemCreateRequest request) {
         return ResponseEntity.status(201)
-                .body(itemService.createItem(getCurrentUserId(), request, image));
+                .body(itemService.createItem(getCurrentUserId(), request));
     }
 
     @Operation(summary = "Обновить вещь",
-            description = "Полностью обновляет данные вещи по её ID (PUT-логика). "
-                    + "Запрос multipart/form-data: часть `data` — JSON, часть `image` — необязательный новый файл.")
+            description = "Полностью обновляет данные вещи по её ID (PUT-логика), тело — application/json. "
+                    + "Если передан новый imageUrl (из /api/items/analyze) — фото заменяется, старый файл удаляется; "
+                    + "если imageUrl не передан — остаётся текущее фото.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Вещь успешно обновлена",
                     content = @Content(schema = @Schema(implementation = ItemResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "Ошибка валидации или файла",
+            @ApiResponse(responseCode = "400", description = "Ошибка валидации полей или imageUrl",
                     content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
@@ -120,12 +120,11 @@ public class ItemController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Вещь не найдена или не принадлежит Вам.\"}")))
     })
-    @PutMapping(value = "/{itemId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping("/{itemId}")
     public ResponseEntity<ItemResponseDto> updateItem(
             @PathVariable Integer itemId,
-            @Valid @RequestPart("data") ItemUpdateRequest request,
-            @RequestPart(value = "image", required = false) MultipartFile image) {
-        return ResponseEntity.ok(itemService.updateItem(getCurrentUserId(), itemId, request, image));
+            @Valid @RequestBody ItemUpdateRequest request) {
+        return ResponseEntity.ok(itemService.updateItem(getCurrentUserId(), itemId, request));
     }
 
     @Operation(summary = "Удалить вещь",
@@ -265,9 +264,10 @@ public class ItemController {
     }
 
     @Operation(summary = "Проанализировать фото вещи",
-            description = "Загружает фото, сегментирует объект (SAM 2), определяет категорию (Fashion-CLIP) "
-                    + "и основные цвета (K-Means). Возвращает URL обработанного изображения и подсказки. "
-                    + "Используется на первом этапе создания вещи.")
+            description = "Загружает фото, сегментирует вещь (YOLOE-26), определяет категорию (Fashion-CLIP) "
+                    + "и основные цвета (K-Means). Сохраняет только обработанное изображение (PNG без фона) "
+                    + "и возвращает его URL и подсказки. Первый этап создания вещи: "
+                    + "полученный imageUrl затем передаётся в POST /api/items.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Анализ выполнен",
                     content = @Content(schema = @Schema(implementation = ItemAnalysisResponse.class))),
@@ -276,6 +276,9 @@ public class ItemController {
             @ApiResponse(responseCode = "401", description = "Не авторизован",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"Не авторизован\"}"))),
+            @ApiResponse(responseCode = "422", description = "На фото не найдена вещь",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
+                            example = "{\"error\": \"На фото не найдена вещь. Попробуйте другое фото.\"}"))),
             @ApiResponse(responseCode = "503", description = "AI-сервис недоступен",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class,
                             example = "{\"error\": \"AI-сервис недоступен\"}")))
