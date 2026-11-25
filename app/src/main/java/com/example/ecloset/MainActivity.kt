@@ -5,31 +5,33 @@
 	main:
 		functions:
 			connect backend in full:
-				dto
-				tokens
-				enums
-				api
+				dto, tokens, enums, api
 				call weather from backend
 			theme viewmodel
 			weather viewmodel
 		widgets:
-			outfit collage
-			add wait for items to load on collage
+			collage canvas:
+				outfit collage
+				add wait for items to load on collage
 			location select
 			filters block and popup
 			item/oufit details clean up and add actions
 			outfit preview card grays out if item not available
+				(check field from db)
 		general:
-			image cache for outfit/item preview
-			last added items, relevant outfits
-			add load more button to grid
-			login - if email then otp input else email first
-			resend code button with timer to otp page
-			filters for outfits/clothing (with some presets: category for items, year/occasion for outfits)
+			closet:
+				image cache for outfit/item preview
+				add load more button to grid
+				filters for outfits/clothing (with some presets:
+					category for items, year/occasion for outfits)
+			login & otp
+				if email then otp input else email first
+				resend code button with timer to otp page
 	medium:
 		add localizations for all hardcoded strings
 		prettify weather widget with lottie
 	misc:
+		last added items, relevant outfits
 		add admin/support functions
 */
 

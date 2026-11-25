@@ -35,6 +35,7 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.components.DetailsPopup
 import com.example.ecloset.ui.components.MultiSelectColorGrid
 import com.example.ecloset.ui.components.OutfitCollageCanvas
+import com.example.ecloset.ui.components.OutfitCollageCarousel
 import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.RadioGroupBlock
 import com.example.ecloset.user.local.ClosetItemData
@@ -69,7 +70,10 @@ fun NewOutfitPage(
 				)
 			}
 			item {
-				OutfitCollageCanvas(
+//				OutfitCollageCanvas(
+//					selectedItems = selectedItems
+//				)
+				OutfitCollageCarousel(
 					selectedItems = selectedItems
 				)
 			}

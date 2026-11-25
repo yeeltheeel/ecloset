@@ -1,9 +1,12 @@
 package com.example.ecloset.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -58,6 +61,14 @@ fun PreviewGridCard(
 			defaultElevation = 2.dp
 		)
 	) {
+		val contentType: String =  when (data) {
+			is OutfitItemData -> {
+				"outfit"
+			}
+			else -> {
+				"item"
+			}
+		}
 		Column(
 			modifier = Modifier
 				.fillMaxWidth()
@@ -65,6 +76,19 @@ fun PreviewGridCard(
 				.padding(8.dp),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
+			// use contentType in other places
+			if (contentType == "outfit") {
+				// mb a field
+				val allAvailable = true
+				if (!allAvailable) {
+					Box(
+						modifier = Modifier
+							.fillMaxSize()
+							.background(Color(0x802A2A2A))
+					){ }
+				}
+			}
+
 			val previewModel: Any? = when (data) {
 				is OutfitItemData -> {
 					data.imageUrl ?: R.drawable.fashion_design
@@ -133,27 +157,6 @@ fun CardDetails(
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		item{
-			Text(
-				text = data.title,
-				style = MaterialTheme.typography.titleLarge
-			)
-		}
-		item{
-			val type: String? = when (data) {
-				is OutfitItemData -> {
-					stringResource(R.string.outfit_text)
-				}
-				is ClosetItemData -> {
-					stringResource(R.string.item_text)
-				}
-				else -> { "" }
-			}
-			Text(
-				text = type + ", " + data.dateAdded.toString(),
-				style = MaterialTheme.typography.bodyMedium
-			)
-		}
-		item{
 			val previewModel: Any? = when (data) {
 				is OutfitItemData -> {
 					data.imageUrl ?: R.drawable.thimking
@@ -169,8 +172,35 @@ fun CardDetails(
 				contentDescription = "preview image",
 				contentScale = ContentScale.Fit,
 				modifier = Modifier
-					.height(130.dp)
+					.fillMaxWidth()
+					//.aspectRatio(1f)
+					//.height(130.dp)
 					.padding(16.dp)
+			)
+		}
+		item{
+			Text(
+				text = data.title,
+				style = MaterialTheme.typography.titleLarge
+			)
+		}
+		item {
+			val type: String? = when (data) {
+				is OutfitItemData -> {
+					stringResource(R.string.outfit_text)
+				}
+
+				is ClosetItemData -> {
+					stringResource(R.string.item_text)
+				}
+
+				else -> {
+					""
+				}
+			}
+			Text(
+				text = type + ", " + data.dateAdded.toString(),
+				style = MaterialTheme.typography.bodyMedium
 			)
 		}
 		item{

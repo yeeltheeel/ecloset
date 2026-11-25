@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -23,6 +25,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.luminance
@@ -129,3 +135,40 @@ fun OutfitCollageCanvas(
 		)
 	}
 }
+
+@Composable
+fun OutfitCollageCarousel(
+	categoryList: List<CategoryItem> = clothesCategories,
+	selectedItems: List<ClosetItemData>
+){
+	var currentOutfit by remember {
+		mutableStateOf<List<ClosetItemData>>(emptyList())
+	}
+
+	Box(
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(16.dp)
+	) {
+		categoryList.forEach { category ->
+			val selectedCategoryItems = selectedItems.filter { it.category == category.id }
+			if (selectedCategoryItems.isNotEmpty()){
+				LazyRow(
+					modifier = Modifier
+						.fillMaxWidth(),
+					horizontalArrangement = Arrangement.spacedBy(8.dp)
+				) {
+					items(
+						items = selectedCategoryItems,
+						key = { item -> item.id }
+					) { item ->
+						PreviewGridCard(
+							data = item
+						)
+					}
+				}
+			}
+		}
+	}
+}
+

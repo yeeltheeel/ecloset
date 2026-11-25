@@ -88,7 +88,8 @@ fun DrawDonut(
 
 	val strokeWidth = 50.dp
 	val maxSize = 250.dp
-	val trackColor = if (total == 0) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background
+	val trackColor = if (total == 0) MaterialTheme.colorScheme.surface
+		else MaterialTheme.colorScheme.background
 
 	Box(
 		modifier = Modifier
@@ -188,7 +189,9 @@ fun DrawDonut(
 					if (isSelected) {
 						val selStrokePx = strokePx + expansionPx
 						val selRadiusPx = arcRadiusPx + expansionPx / 2f
-						val selArcSize = Size(selRadiusPx * 2f, selRadiusPx * 2f)
+						val selArcSize = Size(
+							width = selRadiusPx * 2f,
+							height = selRadiusPx * 2f)
 						val selTopLeft = Offset(
 							x = size.width / 2f - selRadiusPx,
 							y = size.height / 2f - selRadiusPx
