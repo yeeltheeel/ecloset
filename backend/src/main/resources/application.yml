@@ -11,10 +11,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
     open-in-view: false
+
+  sql:
+    init:
+      mode: always
 
   jackson:
     serialization:

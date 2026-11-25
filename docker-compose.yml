@@ -31,9 +31,9 @@ services:
     environment:
       HF_HOME: /app/.cache/huggingface
       YOLO_CONFIG_DIR: /app/.cache/Ultralytics
-      YOLO_MODEL: yoloe-26n-seg.pt
-      YOLO_CONFIDENCE: 0.15
-      YOLO_IMAGE_SIZE: 640
+      YOLO_MODEL: yoloe-26s-seg.pt
+      YOLO_CONFIDENCE: 0.05
+      YOLO_IMAGE_SIZE: 1024
     volumes:
       - ai-cache:/app/.cache
     healthcheck:

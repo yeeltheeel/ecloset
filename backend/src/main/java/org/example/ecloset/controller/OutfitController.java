@@ -19,6 +19,7 @@ import org.example.ecloset.enums.Occasion;
 import org.example.ecloset.exception.UserNotFoundException;
 import org.example.ecloset.repository.UserRepository;
 import org.example.ecloset.service.OutfitService;
+import org.example.ecloset.service.WeatherService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -35,6 +36,7 @@ import java.util.List;
 public class OutfitController {
 
     private final OutfitService outfitService;
+    private final WeatherService weatherService;
     private final UserRepository userRepository;
 
     private Integer getCurrentUserId() {
@@ -49,13 +51,16 @@ public class OutfitController {
             description = "Возвращает один образ пользователя по его ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Образ найден",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Образ не найден или не принадлежит Вам.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Образ не найден или не принадлежит Вам.\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Образ не найден или не принадлежит Вам.\"}")))
     })
     @GetMapping("/{outfitId}")
     public ResponseEntity<OutfitResponseDto> getOutfitById(@PathVariable Integer outfitId) {
@@ -66,13 +71,16 @@ public class OutfitController {
             description = "Возвращает список всех образов, принадлежащих авторизованному пользователю")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Список образов успешно получен",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Пользователь не найден",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Пользователь не найден в БД\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Пользователь не найден в БД\"}")))
     })
     @GetMapping
     public ResponseEntity<List<OutfitResponseDto>> getAllOutfits() {
@@ -84,15 +92,19 @@ public class OutfitController {
                     + "multipart/form-data: `data` — JSON с параметрами образа, `image` — файл изображения.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Образ успешно создан",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Ошибка валидации входных данных или файла",
-                    content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Указанный сезон или одна из вещей не найдены",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Вещь с ID 5 не найдена\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Вещь с ID 5 не найдена\"}")))
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<OutfitResponseDto> createOutfit(
@@ -103,19 +115,23 @@ public class OutfitController {
     }
 
     @Operation(summary = "Обновить образ",
-            description = "Полностью обновляет данные образа по его ID"
+            description = "Полностью обновляет данные образа по его ID. "
                     + "multipart/form-data: `data` — JSON, `image` — необязательный новый файл.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Образ успешно обновлен",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Ошибка валидации или файла",
-                    content = @Content(schema = @Schema(implementation = ValidationErrorResponse.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ValidationErrorResponse.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Образ не найден или не принадлежит Вам.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Образ не найден или не принадлежит Вам.\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Образ не найден или не принадлежит Вам.\"}")))
     })
     @PutMapping(value = "/{outfitId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<OutfitResponseDto> updateOutfit(
@@ -130,11 +146,13 @@ public class OutfitController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Образ успешно удален"),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Образ не найден или не принадлежит Вам.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Образ не найден или не принадлежит Вам.\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Образ не найден или не принадлежит Вам.\"}")))
     })
     @DeleteMapping("/{outfitId}")
     public ResponseEntity<Void> deleteOutfit(@PathVariable Integer outfitId) {
@@ -146,13 +164,16 @@ public class OutfitController {
             description = "Увеличивает счётчик носки на 1 для указанного образа и всех вещей в нём")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Счётчик успешно увеличен",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Образ не найден или не принадлежит Вам",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Образ не найден или не принадлежит Вам\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Образ не найден или не принадлежит Вам\"}")))
     })
     @PostMapping("/{outfitId}/wear")
     public ResponseEntity<OutfitResponseDto> wearOutfit(@PathVariable Integer outfitId) {
@@ -163,13 +184,16 @@ public class OutfitController {
             description = "Добавляет указанную вещь в существующий образ.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Вещь успешно добавлена в образ",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Образ или вещь не найдены, или не принадлежат Вам",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Вещь не найдена или не принадлежит Вам\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Вещь не найдена или не принадлежит Вам\"}")))
     })
     @PostMapping("/{outfitId}/items/{itemId}")
     public ResponseEntity<OutfitResponseDto> addItemToOutfit(
@@ -182,13 +206,16 @@ public class OutfitController {
             description = "Удаляет старую вещь из образа и добавляет новую на её место.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Вещь успешно заменена",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
             @ApiResponse(responseCode = "404", description = "Образ или новая вещь не найдены",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Новая вещь не найдена\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Новая вещь не найдена\"}")))
     })
     @PutMapping("/{outfitId}/items/{oldItemId}/replace/{newItemId}")
     public ResponseEntity<OutfitResponseDto> replaceItemInOutfit(
@@ -203,30 +230,68 @@ public class OutfitController {
             description = "Возвращает образы пользователя, сезоны которых подходят под указанную температуру")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Список подходящих образов",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Температура не указана",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Параметр temp обязателен\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Параметр 'temp' обязателен\"}"))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}")))
     })
     @GetMapping("/temperature")
     public ResponseEntity<List<OutfitResponseDto>> getOutfitsByTemperature(@RequestParam Integer temp) {
         return ResponseEntity.ok(outfitService.getOutfitsByTemperature(getCurrentUserId(), temp));
     }
 
+    @Operation(summary = "Получить образы по текущей погоде",
+            description = "Определяет текущую температуру по координатам пользователя (wttr.in) "
+                    + "и возвращает образы, сезоны которых подходят под эту температуру. "
+                    + "Если сервис вернул диапазон — берётся среднее.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список подходящих образов",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Координаты пользователя не установлены",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Координаты пользователя не установлены. Обновите профиль.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}"))),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Текущий пользователь не найден в БД\"}"))),
+            @ApiResponse(responseCode = "502", description = "Погодный сервис недоступен или вернул некорректный ответ",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Сетевая ошибка при получении температуры\"}")))
+    })
+    @GetMapping("/weather")
+    public ResponseEntity<List<OutfitResponseDto>> getOutfitsByCurrentWeather() {
+        Integer userId = getCurrentUserId();
+        Integer temperature = weatherService.getCurrentTemperatureForUser(userId);
+        return ResponseEntity.ok(outfitService.getOutfitsByTemperature(userId, temperature));
+    }
+
     @Operation(summary = "Найти образы по times worn",
             description = "Возвращает образы с указанным количеством носок")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Список образов",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Параметр count не указан",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Параметр count обязателен\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Параметр 'count' обязателен\"}"))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}")))
     })
     @GetMapping("/times-worn")
     public ResponseEntity<List<OutfitResponseDto>> getOutfitsByTimesWorn(@RequestParam Integer count) {
@@ -237,13 +302,16 @@ public class OutfitController {
             description = "Возвращает образы указанной цветовой гаммы")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Список образов",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Некорректное значение цвета",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}")))
     })
     @GetMapping("/color")
     public ResponseEntity<List<OutfitResponseDto>> getOutfitsByColor(@RequestParam Color color) {
@@ -254,13 +322,16 @@ public class OutfitController {
             description = "Возвращает образы для указанного повода")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Список образов",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Некорректное значение повода",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Некорректное значение перечисления (enum)\"}"))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}")))
     })
     @GetMapping("/occasion")
     public ResponseEntity<List<OutfitResponseDto>> getOutfitsByOccasion(@RequestParam Occasion occasion) {
@@ -271,10 +342,12 @@ public class OutfitController {
             description = "Возвращает образы, которые помечены как недоступные")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Список недоступных образов",
-                    content = @Content(schema = @Schema(implementation = OutfitResponseDto.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OutfitResponseDto.class))),
             @ApiResponse(responseCode = "401", description = "Не авторизован",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class,
-                            example = "{\"error\": \"Не авторизован\"}")))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class,
+                                    example = "{\"error\": \"Не авторизован\"}")))
     })
     @GetMapping("/unavailable")
     public ResponseEntity<List<OutfitResponseDto>> getUnavailableOutfits() {
