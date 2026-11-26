@@ -10,9 +10,8 @@
 			theme viewmodel
 			weather viewmodel
 		widgets:
-			collage canvas:
-				outfit collage
-				add wait for items to load on collage
+			outfit collage:
+				 implement dran and drop
 			location select
 			filters block and popup
 			item/oufit details clean up and add actions

@@ -17,6 +17,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +36,6 @@ import com.example.ecloset.R
 import com.example.ecloset.ui.components.DetailsPopup
 import com.example.ecloset.ui.components.MultiSelectColorGrid
 import com.example.ecloset.ui.components.OutfitCollageCanvas
-import com.example.ecloset.ui.components.OutfitCollageCarousel
 import com.example.ecloset.ui.components.PageHeader
 import com.example.ecloset.ui.components.RadioGroupBlock
 import com.example.ecloset.user.local.ClosetItemData
@@ -51,8 +51,12 @@ fun NewOutfitPage(
 	newOutfitViewmodel: NewOutfitViewmodel = hiltViewModel()
 ){
 	val newOutfitState by newOutfitViewmodel.clothesList.collectAsStateWithLifecycle()
-	var selectedItems by remember { mutableStateOf(newOutfitState.items) }
+	var selectedItems by remember { mutableStateOf<List<ClosetItemData>>(emptyList()) }
 	var showFilters by remember { mutableStateOf(false) }
+
+	LaunchedEffect(newOutfitState.items) {
+		selectedItems = newOutfitState.items
+	}
 
 	Box(
 		modifier = modifier.fillMaxSize()
@@ -70,10 +74,7 @@ fun NewOutfitPage(
 				)
 			}
 			item {
-//				OutfitCollageCanvas(
-//					selectedItems = selectedItems
-//				)
-				OutfitCollageCarousel(
+				OutfitCollageCanvas(
 					selectedItems = selectedItems
 				)
 			}
@@ -116,7 +117,17 @@ fun NewOutfitPage(
 	if (showFilters){
 		DetailsPopup(
 			content = {
-				QuizBlock(newOutfitViewmodel, {})
+				QuizBlock(newOutfitViewmodel,
+					onClick = {occasion, location, colors ->
+						val matches = filterItems(
+							itemList = newOutfitState.items,
+							occasion = occasion,
+							colors = colors
+						)
+						selectedItems = matches
+						showFilters = false
+					}
+				)
 			},
 			onDismiss = {
 				showFilters = false
@@ -175,13 +186,21 @@ fun MultiSelectBlock(
 @Composable
 fun QuizBlock(
 	newOutfitViewmodel: NewOutfitViewmodel,
-	onClick: () -> Unit
+	onClick: (
+		occasion: String,
+		location: String,
+		colors: List<Int>
+			) -> Unit
 ){
 	val occasionList = listOf("Casual", "Party", "Business")
 	var occasion by remember { mutableIntStateOf(0) }
 	val locationList = listOf("Inside", "Outside", "Both")
 	var location by remember { mutableIntStateOf(0) }
 	var colors by remember { mutableStateOf(emptyList<ColorSelect>()) }
+
+	var selected by remember {
+		mutableStateOf<List<Int>>(emptyList())
+	}
 
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally
@@ -190,21 +209,15 @@ fun QuizBlock(
 			title = stringResource(R.string.occasion_prompt),
 			itemList = occasionList,
 			selectedIndex = occasion,
-			onSelectedIndex = { index ->
-				occasion = index
-			}
+			onSelectedIndex = { occasion = it }
 		)
 		SelectBlock(
 			title = stringResource(R.string.location_prompt),
 			itemList = locationList,
 			selectedIndex = location,
-			onSelectedIndex = { index ->
-				location = index
-			}
+			onSelectedIndex = { location = it }
 		)
-		var selected by remember {
-			mutableStateOf<List<Int>>(emptyList())
-		}
+
 		MultiSelectColorGrid(
 			title = stringResource(R.string.color_prompt),
 			itemList = colorList,
@@ -220,7 +233,11 @@ fun QuizBlock(
 					vertical = 8.dp
 				),
 			onClick = {
-				onClick()
+				onClick(
+					occasionList[occasion],
+					locationList[location],
+					selected
+				)
 			}
 		) {
 			Text(
